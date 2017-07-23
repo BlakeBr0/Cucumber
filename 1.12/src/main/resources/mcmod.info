@@ -1,0 +1,16 @@
+[
+{
+  "modid": "cucumber",
+  "name": "Cucumber",
+  "description": "Shared code for all my mods.",
+  "version": "1.0.0",
+  "mcversion": "${mcversion}",
+  "url": "https://minecraft.curseforge.com/projects/cucumber",
+  "updateUrl": "",
+  "authorList": ["BlakeBr0"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
