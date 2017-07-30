@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.blakebr0.cucumber.helper.RecipeHelper;
 import com.blakebr0.cucumber.helper.StackHelper;
 import com.blakebr0.cucumber.iface.IEnableable;
 import com.blakebr0.cucumber.iface.IModelHelper;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -31,6 +33,7 @@ public class ModRegistry {
 	private String modid;
 	public List<RegistryObject<Block>> blocks = new ArrayList<>();
 	public List<RegistryObject<Item>> items = new ArrayList<>();
+	public List<RegistryObject<IRecipe>> recipes = new ArrayList<>();
 	public Map<Class, String> tiles = new HashMap<>();
 	public Map<ItemStack, String> ores = new HashMap<>();
 	
@@ -106,6 +109,17 @@ public class ModRegistry {
 		return item;
 	}
 	
+	public <T extends IRecipe> T register(T recipe){
+		if(recipe.getRecipeOutput().isEmpty()){
+			return recipe;
+		}
+		if(recipe.getIngredients().isEmpty()){
+			return recipe;
+		}
+		recipes.add(new RegistryObject<IRecipe>(recipe, RecipeHelper.getRecipeLocation(recipe.getRecipeOutput()).toString()));
+		return recipe;
+	}
+	
 	public void register(Class clazz, String name){
 		tiles.put(clazz, name);
 	}
@@ -143,6 +157,16 @@ public class ModRegistry {
 		
 		for(Map.Entry<ItemStack, String> ore : ores.entrySet()){
 			OreDictionary.registerOre(ore.getValue(), ore.getKey());
+		}
+	}
+	
+	@SubscribeEvent
+	public void registerRecipes(RegistryEvent.Register<IRecipe> event){
+		for(RegistryObject<IRecipe> recipe : recipes){
+			if(recipe.get().getRegistryName() == null){
+				recipe.get().setRegistryName(new ResourceLocation(recipe.getName()));
+			}
+			event.getRegistry().register(recipe.get());
 		}
 	}
 	
