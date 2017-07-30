@@ -120,6 +120,17 @@ public class ModRegistry {
 		return recipe;
 	}
 	
+	public <T extends IRecipe> T register(T recipe, String name){
+		if(recipe.getRecipeOutput().isEmpty()){
+			return recipe;
+		}
+		if(recipe.getIngredients().isEmpty()){
+			return recipe;
+		}
+		recipes.add(new RegistryObject<IRecipe>(recipe, modid + ":" + name));
+		return recipe;
+	}
+	
 	public void register(Class clazz, String name){
 		tiles.put(clazz, name);
 	}
