@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.lib;
+package com.blakebr0.cucumber.item.color;
 
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.EnumDyeColor;
