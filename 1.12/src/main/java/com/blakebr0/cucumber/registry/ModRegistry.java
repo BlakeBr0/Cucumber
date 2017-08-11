@@ -13,7 +13,9 @@ import com.blakebr0.cucumber.iface.IRepairMaterial;
 import com.blakebr0.cucumber.item.ItemMeta;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -36,6 +38,7 @@ public class ModRegistry {
 	public List<RegistryObject<IRecipe>> recipes = new ArrayList<>();
 	public Map<Class, String> tiles = new HashMap<>();
 	public Map<ItemStack, String> ores = new HashMap<>();
+	public Map<IItemColor, Item[]> itemColor = new HashMap<>();
 	
 	public ModRegistry(String modid){
 		this.modid = modid;
@@ -146,6 +149,10 @@ public class ModRegistry {
 			throw new RuntimeException("Tried to add an invalid object to the OreDictionary, well done." + " (" + ore.toString() + " named: " + name + ")");
 		}
 	}
+	
+	public void register(IItemColor color, Item... items){
+		itemColor.put(color, items);
+	}
 
 	@SubscribeEvent
 	public void registerBlocks(RegistryEvent.Register<Block> event){
@@ -197,6 +204,11 @@ public class ModRegistry {
 			} else {
 				ModelLoader.setCustomModelResourceLocation(item.get(), 0, new ModelResourceLocation(modid + ":" + item.getName(), "inventory")); 
 			}
+		}
+		
+		
+		for(Map.Entry<IItemColor, Item[]> handler : itemColor.entrySet()){
+			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(handler.getKey(), handler.getValue());
 		}
 	}
 }
