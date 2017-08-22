@@ -3,7 +3,7 @@
   "modid": "cucumber",
   "name": "Cucumber",
   "description": "Shared code for all my mods.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "mcversion": "${mcversion}",
   "url": "https://minecraft.curseforge.com/projects/cucumber",
   "updateUrl": "",

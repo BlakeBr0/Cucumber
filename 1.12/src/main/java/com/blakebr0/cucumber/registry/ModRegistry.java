@@ -206,7 +206,6 @@ public class ModRegistry {
 			}
 		}
 		
-		
 		for(Map.Entry<IItemColor, Item[]> handler : itemColor.entrySet()){
 			Minecraft.getMinecraft().getItemColors().registerItemColorHandler(handler.getKey(), handler.getValue());
 		}
