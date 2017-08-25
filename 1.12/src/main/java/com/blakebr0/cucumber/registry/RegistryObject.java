@@ -3,21 +3,21 @@ package com.blakebr0.cucumber.registry;
 import net.minecraft.util.IStringSerializable;
 
 public class RegistryObject<T> implements IStringSerializable {
-		
+
 	private final T object;
 	private final String name;
-		
-	public RegistryObject(T object, String name){
+
+	public RegistryObject(T object, String name) {
 		this.object = object;
 		this.name = name;
 	}
-	
-	public T get(){
+
+	public T get() {
 		return this.object;
 	}
 
 	@Override
-	public String getName(){
+	public String getName() {
 		return this.name;
 	}
 }

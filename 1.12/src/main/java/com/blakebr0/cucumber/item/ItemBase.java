@@ -9,8 +9,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBase extends Item {
-	
-	public ItemBase(String name){
+
+	public ItemBase(String name) {
 		super();
 		this.setUnlocalizedName(name);
 	}

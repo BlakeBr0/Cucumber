@@ -6,12 +6,13 @@ import net.minecraft.item.ItemStack;
 
 /**
  * A generic EnumDyeColor item color handler
+ * 
  * @author BlakeBr0
  */
 public class ItemDyeColorHandler implements IItemColor {
 
 	@Override
-	public int getColorFromItemstack(ItemStack stack, int tintIndex){
+	public int getColorFromItemstack(ItemStack stack, int tintIndex) {
 		return EnumDyeColor.byMetadata(stack.getMetadata()).getColorValue();
 	}
 }
