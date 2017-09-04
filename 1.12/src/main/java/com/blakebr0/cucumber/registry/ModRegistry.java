@@ -46,6 +46,10 @@ public class ModRegistry {
 	public <T extends Block> T register(T block, String name) {
 		return register(block, name, true);
 	}
+	
+	public <T extends Block> T register(T block, String name, Ore... oreNames) {
+		return register(block, name, true, oreNames);
+	}
 
 	public <T extends Block> T register(T block, String name, boolean itemBlock) {
 		if (block instanceof IEnableable) {
@@ -59,6 +63,19 @@ public class ModRegistry {
 		}
 		return block;
 	}
+	
+	public <T extends Block> T register(T block, String name, boolean itemBlock, Ore... oreNames) {
+		if (block instanceof IEnableable) {
+			if (!((IEnableable) block).isEnabled()) {
+				return block;
+			}
+		}
+		blocks.add(new RegistryObject<Block>(block, name, oreNames));
+		if (itemBlock) {
+			items.add(new RegistryObject<Item>(new ItemBlock(block), name));
+		}
+		return block;
+	}
 
 	public <T extends Block> T register(T block, String name, ItemBlock itemBlock) {
 		if (block instanceof IEnableable) {
@@ -67,6 +84,17 @@ public class ModRegistry {
 			}
 		}
 		blocks.add(new RegistryObject<Block>(block, name));
+		items.add(new RegistryObject<Item>(itemBlock, name));
+		return block;
+	}
+	
+	public <T extends Block> T register(T block, String name, ItemBlock itemBlock, Ore... oreNames) {
+		if (block instanceof IEnableable) {
+			if (!((IEnableable) block).isEnabled()) {
+				return block;
+			}
+		}
+		blocks.add(new RegistryObject<Block>(block, name, oreNames));
 		items.add(new RegistryObject<Item>(itemBlock, name));
 		return block;
 	}
@@ -90,6 +118,26 @@ public class ModRegistry {
 		}
 		return item;
 	}
+	
+	public <T extends Item> T register(T item, String name, Ore... oreNames) {
+		if (item instanceof ItemBlock) {
+			if (((ItemBlock) item).getBlock() instanceof IEnableable) {
+				if (!((IEnableable) ((ItemBlock) item).getBlock()).isEnabled()) {
+					return item;
+				}
+			}
+		}
+		if (item instanceof IEnableable) {
+			if (!((IEnableable) item).isEnabled()) {
+				return item;
+			}
+		}
+		items.add(new RegistryObject<Item>(item, name, oreNames));
+		if (item instanceof ItemMeta) {
+			((ItemMeta) item).init();
+		}
+		return item;
+	}
 
 	public <T extends Item> T register(T item, String name, ItemStack stack) {
 		if (item instanceof ItemBlock) {
@@ -105,6 +153,26 @@ public class ModRegistry {
 			}
 		}
 		register(item, name);
+		if (item instanceof IRepairMaterial) {
+			((IRepairMaterial) item).setRepairMaterial(stack);
+		}
+		return item;
+	}
+	
+	public <T extends Item> T register(T item, String name, ItemStack stack, Ore... oreNames) {
+		if (item instanceof ItemBlock) {
+			if (((ItemBlock) item).getBlock() instanceof IEnableable) {
+				if (!((IEnableable) ((ItemBlock) item).getBlock()).isEnabled()) {
+					return item;
+				}
+			}
+		}
+		if (item instanceof IEnableable) {
+			if (!((IEnableable) item).isEnabled()) {
+				return item;
+			}
+		}
+		register(item, name, oreNames);
 		if (item instanceof IRepairMaterial) {
 			((IRepairMaterial) item).setRepairMaterial(stack);
 		}
@@ -158,6 +226,12 @@ public class ModRegistry {
 				block.get().setRegistryName(block.getName());
 			}
 			event.getRegistry().register(block.get());
+			
+			if (block.getOreNames() != null) {
+				for (Ore o : block.getOreNames()) {
+					OreDictionary.registerOre(o.getName(), StackHelper.to(block.get(), 1, o.getMeta()));
+				}
+			}
 		}
 	}
 
@@ -168,6 +242,12 @@ public class ModRegistry {
 				item.get().setRegistryName(item.getName());
 			}
 			event.getRegistry().register(item.get());
+			
+			if (item.getOreNames() != null) {
+				for (Ore o : item.getOreNames()) {
+					OreDictionary.registerOre(o.getName(), StackHelper.to(item.get(), 1, o.getMeta()));
+				}
+			}
 		}
 
 		for (Map.Entry<ItemStack, String> ore : ores.entrySet()) {
