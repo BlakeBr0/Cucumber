@@ -70,9 +70,9 @@ public class ModRegistry {
 				return block;
 			}
 		}
-		blocks.add(new RegistryObject<Block>(block, name, oreNames));
+		blocks.add(new RegistryObject<Block>(block, name));
 		if (itemBlock) {
-			items.add(new RegistryObject<Item>(new ItemBlock(block), name));
+			items.add(new RegistryObject<Item>(new ItemBlock(block), name, oreNames));
 		}
 		return block;
 	}
@@ -94,8 +94,8 @@ public class ModRegistry {
 				return block;
 			}
 		}
-		blocks.add(new RegistryObject<Block>(block, name, oreNames));
-		items.add(new RegistryObject<Item>(itemBlock, name));
+		blocks.add(new RegistryObject<Block>(block, name));
+		items.add(new RegistryObject<Item>(itemBlock, name, oreNames));
 		return block;
 	}
 
@@ -226,12 +226,6 @@ public class ModRegistry {
 				block.get().setRegistryName(block.getName());
 			}
 			event.getRegistry().register(block.get());
-			
-			if (block.getOreNames() != null) {
-				for (Ore o : block.getOreNames()) {
-					OreDictionary.registerOre(o.getName(), StackHelper.to(block.get(), 1, o.getMeta()));
-				}
-			}
 		}
 	}
 
