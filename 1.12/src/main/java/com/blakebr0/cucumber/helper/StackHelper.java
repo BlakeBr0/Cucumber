@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.helper;
 
-import java.util.*;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;

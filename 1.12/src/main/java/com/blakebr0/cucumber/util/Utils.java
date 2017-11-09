@@ -57,4 +57,8 @@ public class Utils {
 		}
 		return item;
 	}
+	
+	public static int intColor(int r, int g, int b) {
+		return (r * 65536 + g * 256 + b);
+	}
 }
