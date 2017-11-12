@@ -51,9 +51,7 @@ public class Utils {
 		List<ItemStack> list = OreDictionary.getOres(oreDict);
 		if (!list.isEmpty()) {
 			item = list.get(0).copy();
-			{
-				item.setCount(stackSize);
-			}
+			item.setCount(stackSize);
 		}
 		return item;
 	}

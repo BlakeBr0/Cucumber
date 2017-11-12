@@ -21,6 +21,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.oredict.OreDictionary;
@@ -36,6 +37,12 @@ public class ModRegistry {
 
 	public ModRegistry(String modid) {
 		this.modid = modid;
+	}
+	
+	public static ModRegistry create(String modid) {
+		ModRegistry registry = new ModRegistry(modid);
+		MinecraftForge.EVENT_BUS.register(registry);
+		return registry;
 	}
 
 	public <T extends Block> T register(T block, String name) {
