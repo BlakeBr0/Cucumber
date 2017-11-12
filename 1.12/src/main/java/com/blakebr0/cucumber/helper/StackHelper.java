@@ -58,7 +58,7 @@ public class StackHelper {
 
 	public static ItemStack decrease(ItemStack stack, int amount, boolean container) {
 		if (isNull(stack)) {
-			return null;
+			return getNull();
 		}
 		stack.shrink(amount);
 		return withSize(stack, stack.getCount(), container);
