@@ -46,6 +46,7 @@ public class Utils {
 		return rand.nextInt(max - min + 1) + min;
 	}
 
+	@Deprecated
 	public static ItemStack getItem(String oreDict, int stackSize) {
 		ItemStack item = ItemStack.EMPTY;
 		List<ItemStack> list = OreDictionary.getOres(oreDict);

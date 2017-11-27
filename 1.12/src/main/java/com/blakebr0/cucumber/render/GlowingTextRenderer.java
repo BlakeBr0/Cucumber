@@ -43,11 +43,11 @@ public class GlowingTextRenderer {
 		}
 	}
 	
-	public static void addStack(ItemStack stack, int r, int g, int b, int rl, int gl, int bl) {
+	public static void registerStack(ItemStack stack, int r, int g, int b, int rl, int gl, int bl) {
 		stacks.put(stack, ColorInfo.create(r, g, b, rl, gl, bl));
 	}
 	
-	public static void addStack(ItemStack stack, ColorInfo info) {
+	public static void registerStack(ItemStack stack, ColorInfo info) {
 		stacks.put(stack, info);
 	}
 	

@@ -18,8 +18,7 @@ public class RecipeHelper {
 				return;
 			}
 		}
-		ForgeRegistries.RECIPES
-				.register(new ShapedOreRecipe(EMPTY_GROUP, output, input).setRegistryName(getRecipeLocation(output)));
+		ForgeRegistries.RECIPES.register(new ShapedOreRecipe(EMPTY_GROUP, output, input).setRegistryName(getRecipeLocation(output)));
 	}
 
 	public static void addShapelessRecipe(ItemStack output, Object... input) {
@@ -28,14 +27,12 @@ public class RecipeHelper {
 				return;
 			}
 		}
-		ForgeRegistries.RECIPES.register(
-				new ShapelessOreRecipe(EMPTY_GROUP, output, input).setRegistryName(getRecipeLocation(output)));
+		ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(EMPTY_GROUP, output, input).setRegistryName(getRecipeLocation(output)));
 	}
 
 	public static ResourceLocation getRecipeLocation(ItemStack output) {
 		String namespace = Loader.instance().activeModContainer().getModId();
-		ResourceLocation baseLoc = new ResourceLocation(namespace,
-				output.getItem().getRegistryName().getResourcePath());
+		ResourceLocation baseLoc = new ResourceLocation(namespace, output.getItem().getRegistryName().getResourcePath());
 		ResourceLocation recipeLoc = baseLoc;
 		int index = 0;
 

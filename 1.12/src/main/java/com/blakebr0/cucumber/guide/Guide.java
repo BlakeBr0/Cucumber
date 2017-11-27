@@ -3,7 +3,6 @@ package com.blakebr0.cucumber.guide;
 import java.util.ArrayList;
 
 import com.blakebr0.cucumber.Cucumber;
-import com.blakebr0.cucumber.guide.page.PageHome;
 import com.blakebr0.cucumber.registry.GuideRegistry;
 import com.blakebr0.cucumber.util.Utils;
 
@@ -51,9 +50,5 @@ public class Guide {
 	
 	public ArrayList<GuideEntry> getEntries() {
 		return this.entries;
-	}
-	
-	public PageHome getHomePage() {
-		return new PageHome();
 	}
 }
