@@ -15,30 +15,42 @@ public class RecipeHelper {
 	public static final ResourceLocation EMPTY_GROUP = new ResourceLocation("", "");
 
 	public static void addShapedRecipe(ItemStack output, Object... input) {
-		for (Object obj : input) {
-			if (obj == null) {
-				return;
-			}
-		}
-		ForgeRegistries.RECIPES.register(new ShapedOreRecipe(EMPTY_GROUP, output, input).setRegistryName(getRecipeLocation(output)));
+		addShapedRecipe(EMPTY_GROUP, output, input);
 	}
-
+	
 	public static void addShapelessRecipe(ItemStack output, Object... input) {
-		for (Object obj : input) {
-			if (obj == null) {
-				return;
-			}
-		}
-		ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(EMPTY_GROUP, output, input).setRegistryName(getRecipeLocation(output)));
+		addShapelessRecipe(EMPTY_GROUP, output, input);
 	}
 	
 	public static void addShapedOreOutputRecipe(String ore, int amount, Object... input) {
+		addShapedOreOutputRecipe(EMPTY_GROUP, ore, amount, input);
+	}
+	
+	public static void addShapedRecipe(ResourceLocation group, ItemStack output, Object... input) {
 		for (Object obj : input) {
 			if (obj == null) {
 				return;
 			}
 		}
-		ForgeRegistries.RECIPES.register(new ShapedOreOutputRecipe(EMPTY_GROUP, ore, amount, input).setRegistryName(getRecipeLocation(ore)));
+		ForgeRegistries.RECIPES.register(new ShapedOreRecipe(group, output, input).setRegistryName(getRecipeLocation(output)));
+	}
+
+	public static void addShapelessRecipe(ResourceLocation group, ItemStack output, Object... input) {
+		for (Object obj : input) {
+			if (obj == null) {
+				return;
+			}
+		}
+		ForgeRegistries.RECIPES.register(new ShapelessOreRecipe(group, output, input).setRegistryName(getRecipeLocation(output)));
+	}
+	
+	public static void addShapedOreOutputRecipe(ResourceLocation group, String ore, int amount, Object... input) {
+		for (Object obj : input) {
+			if (obj == null) {
+				return;
+			}
+		}
+		ForgeRegistries.RECIPES.register(new ShapedOreOutputRecipe(group, ore, amount, input).setRegistryName(getRecipeLocation(ore)));
 	}
 
 	public static ResourceLocation getRecipeLocation(ItemStack output) {
