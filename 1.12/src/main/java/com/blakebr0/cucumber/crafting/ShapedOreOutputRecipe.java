@@ -33,4 +33,9 @@ public class ShapedOreOutputRecipe extends ShapedOreRecipe {
 		}
 		return stack;
 	}
+	
+	@Override
+	public boolean isHidden() {
+		return getRecipeOutput().isEmpty();
+	}
 }
