@@ -81,7 +81,7 @@ public class GuiGuide extends GuiScreen {
 	public void onGuiClosed() {
 		super.onGuiClosed();
 		if (save) {
-			NetworkHandler.NETWORK.sendToServer(new MessageUpdateGuideNBT(page));
+			NetworkHandler.INSTANCE.sendToServer(new MessageUpdateGuideNBT(page));
 			this.save = false;
 		}
 	}
