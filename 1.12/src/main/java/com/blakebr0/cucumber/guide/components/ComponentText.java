@@ -20,8 +20,8 @@ public class ComponentText implements IEntryComponent {
 	}
 
 	@Override
-	public void draw(int mouseX, int mouseY, float partialTicks, int x, int y) {
-		RenderUtils.drawScaledWrappedText(Minecraft.getMinecraft().fontRenderer, Utils.localize(key), x, y, 1.0F, 160, 1, false);
+	public void draw(int mouseX, int mouseY, float partialTicks, int x, int y, int width, int height, int page) {
+		RenderUtils.drawScaledWrappedText(Minecraft.getMinecraft().fontRenderer, Utils.localize(key), x, y, 1.0F, width, 150 - height, 1, false);
 	}
 
 	@Override

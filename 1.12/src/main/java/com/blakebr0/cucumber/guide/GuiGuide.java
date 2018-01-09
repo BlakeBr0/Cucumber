@@ -22,6 +22,7 @@ public class GuiGuide extends GuiScreen {
 	public Guide guide;
 	public int xSize, ySize;
 	public int page;
+	public boolean save = true;
 	
 	public GuiGuide(ItemStack book, Guide guide) {
 		this.book = book;
@@ -37,7 +38,7 @@ public class GuiGuide extends GuiScreen {
 		int offset = 0;
 		int i = ENTRIES_PER_PAGE * page;
 		for (int x = 0; x < ENTRIES_PER_PAGE && i < guide.getEntries().size(); x++) {
-			this.buttonList.add(new GuiButtonEntry(i, (this.width - this.xSize) / 2 + 20, (this.height - this.ySize) / 2 + 40 + (x * 18), 160, 14, "test"));
+			this.buttonList.add(new GuiButtonEntry(i, (this.width - this.xSize) / 2 + 20, (this.height - this.ySize) / 2 + 40 + (x * 18), 160, 14, guide.getEntries().get(x).getTitle()));
 			i++;
 		}
 		this.buttonList.add(new GuiButton(10000, (this.width - this.xSize) / 2 + 9, (this.height - this.ySize) / 2 + 200, 30, 12, "<<<"));
@@ -58,17 +59,20 @@ public class GuiGuide extends GuiScreen {
 	
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
-		if (button.id == 10000) {
+		if (button.id == 10000 && this.page > 0) {
 			book.getTagCompound().setInteger("Page", book.getTagCompound().getInteger("Page") - 1);
 			this.page--;
+			this.save = false;
 			Minecraft.getMinecraft().displayGuiScreen(new GuiGuide(book, guide));
 		} else if (button.id == 10001) {
 			book.getTagCompound().setInteger("Page", book.getTagCompound().getInteger("Page") + 1);
 			this.page++;
+			this.save = false;
 			Minecraft.getMinecraft().displayGuiScreen(new GuiGuide(book, guide));
 		}
 		
 		if (button instanceof GuiButtonEntry) {
+			// TODO: save later
 			this.guide.getEntries().get(button.id).open(this);
 		}
 	}
@@ -76,7 +80,10 @@ public class GuiGuide extends GuiScreen {
 	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
-		NetworkHandler.NETWORK.sendToServer(new MessageUpdateGuideNBT(page));
+		if (save) {
+			NetworkHandler.NETWORK.sendToServer(new MessageUpdateGuideNBT(page));
+			this.save = false;
+		}
 	}
 	
 	@Override

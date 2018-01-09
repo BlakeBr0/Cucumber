@@ -12,14 +12,14 @@ public class Guide {
 
 	private ArrayList<GuideEntry> entries = new ArrayList<>();
 	
-	private String modid;
+	private String modname;
 	private String name;
 	private String registryName;
 	private int color;
 	private CreativeTabs tab;
 	
-	private Guide(String modid, String name, String registryName, int color, CreativeTabs tab) {
-		this.modid = modid;
+	private Guide(String modname, String name, String registryName, int color, CreativeTabs tab) {
+		this.modname = modname;
 		this.name = name;
 		this.registryName = registryName;
 		this.color = color;
@@ -35,8 +35,8 @@ public class Guide {
 		Cucumber.REGISTRY.register(new ItemGuide(registryName, tab, this), registryName);
 	}
 	
-	public String getModId() {
-		return this.modid;
+	public String getModName() {
+		return this.modname;
 	}
 	
 	public String getName() {

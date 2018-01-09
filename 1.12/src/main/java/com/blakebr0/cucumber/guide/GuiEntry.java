@@ -41,9 +41,14 @@ public class GuiEntry extends GuiScreen {
 		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
 		RenderUtils.drawScaledWrappedText(fontRenderer, entry.getTitle(), (this.width - this.xSize) / 2 + 23, (this.height - this.ySize) / 2 + 10, 1.3F, 160, 0, false);
 		int drawAt = (this.height - this.ySize) / 2 + 30;
+		int height = 0;
 		for (IEntryComponent comp : entry.getComponents()) {
-			comp.draw(mouseX, mouseY, partialTicks, x + 20, drawAt);
+			if (drawAt + comp.height() > this.height) {
+				//break;
+			}
+			comp.draw(mouseX, mouseY, partialTicks, x + 20, drawAt, 160, height, 1);
 			drawAt += comp.height() + COMPONENT_SPACING;
+			height += comp.height();
 		}
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

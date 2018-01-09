@@ -32,7 +32,7 @@ public class ItemGuide extends ItemBase {
 			ItemStack stack = new ItemStack(this, 1, 0);
 			stack.setTagCompound(new NBTTagCompound());
 			stack.getTagCompound().setString("Name", guide.getName());
-			stack.getTagCompound().setString("ModId", guide.getModId());
+			stack.getTagCompound().setString("ModName", guide.getModName());
 			items.add(stack);
 		}
 	}
@@ -48,8 +48,8 @@ public class ItemGuide extends ItemBase {
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
 		if (stack.hasTagCompound()) {
-			if (stack.getTagCompound().hasKey("ModId")) {
-				tooltip.add(Colors.ITALICS + "Added by: " + stack.getTagCompound().getString("ModId"));
+			if (stack.getTagCompound().hasKey("ModName")) {
+				tooltip.add(Colors.ITALICS + "Added by: " + stack.getTagCompound().getString("ModName"));
 			}
 		}
 	}
