@@ -19,6 +19,10 @@ public class Colors {
 	public static final String YELLOW = "\u00A7e";
 	public static final String WHITE = "\u00A7f";
 
+	public static final String OBFUSCATED = "\u00A7k";
+	public static final String BOLD = "\u00A7l";
+	public static final String STRIKETHROUGH = "\u00A7m";
+	public static final String UNDERLINE = "\u00A7n";
 	public static final String ITALICS = "\u00A7o";
 
 	public static final String RESET = "\u00A7r";
