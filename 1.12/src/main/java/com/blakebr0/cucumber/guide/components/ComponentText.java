@@ -2,7 +2,7 @@ package com.blakebr0.cucumber.guide.components;
 
 import java.util.List;
 
-import com.blakebr0.cucumber.util.RenderUtils;
+import com.blakebr0.cucumber.helper.RenderHelper;
 import com.blakebr0.cucumber.util.Utils;
 
 import net.minecraft.client.Minecraft;
@@ -21,7 +21,7 @@ public class ComponentText implements IEntryComponent {
 
 	@Override
 	public void draw(int mouseX, int mouseY, float partialTicks, int x, int y, int width, int height, int page) {
-		RenderUtils.drawScaledWrappedText(Minecraft.getMinecraft().fontRenderer, Utils.localize(key), x, y, 1.0F, width, 150 - height, 1, false);
+		RenderHelper.drawScaledWrappedText(Minecraft.getMinecraft().fontRenderer, Utils.localize(key), x, y, 1.0F, width, 150 - height, 1, false);
 	}
 
 	@Override

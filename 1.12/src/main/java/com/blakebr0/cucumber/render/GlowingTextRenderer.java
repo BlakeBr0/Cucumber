@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.blakebr0.cucumber.util.RenderUtils;
+import com.blakebr0.cucumber.helper.RenderHelper;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.RenderTooltipEvent;
@@ -39,7 +39,7 @@ public class GlowingTextRenderer {
 		List<ItemStack> listOfStacks = stacks.keySet().stream().filter(s -> s.isItemEqual(event.getStack())).collect(Collectors.toList());
 		if (!listOfStacks.isEmpty()) {
 			String s = event.getLines().get(0);
-			RenderUtils.drawGlowingText(event.getFontRenderer(), event.getStack().getDisplayName(), event.getX(), event.getY() - 1 + (event.getFontRenderer().FONT_HEIGHT) * (event.getLines().indexOf(s)) - 1 + 2, stacks.get(listOfStacks.get(0)));
+			RenderHelper.drawGlowingText(event.getFontRenderer(), event.getStack().getDisplayName(), event.getX(), event.getY() - 1 + (event.getFontRenderer().FONT_HEIGHT) * (event.getLines().indexOf(s)) - 1 + 2, stacks.get(listOfStacks.get(0)));
 		}
 	}
 	

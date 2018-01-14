@@ -3,7 +3,7 @@ package com.blakebr0.cucumber.guide;
 import java.io.IOException;
 
 import com.blakebr0.cucumber.guide.components.IEntryComponent;
-import com.blakebr0.cucumber.util.RenderUtils;
+import com.blakebr0.cucumber.helper.RenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -39,7 +39,7 @@ public class GuiEntry extends GuiScreen {
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
-		RenderUtils.drawScaledWrappedText(fontRenderer, entry.getTitle(), (this.width - this.xSize) / 2 + 23, (this.height - this.ySize) / 2 + 10, 1.3F, 160, 0, false);
+		RenderHelper.drawScaledWrappedText(fontRenderer, entry.getTitle(), (this.width - this.xSize) / 2 + 23, (this.height - this.ySize) / 2 + 10, 1.3F, 160, 0, false);
 		int drawAt = (this.height - this.ySize) / 2 + 30;
 		int height = 0;
 		for (IEntryComponent comp : entry.getComponents()) {

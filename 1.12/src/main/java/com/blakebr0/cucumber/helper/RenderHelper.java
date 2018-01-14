@@ -1,15 +1,16 @@
-package com.blakebr0.cucumber.util;
+package com.blakebr0.cucumber.helper;
 
 import java.util.List;
 
 import com.blakebr0.cucumber.render.GlowingTextRenderer;
 import com.blakebr0.cucumber.render.GlowingTextRenderer.ColorInfo;
+import com.blakebr0.cucumber.util.Utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 
-public class RenderUtils {
+public class RenderHelper {
 	
 	/*
 	 * Credit to elucent for embers https://github.com/RootsTeam/Embers/blob/master/src/main/java/teamroots/embers/gui/GuiCodex.java
