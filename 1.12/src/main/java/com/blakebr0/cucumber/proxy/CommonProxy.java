@@ -20,7 +20,7 @@ public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
-		Guide g = Guide.create(Cucumber.NAME, "guide.cucumber.name", "guide_test", 0x123456, CreativeTabs.MATERIALS);
+/*		Guide g = Guide.create(Cucumber.NAME, "guide.cucumber.name", "guide_test", 0x123456, CreativeTabs.MATERIALS);
 		g.addEntry(new GuideEntry(0, "the ting goes SKRRRA XD")
 				.addComponent(new ComponentText("Hello theorists! Welcome to GAME THEORY!"))
 				.addComponent(new ComponentText("WOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
@@ -42,7 +42,7 @@ public class CommonProxy {
 		g.addEntry(new GuideEntry(11, "the ting goes SKRRRA XD"));
 		g.addEntry(new GuideEntry(12, "the ting goes SKRRRA XD"));
 		g.addEntry(new GuideEntry(13, "the ting goes SKRRRA XD"));
-		g.register();
+		g.register(); */
 	}
 	
 	public void init(FMLInitializationEvent event) {
