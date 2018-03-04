@@ -27,8 +27,8 @@ public class GuiGuide extends GuiScreen {
 	public GuiGuide(ItemStack book, Guide guide) {
 		this.book = book;
 		this.guide = guide;
-		this.xSize = 200;
-		this.ySize = 223;
+		this.xSize = 436;
+		this.ySize = 240;
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class GuiGuide extends GuiScreen {
 		this.mc.renderEngine.bindTexture(GUI_TEX);
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
-		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
+		RenderHelper.drawTexturedModelRect(x, y, 0, 0, this.xSize, this.ySize, 512, 512);
 		RenderHelper.drawScaledWrappedText(fontRenderer, "Select a category", (this.width - this.xSize) / 2 + 23, (this.height - this.ySize) / 2 + 10, 1.5F, 160, 0, false);
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}

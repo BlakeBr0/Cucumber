@@ -44,12 +44,10 @@ public class RenderHelper {
 	}
 	
 	public static void drawTexturedModelRect(int x, int y, int textureX, int textureY, int width, int height) {
-		float f = 0.00390625F;
-		float f1 = 0.00390625F;
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos((double) (x + 0), (double) (y + height), (double) 0)
+		bufferbuilder.pos(x + 0, y + height, (double) 0)
 					 .tex((double) ((float) (textureX + 0) * 0.00390625F), (double) ((float) (textureY + height) * 0.00390625F))
 					 .endVertex();
 		bufferbuilder.pos((double) (x + width), (double) (y + height), (double) 0)
@@ -63,4 +61,25 @@ public class RenderHelper {
 					 .endVertex();
 		tessellator.draw();
 	}
+	
+    public static void drawTexturedModelRect(double x, double y, double u, double v, double width, double height, double textureWidth, double textureHeight) {
+        double f = 1.0D / textureWidth;
+        double f1 = 1.0D / textureHeight;
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos(x, (y + height), 0)
+        			 .tex((u * f), ((v + height) * f1))
+        			 .endVertex();
+        bufferbuilder.pos((x + width), (y + height), 0)
+        			 .tex(((u + width) * f), ((v + height) * f1))
+        			 .endVertex();
+        bufferbuilder.pos((x + width), y, 0)
+        			 .tex(((u + width) * f), (v * f1))
+        			 .endVertex();
+        bufferbuilder.pos(x, y, 0)
+        			 .tex((u * f), (v * f1))
+        			 .endVertex();
+        tessellator.draw();
+    }
 }
