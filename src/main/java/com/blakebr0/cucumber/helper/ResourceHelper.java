@@ -17,11 +17,12 @@ public class ResourceHelper {
 	
 	public static ModelResourceLocation getModelResource(String resource) {
 		String modid = Loader.instance().activeModContainer().getModId();
-		return getModelResource(modid, resource);
+		return new ModelResourceLocation(modid + ":" + resource);
 	}
 	
-	public static ModelResourceLocation getModelResource(String modid, String resource) {
-		return new ModelResourceLocation(modid + ":" + resource);
+	public static ModelResourceLocation getModelResource(String resource, String variant) {
+		String modid = Loader.instance().activeModContainer().getModId();
+		return getModelResource(modid, resource, variant);
 	}
 	
 	public static ModelResourceLocation getModelResource(String modid, String resource, String variant) {
