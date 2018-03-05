@@ -15,11 +15,10 @@ public class GuideRegistry {
 	}
 	
 	public static Guide getGuide(String name) {
-		for (Guide g : guides) {
-			if (g.getName() == name) {
-				return g;
-			}
-		}
-		return null;
+		return guides.stream().filter(g -> g.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+	}
+	
+	public static ArrayList<Guide> getGuides() {
+		return guides;
 	}
 }

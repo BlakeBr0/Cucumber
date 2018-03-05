@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.blakebr0.cucumber.guide.components.IEntryComponent;
 
 import net.minecraft.client.Minecraft;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuideEntry {
 	
@@ -18,6 +20,7 @@ public class GuideEntry {
 		this.title = title;
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public void open(GuiGuide parent) {
 		Minecraft.getMinecraft().displayGuiScreen(new GuiEntry(parent, parent.guide.getEntries().get(id)));
 	}

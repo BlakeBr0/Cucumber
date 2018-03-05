@@ -6,10 +6,8 @@ import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.helper.ResourceHelper;
 import com.blakebr0.cucumber.iface.IModelHelper;
 import com.blakebr0.cucumber.item.ItemBase;
-import com.blakebr0.cucumber.lib.Colors;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +18,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemGuide extends ItemBase implements IModelHelper {
 
@@ -44,7 +44,7 @@ public class ItemGuide extends ItemBase implements IModelHelper {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		if (player != null && world.isRemote) {
-			Minecraft.getMinecraft().displayGuiScreen(new GuiGuide(player.getHeldItem(hand), this.guide));
+			openGuide(player.getHeldItem(hand));
 		}
 		return super.onItemRightClick(world, player, hand);
 	}
@@ -59,12 +59,17 @@ public class ItemGuide extends ItemBase implements IModelHelper {
 		}
 	}
 	
+	@Override
+	public void initModels() {
+		ModelLoader.setCustomModelResourceLocation(this, 0, ResourceHelper.getModelResource(Cucumber.MOD_ID, "guide", "inventory"));
+	}
+	
 	public Guide getGuide() {
 		return this.guide;
 	}
 
-	@Override
-	public void initModels() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, ResourceHelper.getModelResource(Cucumber.MOD_ID, "guide", "inventory"));
+	@SideOnly(Side.CLIENT)
+	private void openGuide(ItemStack book) {
+		Minecraft.getMinecraft().displayGuiScreen(new GuiGuide(book, this.guide));
 	}
 }
