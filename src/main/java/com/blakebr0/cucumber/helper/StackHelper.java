@@ -11,6 +11,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class StackHelper {
 
+	@Deprecated
 	public static ItemStack to(Object obj) {
 		if (obj instanceof Block) {
 			return new ItemStack((Block) obj);
@@ -21,6 +22,7 @@ public class StackHelper {
 		}
 	}
 
+	@Deprecated
 	public static ItemStack to(Object obj, int amount) {
 		if (obj instanceof Block) {
 			return new ItemStack((Block) obj, amount, 0);
@@ -31,6 +33,7 @@ public class StackHelper {
 		}
 	}
 
+	@Deprecated
 	public static ItemStack to(Object obj, int amount, int meta) {
 		if (obj instanceof Block) {
 			return new ItemStack((Block) obj, amount, meta);
