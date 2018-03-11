@@ -23,6 +23,20 @@ public class RenderHelper {
 		font.drawStringWithShadow(s, x, y, Utils.intColor(info.r + (int) (info.rl * sine), info.g + (int) (info.gl * sine), info.b + (int) (info.bl * sine)));
 	}
 	
+	public static void drawScaledWrappedText(FontRenderer font, String s, int x, int y, float scale, float width, float height, int offset, int color, boolean shadow) {
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(scale, scale, scale);
+        boolean oldUnicode = font.getUnicodeFlag();
+        font.setUnicodeFlag(false);
+        List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
+        List<String> sub = lines.subList((int) ((height + offset) / (font.FONT_HEIGHT * scale)), lines.size());
+        for (int i = 0; i < sub.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
+        	font.drawString(sub.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color, shadow);        
+        }
+        font.setUnicodeFlag(oldUnicode);
+        GlStateManager.popMatrix();
+	}
+	
 	/*
 	 * Credit to ellpeck for actually additions https://github.com/Ellpeck/ActuallyAdditions/blob/6ded1cc7b37e240642847a3addf90f5273844666/src/main/java/de/ellpeck/actuallyadditions/mod/util/StringUtil.java
 	 */

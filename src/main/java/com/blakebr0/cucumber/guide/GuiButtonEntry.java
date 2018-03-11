@@ -1,5 +1,7 @@
 package com.blakebr0.cucumber.guide;
 
+import com.blakebr0.cucumber.util.Utils;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -7,14 +9,16 @@ import net.minecraft.client.renderer.GlStateManager;
 
 public class GuiButtonEntry extends GuiButton {
 
-	public GuiButtonEntry(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
-		super(buttonId, x, y, widthIn, heightIn, buttonText);
+	private int color;
+	
+	public GuiButtonEntry(int id, int x, int y, int width, int height, String text, int color) {
+		super(id, x, y, width, height, text);
+		this.color = color;
 	}
 
 	@Override
 	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-        if (this.visible)
-        {
+        if (this.visible) {
             FontRenderer fontrenderer = mc.fontRenderer;
             mc.getTextureManager().bindTexture(GuiGuide.WIDGET_TEX);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

@@ -22,8 +22,7 @@ public class Utils {
 	/**
 	 * Adds commas to the specified numerical value
 	 * 
-	 * @param obj
-	 *            the number
+	 * @param obj the number
 	 * @return the formatted number
 	 */
 	public static String format(Object obj) {
@@ -59,5 +58,15 @@ public class Utils {
 	
 	public static int intColor(int r, int g, int b) {
 		return (r * 65536 + g * 256 + b);
+	}
+	
+	public static int[] hexToRGB(int hex) {
+		int[] colors = new int[3];
+		
+		int r = hex >> 16 & 255;
+		int g = hex >> 8 & 255;
+		int b = hex & 255;
+		
+		return colors;
 	}
 }
