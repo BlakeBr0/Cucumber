@@ -5,6 +5,9 @@
 
 # ITEMS
 
+# GUIDE
+guide.cu.page_indicator=Page %s / %s
+
 # TOOLTIPS
 tooltip.cu.uses_left=Uses Left:
 

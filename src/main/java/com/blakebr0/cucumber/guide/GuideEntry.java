@@ -20,11 +20,6 @@ public class GuideEntry {
 		this.title = title;
 	}
 	
-	@SideOnly(Side.CLIENT)
-	public void open(GuiGuide parent) {
-		Minecraft.getMinecraft().displayGuiScreen(new GuiEntry(parent, parent.guide.getEntries().get(id)));
-	}
-	
 	public int getId() {
 		return this.id;
 	}

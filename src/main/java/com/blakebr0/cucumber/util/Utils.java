@@ -18,6 +18,10 @@ public class Utils {
 	public static String localize(String string) {
 		return new TextComponentTranslation(string).getFormattedText();
 	}
+	
+	public static String localize(String string, Object... args) {
+		return new TextComponentTranslation(string, args).getFormattedText();
+	}
 
 	/**
 	 * Adds commas to the specified numerical value

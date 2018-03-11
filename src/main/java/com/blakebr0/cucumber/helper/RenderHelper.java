@@ -23,6 +23,10 @@ public class RenderHelper {
 		font.drawStringWithShadow(s, x, y, Utils.intColor(info.r + (int) (info.rl * sine), info.g + (int) (info.gl * sine), info.b + (int) (info.bl * sine)));
 	}
 	
+    public static void drawCenteredText(FontRenderer font, String s, int x, int y, int color) {
+        font.drawString(s, (x - font.getStringWidth(s) / 2), y, color);
+    }
+    
 	public static void drawScaledWrappedText(FontRenderer font, String s, int x, int y, float scale, float width, float height, int offset, int color, boolean shadow) {
         GlStateManager.pushMatrix();
         GlStateManager.scale(scale, scale, scale);
@@ -61,7 +65,7 @@ public class RenderHelper {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos(x + 0, y + height, (double) 0)
+		bufferbuilder.pos((double) (x + 0), (double) (y + height), (double) 0)
 					 .tex((double) ((float) (textureX + 0) * 0.00390625F), (double) ((float) (textureY + height) * 0.00390625F))
 					 .endVertex();
 		bufferbuilder.pos((double) (x + width), (double) (y + height), (double) 0)
