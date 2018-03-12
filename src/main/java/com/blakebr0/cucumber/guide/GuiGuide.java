@@ -5,6 +5,7 @@ import java.io.IOException;
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.guide.components.IEntryComponent;
 import com.blakebr0.cucumber.helper.RenderHelper;
+import com.blakebr0.cucumber.helper.ResourceHelper;
 import com.blakebr0.cucumber.network.NetworkHandler;
 import com.blakebr0.cucumber.network.messages.MessageUpdateGuideNBT;
 import com.blakebr0.cucumber.util.Utils;
@@ -20,16 +21,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiGuide extends GuiScreen {
 
-	public static final ResourceLocation GUI_TEX = new ResourceLocation(Cucumber.MOD_ID, "textures/gui/guide.png");
-	public static final ResourceLocation WIDGET_TEX = new ResourceLocation(Cucumber.MOD_ID, "textures/gui/guide_widgets.png");
+	public static final ResourceLocation GUI_TEX = ResourceHelper.getResource(Cucumber.MOD_ID, "textures/gui/guide.png");
+	public static final ResourceLocation WIDGET_TEX = ResourceHelper.getResource(Cucumber.MOD_ID, "textures/gui/guide_widgets.png");
 	public static final int ENTRIES_PER_PAGE = 8;
 	public static final int COMPONENT_SPACING = 6;
 	public ItemStack book;
 	public Guide guide;
 	public int xSize, ySize;
 	public int xStart, yStart;
-	public int page, maxPage, page1;
+	public int topicsPage, maxTopicsPage;
+	public int entryPage, maxEntryPage;
 	public GuideEntry entry;
+	public int entryId;
 	public GuiButtonArrow prevEntry, nextEntry, prevPage, nextPage;
 	
 	public GuiGuide(ItemStack book, Guide guide) {
@@ -44,17 +47,19 @@ public class GuiGuide extends GuiScreen {
 		super.initGui();
 		this.xStart = (this.width - this.xSize) / 2;
 		this.yStart = (this.height - this.ySize) / 2;
-		this.page = GuideBookHelper.getEntryPage(this.book);
-		this.maxPage = (this.guide.getEntries().size() / ENTRIES_PER_PAGE) - 1;
-		this.page1 = 1;
-		int offset = 0;
+		this.topicsPage = GuideBookHelper.getTopicsPage(this.book);
+		this.maxTopicsPage = (this.guide.getEntries().size() / ENTRIES_PER_PAGE) - 1;
+		this.entryId = GuideBookHelper.getEntryId(this.book);
+		this.entry = this.entryId > -1 ? this.guide.getEntryById(this.entryId) : null;
+		this.entryPage = 0;
 		
 		this.prevEntry = this.addButton(new GuiButtonArrow(10000, this.xStart + 17, this.yStart + 207, true));
 		this.nextEntry = this.addButton(new GuiButtonArrow(10001, this.xStart + 145, this.yStart + 207, false));
-		this.prevPage = this.addButton(new GuiButtonArrow(10002, this.xStart + 196, this.yStart + 207,true));
+		this.prevPage = this.addButton(new GuiButtonArrow(10002, this.xStart + 196, this.yStart + 207, true));
 		this.nextPage = this.addButton(new GuiButtonArrow(10003, this.xStart + 390, this.yStart + 207, false));
 		
 		this.updateEntryButtons();
+		this.updatePageButtons();
 	}
 	
 	@Override
@@ -66,15 +71,16 @@ public class GuiGuide extends GuiScreen {
 		int y = this.yStart;
 		RenderHelper.drawTexturedModelRect(x, y, 0, 0, this.xSize, this.ySize, 512, 512);
 		
-		if (entry != null) {
-			RenderHelper.drawScaledWrappedText(fontRenderer, entry.getTitle(), (this.width - this.xSize) / 2 + 235, (this.height - this.ySize) / 2 + 16, 1.3F, 160, 0, false);
+		if (this.entry != null) {
+			RenderHelper.drawScaledWrappedText(this.fontRenderer, this.entry.getTitle(), this.xStart + 235, this.yStart + 16, 1.3F, 160, 0, false);
+			RenderHelper.drawScaledItemIntoGui(this.itemRender, this.entry.getIconStack(), this.xStart + 198, this.yStart + 18, 1.9F);
 			int drawAt = this.yStart + 60;
 			int height = 0;
 			for (IEntryComponent comp : entry.getComponents()) {
 				if (drawAt + comp.height() > this.height) {
 					//break;
 				}
-				comp.draw(mouseX, mouseY, partialTicks, x + 200, drawAt, 220, height, page1 * comp.height(), page1);
+				comp.draw(mouseX, mouseY, partialTicks, x + 200, drawAt, 220, height, entryPage * comp.height(), this.entryPage);
 				drawAt += comp.height() + COMPONENT_SPACING;
 				height += comp.height();
 			}
@@ -82,35 +88,38 @@ public class GuiGuide extends GuiScreen {
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		
-		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.page + 1, this.maxPage + 2), x + 96, this.yStart + 211, 0);
+		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.topicsPage + 1, this.maxTopicsPage + 2), x + 96, this.yStart + 211, 0);
+		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.entryPage + 1, this.maxEntryPage + 2), x + 308, this.yStart + 211, 0);
 	}
 	
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if (button instanceof GuiButtonEntry) {
-			button.enabled = false;
-			entry = guide.getEntries().get(button.id);
+			this.entry = this.guide.getEntryById(button.id);
+			this.entryId = button.id;
+			this.updateEntryButtons();
+			this.updatePageButtons();
 		}
 		
-		if (button == this.prevEntry && this.page > 0) {
-			book.getTagCompound().setInteger("Page", book.getTagCompound().getInteger("Page") - 1);
-			this.page -= 1;
+		if (button == this.prevEntry && this.topicsPage > 0) {
+			this.topicsPage -= 1;
 			this.updateEntryButtons();
-		} else if (button == this.nextEntry && this.page <= this.maxPage) {
-			book.getTagCompound().setInteger("Page", book.getTagCompound().getInteger("Page") + 1);
-			this.page++;
+		} else if (button == this.nextEntry && this.topicsPage <= this.maxTopicsPage) {
+			this.topicsPage++;
 			this.updateEntryButtons();
 		} else if (button == this.prevPage) {
-			this.page1--;
-		} else if (button == this.nextPage) {
-			this.page1++;
+			this.entryPage--;
+			this.updatePageButtons();
+		} else if (button == this.nextPage && this.entryPage <= this.maxEntryPage) {
+			this.entryPage++;
+			this.updatePageButtons();
 		}
 	}
 	
 	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
-		NetworkHandler.INSTANCE.sendToServer(new MessageUpdateGuideNBT(page));
+		NetworkHandler.INSTANCE.sendToServer(new MessageUpdateGuideNBT(this.topicsPage, this.entryPage, this.entryId));
 	}
 	
 	@Override
@@ -118,16 +127,29 @@ public class GuiGuide extends GuiScreen {
 		return false;
 	}
 	
-	public void updateEntryButtons() {		
+	public void updateEntryButtons() {
 		this.buttonList.removeIf(b -> b.id < 10000);
 		
-		this.prevEntry.enabled = this.page > 0;
-		this.nextEntry.enabled = this.page <= this.maxPage;
+		this.prevEntry.enabled = this.topicsPage > 0;
+		this.nextEntry.enabled = this.topicsPage <= this.maxTopicsPage;
 		
-		int i = ENTRIES_PER_PAGE * this.page;
-		for (int x = 0; x < ENTRIES_PER_PAGE && i < guide.getEntries().size(); x++) {
-			this.addButton(new GuiButtonEntry(i, this.xStart + 20, this.yStart + 40 + (x * 20), 138, 20, guide.getEntries().get(i).getTitle(), this.guide.getColor()));
+		int i = ENTRIES_PER_PAGE * this.topicsPage;
+		for (int x = 0; x < ENTRIES_PER_PAGE && i < this.guide.getEntries().size(); x++) {
+			GuideEntry entry = this.guide.getEntryById(i);
+			GuiButtonEntry button = new GuiButtonEntry(i, this.xStart + 20, this.yStart + 40 + (x * 20), 151, 20, entry.getTitle(), this.guide.getColor());
+			
+			if (i == this.entryId) {
+				button.enabled = false;
+			}
+			
+			this.addButton(button);
+			
 			i++;
 		}
+	}
+	
+	public void updatePageButtons() {
+		this.prevPage.enabled = this.entryPage > 0;
+		this.nextPage.enabled = this.entryPage <= this.maxEntryPage;
 	}
 }

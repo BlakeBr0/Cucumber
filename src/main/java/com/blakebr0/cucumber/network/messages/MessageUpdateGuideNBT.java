@@ -1,6 +1,9 @@
 package com.blakebr0.cucumber.network.messages;
 
 
+import com.blakebr0.cucumber.guide.GuideBookHelper;
+import com.blakebr0.cucumber.helper.NBTHelper;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,24 +17,32 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class MessageUpdateGuideNBT implements IMessage {
 
-	private int page;
+	private int topicsPage;
+	private int entryPage;
+	private int entryId;
 
 	public MessageUpdateGuideNBT() {
 		
 	}
 
-	public MessageUpdateGuideNBT(int page) {
-		this.page = page;
+	public MessageUpdateGuideNBT(int topicsPage, int entryPage, int entryId) {
+		this.topicsPage = topicsPage;
+		this.entryPage = entryPage;
+		this.entryId = entryId;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.page = buf.readInt();
+		this.topicsPage = buf.readInt();
+		this.entryPage = buf.readInt();
+		this.entryId = buf.readInt();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(page);
+		buf.writeInt(this.topicsPage);
+		buf.writeInt(this.entryPage);
+		buf.writeInt(this.entryId);
 	}
 
 	public static class Handler implements IMessageHandler<MessageUpdateGuideNBT, IMessage> {
@@ -44,7 +55,10 @@ public class MessageUpdateGuideNBT implements IMessage {
 
 		private void handle(MessageUpdateGuideNBT message, MessageContext ctx) {
 			ItemStack stack = ctx.getServerHandler().player.getHeldItem(ctx.getServerHandler().player.getActiveHand());
-			stack.getTagCompound().setInteger("Page", message.page); // TODO: SKRRR
+			
+			GuideBookHelper.setTopicsPage(stack, message.topicsPage);
+			GuideBookHelper.setEntryPage(stack, message.entryPage);
+			GuideBookHelper.setEntryId(stack, message.entryId);
 		}
 	}
 }

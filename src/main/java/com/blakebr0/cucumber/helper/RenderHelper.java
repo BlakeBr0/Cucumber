@@ -10,8 +10,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.ItemStack;
 
 public class RenderHelper {
 	
@@ -99,5 +101,12 @@ public class RenderHelper {
         			 .tex((u * f), (v * f1))
         			 .endVertex();
         tessellator.draw();
+    }
+    
+    public static void drawScaledItemIntoGui(RenderItem render, ItemStack stack, int x, int y, float scale) {
+    	GlStateManager.pushMatrix();
+    	GlStateManager.scale(scale, scale, scale);
+    	render.renderItemAndEffectIntoGUI(stack, (int) (x / scale), (int) (y / scale));
+    	GlStateManager.popMatrix();
     }
 }

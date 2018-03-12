@@ -32,11 +32,13 @@ public class Guide {
 	}
 	
 	public static Guide create(String modid, String name, String author, String registryName, int color, CreativeTabs tab) {
-		return new Guide(modid, name, author, registryName, color, tab);
+		Guide guide = new Guide(modid, name, author, registryName, color, tab);
+		GuideRegistry.register(guide);
+		return guide;
 	}
 	
+	// TODO remove
 	public void register() {
-		GuideRegistry.register(this);
 		Cucumber.REGISTRY.register(new ItemGuide(registryName, tab, this), registryName);
 	}
 	
@@ -47,6 +49,7 @@ public class Guide {
 		tag.setString("Name", this.getName());
 		tag.setString("ModName", this.getModName());
 		tag.setString("Author", this.getAuthor());
+		
 		stack.setTagCompound(tag);	
 	
 		return stack;
@@ -80,9 +83,14 @@ public class Guide {
 		return !ALL_GUIDES.isEmpty();
 	}
 	
-	public Guide addEntry(GuideEntry entry) {
+	public GuideEntry addEntry(String loc) {
+		GuideEntry entry = new GuideEntry(this.entries.size(), Utils.localize(loc));
 		this.entries.add(entry);
-		return this;
+		return entry;
+	}
+	
+	public GuideEntry getEntryById(int id) {
+		return this.entries.get(id);
 	}
 	
 	public ArrayList<GuideEntry> getEntries() {
