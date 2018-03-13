@@ -41,6 +41,13 @@ public class GuiGuide extends GuiScreen {
 		this.guide = guide;
 		this.xSize = 436;
 		this.ySize = 240;
+		
+		this.topicsPage = GuideBookHelper.getTopicsPage(this.book);
+		this.maxTopicsPage = (this.guide.getEntryCount() / ENTRIES_PER_PAGE) - 1;
+		this.entryId = GuideBookHelper.getEntryId(this.book);
+		this.entry = this.entryId > -1 ? this.guide.getEntryById(this.entryId) : null;
+		this.entryPage = GuideBookHelper.getEntryPage(this.book);
+		this.maxEntryPage = this.entry.getPageCount() - 2;
 	}
 	
 	@Override
@@ -48,12 +55,6 @@ public class GuiGuide extends GuiScreen {
 		super.initGui();
 		this.xStart = (this.width - this.xSize) / 2;
 		this.yStart = (this.height - this.ySize) / 2;
-		this.topicsPage = GuideBookHelper.getTopicsPage(this.book);
-		this.maxTopicsPage = (this.guide.getEntryCount() / ENTRIES_PER_PAGE) - 1;
-		this.entryId = GuideBookHelper.getEntryId(this.book);
-		this.entry = this.entryId > -1 ? this.guide.getEntryById(this.entryId) : null;
-		this.entryPage = GuideBookHelper.getEntryPage(this.book);
-		this.maxEntryPage = this.entry.getPageCount() - 2;
 		
 		this.prevEntry = this.addButton(new GuiButtonArrow(10000, this.xStart + 17, this.yStart + 207, true));
 		this.nextEntry = this.addButton(new GuiButtonArrow(10001, this.xStart + 145, this.yStart + 207, false));
@@ -117,17 +118,6 @@ public class GuiGuide extends GuiScreen {
 	public void onGuiClosed() {
 		NetworkHandler.INSTANCE.sendToServer(new MessageUpdateGuideNBT(this.topicsPage, this.entryPage, this.entryId));
 		super.onGuiClosed();
-	}
-	
-	@Override // TODO fix saving when resizing window and stuff
-	public void setWorldAndResolution(Minecraft mc, int width, int height) {
-//		GuideBookHelper.setTopicsPage(this.book, this.topicsPage);
-//		GuideBookHelper.setEntryPage(this.book, this.entryPage);
-//		GuideBookHelper.setEntryId(this.book, this.entryId);
-		
-//		NetworkHandler.INSTANCE.sendToServer(new MessageUpdateGuideNBT(this.topicsPage, this.entryPage, this.entryId));
-		
-		super.setWorldAndResolution(mc, width, height);
 	}
 	
 	@Override
