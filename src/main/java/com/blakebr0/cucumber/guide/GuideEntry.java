@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.blakebr0.cucumber.guide.components.IEntryComponent;
+import com.blakebr0.cucumber.guide.pages.IEntryPage;
 import com.google.common.collect.Maps;
 
 import net.minecraft.client.Minecraft;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class GuideEntry {
 	
-	private ArrayList<IEntryComponent> components = new ArrayList<>();
+	private ArrayList<IEntryPage> pages = new ArrayList<>();
 
 	private int id;
 	private String title;
@@ -35,14 +35,25 @@ public class GuideEntry {
 		return this.title;
 	}
 	
-	public GuideEntry addComponent(IEntryComponent component) {
-		this.components.add(component);
-		
+	public GuideEntry addPage(IEntryPage page) {
+		this.pages.add(page);
 		return this;
 	}
+		
+	public ArrayList<IEntryPage> getPages() {
+		return this.pages;
+	}
 	
-	public ArrayList<IEntryComponent> getComponents() {
-		return this.components;
+	public IEntryPage getPage(int page) {
+		return this.pages.get(page);
+	}
+
+	public int getPageCount() {
+		return this.pages.size();
+	}
+	
+	public boolean hasPages() {
+		return !this.pages.isEmpty();
 	}
 	
 	public GuideEntry setIconStack(ItemStack stack) {

@@ -42,19 +42,6 @@ public class Guide {
 		Cucumber.REGISTRY.register(new ItemGuide(registryName, tab, this), registryName);
 	}
 	
-	public ItemStack makeGuideBookStack(ItemGuide guide) {
-		ItemStack stack = new ItemStack(guide);
-		NBTTagCompound tag = new NBTTagCompound();
-		
-		tag.setString("Name", this.getName());
-		tag.setString("ModName", this.getModName());
-		tag.setString("Author", this.getAuthor());
-		
-		stack.setTagCompound(tag);	
-	
-		return stack;
-	}
-	
 	public String getModName() {
 		return this.modname;
 	}
@@ -84,7 +71,7 @@ public class Guide {
 	}
 	
 	public GuideEntry addEntry(String loc) {
-		GuideEntry entry = new GuideEntry(this.entries.size(), Utils.localize(loc));
+		GuideEntry entry = new GuideEntry(this.getEntryCount(), Utils.localize(loc));
 		this.entries.add(entry);
 		return entry;
 	}
@@ -95,6 +82,10 @@ public class Guide {
 	
 	public ArrayList<GuideEntry> getEntries() {
 		return this.entries;
+	}
+	
+	public int getEntryCount() {
+		return this.entries.size();
 	}
 	
 	public boolean hasEntries() {

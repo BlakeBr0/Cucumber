@@ -4,7 +4,7 @@ import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.event.MobDropHandler;
 import com.blakebr0.cucumber.guide.Guide;
 import com.blakebr0.cucumber.guide.GuideEntry;
-import com.blakebr0.cucumber.guide.components.ComponentText;
+import com.blakebr0.cucumber.guide.pages.PageText;
 import com.blakebr0.cucumber.helper.StackHelper;
 import com.blakebr0.cucumber.network.NetworkHandler;
 import com.blakebr0.cucumber.render.GlowingTextRenderer;
@@ -26,8 +26,8 @@ public class CommonProxy {
 		Guide g = Guide.create(Cucumber.NAME, "guide.cucumber.name", "BlakeBr0", "guide_test", 0x123456, CreativeTabs.MATERIALS);
 		g.addEntry("the ting goes SKRRRA XD")
 				.setIconStack(new ItemStack(Blocks.STAINED_GLASS_PANE))
-				.addComponent(new ComponentText("Hello theorists! Welcome to GAME THEORY!"))
-				.addComponent(new ComponentText("WOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
+				.addPage(new PageText("Hello theorists! Welcome to GAME THEORY!"))
+				.addPage(new PageText("WOAAAAAAAAAAAAAA<b>AAA<i>AAA<r>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
 						+ "WOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
 						+ "WOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"
 						+ "WOAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH"

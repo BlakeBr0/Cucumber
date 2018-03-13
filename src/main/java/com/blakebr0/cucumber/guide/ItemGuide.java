@@ -3,9 +3,11 @@ package com.blakebr0.cucumber.guide;
 import java.util.List;
 
 import com.blakebr0.cucumber.Cucumber;
+import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.cucumber.helper.ResourceHelper;
 import com.blakebr0.cucumber.iface.IModelHelper;
 import com.blakebr0.cucumber.item.ItemBase;
+import com.blakebr0.cucumber.util.Utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,21 +26,15 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemGuide extends ItemBase implements IModelHelper {
 
 	private Guide guide;
+	private String author;
 	
 	public ItemGuide(String name, CreativeTabs tab, Guide guide) {
 		super("guide." + name);
 		this.setCreativeTab(tab);
 		this.guide = guide;
+		this.author = guide.getAuthor();
 		
 		Guide.addGuideItem(this);
-	}
-	
-	@Override
-	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if (this.isInCreativeTab(tab)) {
-			ItemStack stack = this.guide.makeGuideBookStack(this);
-			items.add(stack);
-		}
 	}
 	
 	@Override
@@ -51,12 +47,7 @@ public class ItemGuide extends ItemBase implements IModelHelper {
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
-		if (stack.hasTagCompound()) {
-			NBTTagCompound tag = stack.getTagCompound();
-			if (tag.hasKey("Author")) {
-				tooltip.add("Author: " + tag.getString("Author"));
-			}
-		}
+		tooltip.add(Utils.localize("tooltip.cu.author", this.author));
 	}
 	
 	@Override
