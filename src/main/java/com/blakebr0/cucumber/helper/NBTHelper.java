@@ -80,12 +80,32 @@ public class NBTHelper {
 		return stack.hasTagCompound() ? stack.getTagCompound().getByte(key) : 0;
 	}
 	
+	public static short getShort(ItemStack stack, String key) {
+		return stack.hasTagCompound() ? stack.getTagCompound().getShort(key) : 0;
+	}
+	
 	public static int getInt(ItemStack stack, String key) {
 		return stack.hasTagCompound() ? stack.getTagCompound().getInteger(key) : 0;
 	}
 	
+	public static long getLong(ItemStack stack, String key) {
+		return stack.hasTagCompound() ? stack.getTagCompound().getLong(key) : 0L;
+	}
+	
+	public static float getFloat(ItemStack stack, String key) {
+		return stack.hasTagCompound() ? stack.getTagCompound().getFloat(key) : 0.0F;
+	}
+	
+	public static double getDouble(ItemStack stack, String key) {
+		return stack.hasTagCompound() ? stack.getTagCompound().getDouble(key) : 0.0D;
+	}
+	
 	public static String getString(ItemStack stack, String key) {
 		return stack.hasTagCompound() ? stack.getTagCompound().getString(key) : "";
+	}
+	
+	public static byte[] getByteArray(ItemStack stack, String key) {
+		return stack.hasTagCompound() ? stack.getTagCompound().getByteArray(key) : new byte[0];
 	}
 	
 	public static boolean getBoolean(ItemStack stack, String key) {
