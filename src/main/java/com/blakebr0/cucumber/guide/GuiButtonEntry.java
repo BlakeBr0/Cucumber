@@ -1,16 +1,21 @@
 package com.blakebr0.cucumber.guide;
 
+import com.blakebr0.cucumber.helper.RenderHelper;
 import com.blakebr0.cucumber.util.Utils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.item.ItemStack;
 
 public class GuiButtonEntry extends GuiButton {
 	
-	public GuiButtonEntry(int id, int x, int y, int width, int height, String text) {
+	private ItemStack stack;
+	
+	public GuiButtonEntry(int id, int x, int y, int width, int height, String text, ItemStack stack) {
 		super(id, x, y, width, height, text);
+		this.stack = stack;
 	}
 
 	@Override
@@ -36,8 +41,13 @@ public class GuiButtonEntry extends GuiButton {
             } else if (this.hovered) {
                 j = 16777120;
             }
-
-            this.drawCenteredString(font, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, j);
+            
+            if (font.getStringWidth(this.displayString) > this.width) {
+            	this.displayString = font.trimStringToWidth(this.displayString, this.width - 29) + "...";
+            }
+            
+            RenderHelper.drawScaledItemIntoGui(mc.getRenderItem(), this.stack, this.x + 2, this.y + 2, 1.0F);
+            this.drawString(font, this.displayString, this.x + 20, this.y + (this.height - 8) / 2, j);
         }
 	}
 }

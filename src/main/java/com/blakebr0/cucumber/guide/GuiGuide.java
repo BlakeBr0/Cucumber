@@ -6,6 +6,7 @@ import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.guide.pages.IEntryPage;
 import com.blakebr0.cucumber.helper.RenderHelper;
 import com.blakebr0.cucumber.helper.ResourceHelper;
+import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.cucumber.network.NetworkHandler;
 import com.blakebr0.cucumber.network.messages.MessageUpdateGuideNBT;
 import com.blakebr0.cucumber.util.Utils;
@@ -74,18 +75,20 @@ public class GuiGuide extends GuiScreen {
 		int y = this.yStart;
 		RenderHelper.drawTexturedModelRect(x, y, 0, 0, this.xSize, this.ySize, 512, 512);
 		
+		//RenderHelper.drawCenteredText(this.fontRenderer, Colors.BOLD + "Guide", x + 95, this.yStart + 15, 0);
+		
 		if (this.entry != null) {
-			RenderHelper.drawScaledWrappedText(this.fontRenderer, this.entry.getTitle(), this.xStart + 235, this.yStart + 16, 1.3F, 160, 0, false);
-			RenderHelper.drawScaledItemIntoGui(this.itemRender, this.entry.getIconStack(), this.xStart + 198, this.yStart + 18, 1.9F);
+			RenderHelper.drawScaledWrappedText(this.fontRenderer, Colors.BOLD + this.entry.getTitle(), this.xStart + 227, this.yStart + 17, 1.0F, 190, 0, false);
+			RenderHelper.drawScaledItemIntoGui(this.itemRender, this.entry.getIconStack(), this.xStart + 197, this.yStart + 18, 1.54F);
 			if (this.entry.hasPages()) {
-				this.entry.getPage(this.entryPage).draw(this.mc, mouseX, mouseY, partialTicks, x + 200, this.yStart + 60, 220, 0);
+				this.entry.getPage(this.entryPage).draw(this.mc, mouseX, mouseY, partialTicks, x + 200, this.yStart + 63, 220, 0);
 			}
 		}
 		
-		super.drawScreen(mouseX, mouseY, partialTicks);
-		
 		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.topicsPage + 1, this.maxTopicsPage + 2), x + 96, this.yStart + 211, 0);
 		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.entryPage + 1, Math.max(this.maxEntryPage + 2, 1)), x + 308, this.yStart + 211, 0);
+
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 	
 	@Override
@@ -134,7 +137,7 @@ public class GuiGuide extends GuiScreen {
 		int i = ENTRIES_PER_PAGE * this.topicsPage;
 		for (int x = 0; x < ENTRIES_PER_PAGE && i < this.guide.getEntryCount(); x++) {
 			GuideEntry entry = this.guide.getEntryById(i);
-			GuiButtonEntry button = new GuiButtonEntry(i, this.xStart + 20, this.yStart + 40 + (x * 20), 151, 20, entry.getTitle());
+			GuiButtonEntry button = new GuiButtonEntry(i, this.xStart + 20, this.yStart + 40 + (x * 20), 151, 20, entry.getTitle(), entry.getIconStack());
 			
 			if (i == this.entryId) {
 				button.enabled = false;
