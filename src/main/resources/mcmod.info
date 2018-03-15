@@ -1,8 +1,8 @@
 [
 {
   "modid": "cucumber",
-  "name": "Cucumber",
-  "description": "Shared code for all my mods.",
+  "name": "Cucumber Library",
+  "description": "A library of shared code and functionality used by my mods.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "https://minecraft.curseforge.com/projects/cucumber",

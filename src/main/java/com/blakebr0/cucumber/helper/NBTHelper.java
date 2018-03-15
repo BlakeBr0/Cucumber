@@ -108,6 +108,10 @@ public class NBTHelper {
 		return stack.hasTagCompound() ? stack.getTagCompound().getByteArray(key) : new byte[0];
 	}
 	
+	public static int[] getIntArray(ItemStack stack, String key) {
+		return stack.hasTagCompound() ? stack.getTagCompound().getIntArray(key) : new int[0];
+	}
+	
 	public static boolean getBoolean(ItemStack stack, String key) {
 		return stack.hasTagCompound() ? stack.getTagCompound().getBoolean(key) : false;
 	}

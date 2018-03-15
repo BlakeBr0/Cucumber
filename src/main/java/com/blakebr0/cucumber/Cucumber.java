@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 @Mod(name = Cucumber.NAME, modid = Cucumber.MOD_ID, version = Cucumber.VERSION)
 public class Cucumber {
 
-	public static final String NAME = "Cucumber";
+	public static final String NAME = "Cucumber Library";
 	public static final String MOD_ID = "cucumber";
 	public static final String VERSION = "${version}";
 	
