@@ -25,7 +25,7 @@ public class GuiGuide extends GuiScreen {
 
 	public static final ResourceLocation GUI_TEX = ResourceHelper.getResource(Cucumber.MOD_ID, "textures/gui/guide.png");
 	public static final ResourceLocation WIDGET_TEX = ResourceHelper.getResource(Cucumber.MOD_ID, "textures/gui/guide_widgets.png");
-	public static final int ENTRIES_PER_PAGE = 8;
+	public static final int ENTRIES_PER_PAGE = 9;
 	public static final int COMPONENT_SPACING = 6;
 	public ItemStack book;
 	public Guide guide;
@@ -73,7 +73,7 @@ public class GuiGuide extends GuiScreen {
 		this.mc.renderEngine.bindTexture(GUI_TEX);
 		RenderHelper.drawTexturedModelRect(this.xStart, this.yStart, 0, 0, this.xSize, this.ySize, 512, 512);
 		
-		RenderHelper.drawScaledCenteredWrappedTextXY(this.fontRenderer, Colors.BOLD + this.guide.getName(), this.xStart + 95, this.yStart + 24, 1.0F, 120, -1, 0, false);
+		RenderHelper.drawScaledCenteredWrappedTextXY(this.fontRenderer, Colors.BOLD + this.guide.getName(), this.xStart + 95, this.yStart + 22, 1.0F, 120, -1, 0, false);
 		
 		if (this.entry != null) {
 			RenderHelper.drawScaledCenteredWrappedTextY(this.fontRenderer, Colors.BOLD + this.entry.getTitle(), this.xStart + 227, this.yStart + 25, 1.0F, 190, -1, 0, false);
@@ -133,7 +133,7 @@ public class GuiGuide extends GuiScreen {
 		int i = ENTRIES_PER_PAGE * this.topicsPage;
 		for (int x = 0; x < ENTRIES_PER_PAGE && i < this.guide.getEntryCount(); x++) {
 			GuideEntry entry = this.guide.getEntryById(i);
-			GuiButtonEntry button = new GuiButtonEntry(i, this.xStart + 20, this.yStart + 43 + (x * 20), 151, 16, entry.getTitle(), entry.getIconStack());
+			GuiButtonEntry button = new GuiButtonEntry(i, this.xStart + 20, this.yStart + 41 + (x * 18), 151, 16, entry.getTitle(), entry.getIconStack());
 			
 			if (i == this.entryId) {
 				button.enabled = false;

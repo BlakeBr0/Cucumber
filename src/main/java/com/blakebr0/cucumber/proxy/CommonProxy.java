@@ -73,7 +73,7 @@ public class CommonProxy {
 		g.addEntry("th ting goes SKRRRA XD");
 		g.addEntry("the ting goes RA XD");
 		
-		Cucumber.REGISTRY.register(new ItemGuide(CreativeTabs.MATERIALS, g), "guide");
+		Cucumber.REGISTRY.register(new ItemGuide("cucumber_guide", CreativeTabs.MATERIALS, g), "guide");
 	}
 	
 	public void init(FMLInitializationEvent event) {
