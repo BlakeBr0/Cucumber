@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.event.MobDropHandler;
 import com.blakebr0.cucumber.guide.Guide;
 import com.blakebr0.cucumber.guide.GuideEntry;
+import com.blakebr0.cucumber.guide.ItemGuide;
 import com.blakebr0.cucumber.guide.pages.PageText;
 import com.blakebr0.cucumber.helper.StackHelper;
 import com.blakebr0.cucumber.network.NetworkHandler;
@@ -23,7 +24,7 @@ public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
-		Guide g = Guide.create(Cucumber.NAME, "guide.cucumber.name", "BlakeBr0", "guide_test", 0x123456, CreativeTabs.MATERIALS);
+		Guide g = Guide.create("guide.cucumber.name", "BlakeBr0", 0x123456);
 		g.addEntry("the ting goes SKRRRA XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
 				.setIconStack(new ItemStack(Blocks.STAINED_GLASS_PANE, 1, 2))
 				.addPage(new PageText("Hello theorists! Welcome to GAME THEORY!"))
@@ -71,7 +72,8 @@ public class CommonProxy {
 		g.addEntry("the ting goes SKRRRA XD");
 		g.addEntry("th ting goes SKRRRA XD");
 		g.addEntry("the ting goes RA XD");
-		g.register();
+		
+		Cucumber.REGISTRY.register(new ItemGuide(CreativeTabs.MATERIALS, g), "guide");
 	}
 	
 	public void init(FMLInitializationEvent event) {

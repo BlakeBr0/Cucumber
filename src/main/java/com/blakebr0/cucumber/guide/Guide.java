@@ -15,35 +15,20 @@ public class Guide {
 	private static final ArrayList<ItemGuide> ALL_GUIDES = new ArrayList<>();
 	private ArrayList<GuideEntry> entries = new ArrayList<>();
 	
-	private String modname;
 	private String name;
 	private String author;
-	private String registryName;
 	private int color;
-	private CreativeTabs tab;
 	
-	private Guide(String modname, String name, String author, String registryName, int color, CreativeTabs tab) {
-		this.modname = modname;
+	private Guide(String name, String author, int color) {
 		this.name = Utils.localize(name);
 		this.author = author;
-		this.registryName = registryName;
 		this.color = color;
-		this.tab = tab;
 	}
 	
-	public static Guide create(String modid, String name, String author, String registryName, int color, CreativeTabs tab) {
-		Guide guide = new Guide(modid, name, author, registryName, color, tab);
+	public static Guide create(String name, String author, int color) {
+		Guide guide = new Guide(name, author, color);
 		GuideRegistry.register(guide);
 		return guide;
-	}
-	
-	// TODO remove
-	public void register() {
-		Cucumber.REGISTRY.register(new ItemGuide(registryName, tab, this), registryName);
-	}
-	
-	public String getModName() {
-		return this.modname;
 	}
 	
 	public String getName() {
