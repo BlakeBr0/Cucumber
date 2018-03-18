@@ -24,7 +24,7 @@ public class Guide {
 	
 	private Guide(String modname, String name, String author, String registryName, int color, CreativeTabs tab) {
 		this.modname = modname;
-		this.name = name;
+		this.name = Utils.localize(name);
 		this.author = author;
 		this.registryName = registryName;
 		this.color = color;
@@ -47,7 +47,7 @@ public class Guide {
 	}
 	
 	public String getName() {
-		return Utils.localize(this.name);
+		return this.name;
 	}
 	
 	public String getAuthor() {

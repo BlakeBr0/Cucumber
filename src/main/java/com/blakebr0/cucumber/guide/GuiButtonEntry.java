@@ -43,10 +43,10 @@ public class GuiButtonEntry extends GuiButton {
             }
             
             if (font.getStringWidth(this.displayString) > this.width) {
-            	this.displayString = font.trimStringToWidth(this.displayString, this.width - 29) + "...";
+            	this.displayString = font.trimStringToWidth(this.displayString, this.width - 24) + "...";
             }
             
-            RenderHelper.drawScaledItemIntoGui(mc.getRenderItem(), this.stack, this.x + 2, this.y + 2, 1.0F);
+            RenderHelper.drawScaledItemIntoGui(mc.getRenderItem(), this.stack, this.x + 4, this.y + 2, 0.8F);
             this.drawString(font, this.displayString, this.x + 20, this.y + (this.height - 8) / 2, j);
         }
 	}

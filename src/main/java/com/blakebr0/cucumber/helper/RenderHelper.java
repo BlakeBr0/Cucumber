@@ -28,20 +28,6 @@ public class RenderHelper {
     public static void drawCenteredText(FontRenderer font, String s, int x, int y, int color) {
         font.drawString(s, (x - font.getStringWidth(s) / 2), y, color);
     }
-    
-	public static void drawScaledWrappedText(FontRenderer font, String s, int x, int y, float scale, float width, float height, int offset, int color, boolean shadow) {
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(scale, scale, scale);
-        boolean oldUnicode = font.getUnicodeFlag();
-        font.setUnicodeFlag(false);
-        List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
-        List<String> sub = lines.subList((int) ((height + offset) / (font.FONT_HEIGHT * scale)), lines.size());
-        for (int i = 0; i < sub.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
-        	font.drawString(sub.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color, shadow);        
-        }
-        font.setUnicodeFlag(oldUnicode);
-        GlStateManager.popMatrix();
-	}
 	
 	/*
 	 * Credit to ellpeck for actually additions https://github.com/Ellpeck/ActuallyAdditions/blob/6ded1cc7b37e240642847a3addf90f5273844666/src/main/java/de/ellpeck/actuallyadditions/mod/util/StringUtil.java
@@ -49,18 +35,37 @@ public class RenderHelper {
 	public static void drawScaledWrappedText(FontRenderer font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
         GlStateManager.pushMatrix();
         GlStateManager.scale(scale, scale, scale);
-        boolean oldUnicode = font.getUnicodeFlag();
-        font.setUnicodeFlag(false);
         List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
         for (int i = 0; i < lines.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
         	font.drawString(lines.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color, shadow);        
         }
-        font.setUnicodeFlag(oldUnicode);
         GlStateManager.popMatrix();
 	}
 	
 	public static void drawScaledWrappedText(FontRenderer font, String s, int x, int y, float scale, float width, int color, boolean shadow) {
 		drawScaledWrappedText(font, s, x, y, scale, width, -1, color, shadow);
+	}
+	
+	public static void drawScaledCenteredWrappedTextX(FontRenderer font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
+        GlStateManager.pushMatrix();
+        GlStateManager.scale(scale, scale, scale);
+        List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
+        for (int i = 0; i < lines.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
+        	font.drawString(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color, shadow);        
+        }
+        GlStateManager.popMatrix();	
+	}
+	
+	public static void drawScaledCenteredWrappedTextY(FontRenderer font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
+        List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
+        y -= (font.FONT_HEIGHT / 2 / scale) * (lines.size() - 1);
+        drawScaledWrappedText(font, s, x, y, scale, width, height, color, shadow);
+	}
+	
+	public static void drawScaledCenteredWrappedTextXY(FontRenderer font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
+        List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
+        y -= (font.FONT_HEIGHT / 2 / scale) * (lines.size() - 1);
+		drawScaledCenteredWrappedTextX(font, s, x, y, scale, width, height, color, shadow);
 	}
 	
 	public static void drawTexturedModelRect(int x, int y, int textureX, int textureY, int width, int height) {

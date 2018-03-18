@@ -71,22 +71,20 @@ public class GuiGuide extends GuiScreen {
 		this.drawDefaultBackground();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		this.mc.renderEngine.bindTexture(GUI_TEX);
-		int x = this.xStart;
-		int y = this.yStart;
-		RenderHelper.drawTexturedModelRect(x, y, 0, 0, this.xSize, this.ySize, 512, 512);
+		RenderHelper.drawTexturedModelRect(this.xStart, this.yStart, 0, 0, this.xSize, this.ySize, 512, 512);
 		
-		//RenderHelper.drawCenteredText(this.fontRenderer, Colors.BOLD + "Guide", x + 95, this.yStart + 15, 0);
+		RenderHelper.drawScaledCenteredWrappedTextXY(this.fontRenderer, Colors.BOLD + this.guide.getName(), this.xStart + 95, this.yStart + 24, 1.0F, 120, -1, 0, false);
 		
 		if (this.entry != null) {
-			RenderHelper.drawScaledWrappedText(this.fontRenderer, Colors.BOLD + this.entry.getTitle(), this.xStart + 227, this.yStart + 17, 1.0F, 190, 0, false);
+			RenderHelper.drawScaledCenteredWrappedTextY(this.fontRenderer, Colors.BOLD + this.entry.getTitle(), this.xStart + 227, this.yStart + 25, 1.0F, 190, -1, 0, false);
 			RenderHelper.drawScaledItemIntoGui(this.itemRender, this.entry.getIconStack(), this.xStart + 197, this.yStart + 18, 1.54F);
 			if (this.entry.hasPages()) {
-				this.entry.getPage(this.entryPage).draw(this.mc, mouseX, mouseY, partialTicks, x + 200, this.yStart + 63, 220, 0);
+				this.entry.getPage(this.entryPage).draw(this.mc, mouseX, mouseY, partialTicks, this.xStart + 200, this.yStart + 63, 220, 130);
 			}
 		}
 		
-		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.topicsPage + 1, this.maxTopicsPage + 2), x + 96, this.yStart + 211, 0);
-		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.entryPage + 1, Math.max(this.maxEntryPage + 2, 1)), x + 308, this.yStart + 211, 0);
+		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.topicsPage + 1, this.maxTopicsPage + 2), this.xStart + 96, this.yStart + 211, 0);
+		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.entryPage + 1, Math.max(this.maxEntryPage + 2, 1)), this.xStart + 308, this.yStart + 211, 0);
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
@@ -100,9 +98,7 @@ public class GuiGuide extends GuiScreen {
 			this.maxEntryPage = this.entry.getPageCount() - 2;
 			this.updateEntryButtons();
 			this.updatePageButtons();
-		}
-		
-		if (button == this.prevEntry && this.topicsPage > 0) {
+		} else if (button == this.prevEntry && this.topicsPage > 0) {
 			this.topicsPage -= 1;
 			this.updateEntryButtons();
 		} else if (button == this.nextEntry && this.topicsPage <= this.maxTopicsPage) {
@@ -137,7 +133,7 @@ public class GuiGuide extends GuiScreen {
 		int i = ENTRIES_PER_PAGE * this.topicsPage;
 		for (int x = 0; x < ENTRIES_PER_PAGE && i < this.guide.getEntryCount(); x++) {
 			GuideEntry entry = this.guide.getEntryById(i);
-			GuiButtonEntry button = new GuiButtonEntry(i, this.xStart + 20, this.yStart + 40 + (x * 20), 151, 20, entry.getTitle(), entry.getIconStack());
+			GuiButtonEntry button = new GuiButtonEntry(i, this.xStart + 20, this.yStart + 43 + (x * 20), 151, 16, entry.getTitle(), entry.getIconStack());
 			
 			if (i == this.entryId) {
 				button.enabled = false;
