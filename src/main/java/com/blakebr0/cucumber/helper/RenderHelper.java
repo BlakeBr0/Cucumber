@@ -111,7 +111,9 @@ public class RenderHelper {
     public static void drawScaledItemIntoGui(RenderItem render, ItemStack stack, int x, int y, float scale) {
     	GlStateManager.pushMatrix();
     	GlStateManager.scale(scale, scale, scale);
+    	net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
     	render.renderItemAndEffectIntoGUI(stack, (int) (x / scale), (int) (y / scale));
+    	net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
     	GlStateManager.popMatrix();
     }
 }
