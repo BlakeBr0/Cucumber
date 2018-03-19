@@ -20,7 +20,7 @@ public class Guide {
 	private int color;
 	
 	private Guide(String name, String author, int color) {
-		this.name = Utils.localize(name);
+		this.name = name;
 		this.author = author;
 		this.color = color;
 	}
@@ -32,7 +32,7 @@ public class Guide {
 	}
 	
 	public String getName() {
-		return this.name;
+		return Utils.localize("guide." + this.name + ".name");
 	}
 	
 	public String getAuthor() {

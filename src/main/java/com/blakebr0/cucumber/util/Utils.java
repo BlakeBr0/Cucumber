@@ -9,18 +9,19 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class Utils {
 
 	public static Random rand = new Random();
 
-	public static String localize(String string) {
-		return new TextComponentTranslation(string).getFormattedText();
+	public static String localize(String key) {
+		return I18n.translateToLocal(key);
 	}
 	
-	public static String localize(String string, Object... args) {
-		return new TextComponentTranslation(string, args).getFormattedText();
+	public static String localize(String key, Object... format) {
+		return I18n.translateToLocalFormatted(key, format);
 	}
 
 	/**

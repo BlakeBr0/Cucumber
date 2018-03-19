@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.blakebr0.cucumber.guide.pages.IEntryPage;
+import com.blakebr0.cucumber.guide.pages.PageText;
+import com.blakebr0.cucumber.util.Utils;
 import com.google.common.collect.Maps;
 
 import net.minecraft.client.Minecraft;
@@ -32,11 +34,16 @@ public class GuideEntry {
 	}
 	
 	public String getTitle() {
-		return this.title;
+		return Utils.localize("guide.entry." + this.title);
 	}
 	
 	public GuideEntry addPage(IEntryPage page) {
 		this.pages.add(page);
+		return this;
+	}
+	
+	public GuideEntry addPageText(String key) {
+		this.pages.add(new PageText("guide.entry." + this.title + ".page." + key));
 		return this;
 	}
 		
