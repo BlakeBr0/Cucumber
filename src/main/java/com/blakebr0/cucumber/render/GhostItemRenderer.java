@@ -16,7 +16,7 @@ import net.minecraftforge.client.ForgeHooksClient;
 
 public class GhostItemRenderer {
 
-    public static void renderItemModel(Minecraft mc, ItemStack stack) {
+    public static void renderItemModel(Minecraft mc, ItemStack stack, float alpha) {
         if (!stack.isEmpty()) {
             mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
@@ -29,7 +29,7 @@ public class GhostItemRenderer {
             bakedmodel = ForgeHooksClient.handleCameraTransforms(bakedmodel, TransformType.NONE, false);
 
             GlStateManager.enableBlend();
-            GL14.glBlendColor(1, 1, 1, 0.7F);
+            GL14.glBlendColor(1, 1, 1, alpha);
             GlStateManager.blendFunc(SourceFactor.CONSTANT_ALPHA, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 
             mc.getRenderItem().renderItem(stack, bakedmodel);
