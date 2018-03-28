@@ -16,6 +16,7 @@ public interface IEntryPage {
 			 .replaceAll("<i>", Colors.ITALICS)
 			 .replaceAll("<u>", Colors.UNDERLINE)
 			 .replaceAll("<r>", Colors.RESET)
+			 .replaceAll("<n>", "\n")
 			 .replaceAll("<red>", Colors.RED)
 			 .replaceAll("<green>", Colors.GREEN)
 			 .replaceAll("<blue>", Colors.BLUE);
