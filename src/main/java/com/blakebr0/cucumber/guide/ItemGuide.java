@@ -31,6 +31,7 @@ public class ItemGuide extends ItemBase implements IModelHelper {
 	public ItemGuide(String name, CreativeTabs tab, Guide guide) {
 		super("guide." + name);
 		this.setCreativeTab(tab);
+		this.setMaxStackSize(1);
 		this.guide = guide;
 		this.author = guide.getAuthor();
 		

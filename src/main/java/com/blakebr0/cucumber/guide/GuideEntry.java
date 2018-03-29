@@ -42,8 +42,8 @@ public class GuideEntry {
 		return this;
 	}
 	
-	public GuideEntry addPageText(String key) {
-		this.pages.add(new PageText("guide.entry." + this.title + ".page." + key));
+	public GuideEntry addPageText() {
+		this.pages.add(new PageText("guide.entry." + this.title + ".page." + (this.getPageCount() + 1)));
 		return this;
 	}
 		

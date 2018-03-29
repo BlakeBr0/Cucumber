@@ -46,7 +46,7 @@ public class GuiGuide extends GuiScreen {
 		this.topicsPage = GuideBookHelper.getTopicsPage(this.book);
 		this.maxTopicsPage = (this.guide.getEntryCount() / ENTRIES_PER_PAGE) - 1;
 		this.entryId = GuideBookHelper.getEntryId(this.book);
-		this.entry = this.entryId > -1 ? this.guide.getEntryById(this.entryId) : null;
+		this.entry = this.entryId > -1 ? this.guide.getEntryById(this.entryId) : this.guide.hasEntries() ? this.guide.getEntryById(0) : null;
 		this.entryPage = GuideBookHelper.getEntryPage(this.book);
 		this.maxEntryPage = this.entry != null ? this.entry.getPageCount() - 2 : -1;
 	}

@@ -17,7 +17,7 @@ public class MobDropHandler {
 	@SubscribeEvent
 	public void onMobDrops(LivingDropsEvent event) {
 		for (IDrop drop : drops) {
-			drop.handle(event.getDrops(), event.getEntityLiving(), event.getSource(), event.getLootingLevel());
+			drop.handle(event);
 		}
 	}
 	
@@ -26,6 +26,6 @@ public class MobDropHandler {
 	}
 	
 	public interface IDrop {
-		void handle(List<EntityItem> drops, EntityLivingBase attacked, DamageSource source, int looting);
+		void handle(LivingDropsEvent event);
 	}
 }
