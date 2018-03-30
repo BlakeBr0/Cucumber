@@ -24,6 +24,7 @@ public class CommonProxy {
 	
 	public void preInit(FMLPreInitializationEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
+		/*
 		Guide g = Guide.create("guide.cucumber.name", "BlakeBr0", 0x123456);
 		g.addEntry("the ting goes SKRRRA XDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD")
 				.setIconStack(new ItemStack(Blocks.STAINED_GLASS_PANE, 1, 2))
@@ -73,7 +74,7 @@ public class CommonProxy {
 		g.addEntry("th ting goes SKRRRA XD");
 		g.addEntry("the ting goes RA XD");
 		
-		Cucumber.REGISTRY.register(new ItemGuide("cucumber_guide", CreativeTabs.MATERIALS, g), "guide");
+		Cucumber.REGISTRY.register(new ItemGuide("cucumber_guide", CreativeTabs.MATERIALS, g), "guide");*/
 	}
 	
 	public void init(FMLInitializationEvent event) {
