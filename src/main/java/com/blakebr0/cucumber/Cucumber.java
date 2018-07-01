@@ -30,7 +30,7 @@ public class Cucumber {
 	}
 
 	@EventHandler
-	public void init(FMLInitializationEvent event){
+	public void init(FMLInitializationEvent event) {
 		proxy.init(event);
 	}
 

@@ -126,10 +126,21 @@ public class NBTHelper {
 		setBoolean(stack, key, !getBoolean(stack, key));
 	}
 	
+	public static void removeTag(ItemStack stack, String key) {
+		if (hasKey(stack, key)) {
+			stack.getTagCompound().removeTag(key);
+		}
+	}
+
+	
 	public static void validateCompound(ItemStack stack) {
 		if (!stack.hasTagCompound()) {
 			NBTTagCompound tag = new NBTTagCompound();
 			stack.setTagCompound(tag);
 		}
+	}
+		
+	public static CompoundTagHelper newCompoundTagHelper(String name) {
+		return new CompoundTagHelper(name);
 	}
 }
