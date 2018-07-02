@@ -5,6 +5,7 @@ import com.blakebr0.cucumber.helper.RenderHelper;
 import com.blakebr0.cucumber.helper.ResourceHelper;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiIcons {
@@ -13,11 +14,13 @@ public class GuiIcons {
 	
 	public static void drawX(int x, int y) {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ICONS);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderHelper.drawTexturedModelRect(x, y, 0, 0, 13, 13);
 	}
 	
 	public static void drawCheck(int x, int y) {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ICONS);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderHelper.drawTexturedModelRect(x, y, 0, 15, 13, 12);
 	}
 	
