@@ -103,10 +103,12 @@ public class StackHelper {
 		return new EntityItem(world, x, y, z, stack);
 	}
 
+	@Deprecated
 	public static boolean isNull(ItemStack stack) {
 		return stack.isEmpty();
 	}
 
+	@Deprecated
 	public static ItemStack getNull() {
 		return ItemStack.EMPTY;
 	}

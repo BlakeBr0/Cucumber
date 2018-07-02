@@ -131,7 +131,6 @@ public class NBTHelper {
 			stack.getTagCompound().removeTag(key);
 		}
 	}
-
 	
 	public static void validateCompound(ItemStack stack) {
 		if (!stack.hasTagCompound()) {
