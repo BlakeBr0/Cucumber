@@ -49,9 +49,10 @@ public class StackHelper {
 			if (container && stack.getItem().hasContainerItem(stack)) {
 				return stack.getItem().getContainerItem(stack);
 			} else {
-				return getNull();
+				return ItemStack.EMPTY;
 			}
 		}
+		
 		stack.setCount(size);
 		return stack;
 	}
@@ -62,9 +63,7 @@ public class StackHelper {
 	}
 
 	public static ItemStack decrease(ItemStack stack, int amount, boolean container) {
-		if (isNull(stack)) {
-			return getNull();
-		}
+		if (stack.isEmpty()) return ItemStack.EMPTY;
 		stack.shrink(amount);
 		return withSize(stack, stack.getCount(), container);
 	}
@@ -72,7 +71,7 @@ public class StackHelper {
 	public static int getPlaceFromList(List<ItemStack> list, ItemStack stack, boolean wildcard) {
 		if (list != null && list.size() > 0) {
 			for (int i = 0; i < list.size(); i++) {
-				if ((isNull(stack) && isNull(list.get(i))) || areItemsEqual(stack, list.get(i), wildcard)) {
+				if ((stack.isEmpty() && list.get(i).isEmpty() || areItemsEqual(stack, list.get(i), wildcard))) {
 					return i;
 				}
 			}
@@ -83,20 +82,19 @@ public class StackHelper {
 	public static ItemStack fromOre(String oreDict, int stackSize) {
 		ItemStack item = ItemStack.EMPTY;
 		List<ItemStack> list = OreDictionary.getOres(oreDict);
+		
 		if (!list.isEmpty()) {
 			item = list.get(0).copy();
-			{
-				item.setCount(stackSize);
-			}
+			item.setCount(stackSize);
 		}
+		
 		return item;
 	}
 
 	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2, boolean wildcard) {
-		return !isNull(stack1) && !isNull(stack2)
-				&& (stack1.isItemEqual(stack2) || (wildcard && stack1.getItem() == stack2.getItem()
-						&& (stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE
-								|| stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE)));
+		return !stack1.isEmpty() && !stack2.isEmpty()
+			   && (stack1.isItemEqual(stack2) || (wildcard && stack1.getItem() == stack2.getItem()
+			   && (stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE|| stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE)));
 	}
 	
 	public static EntityItem toEntity(ItemStack stack, World world, double x, double y, double z) {
