@@ -1,11 +1,13 @@
 package com.blakebr0.cucumber.helper;
 
 import java.util.List;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -95,6 +97,32 @@ public class StackHelper {
 		return !stack1.isEmpty() && !stack2.isEmpty()
 			   && (stack1.isItemEqual(stack2) || (wildcard && stack1.getItem() == stack2.getItem()
 			   && (stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE || stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE)));
+	}
+	
+	/**
+	 * Compares the tags in stack1 to the corresponding tags in stack2
+	 * @param stack1 the reference stack
+	 * @param stack2 the actual stack
+	 * @return all the corresponding tags are the same
+	 */
+	public static boolean compareTags(ItemStack stack1, ItemStack stack2) {
+		if (!stack1.hasTagCompound()) return true;
+		if (stack1.hasTagCompound() && !stack2.hasTagCompound()) return false;
+		
+		Set<String> stack1Keys = stack1.getTagCompound().getKeySet();
+		Set<String> stack2Keys = stack2.getTagCompound().getKeySet();
+		
+		for (String key : stack1Keys) {
+			if (stack2Keys.contains(key)) {
+				if (!NBTUtil.areNBTEquals(NBTHelper.getTag(stack1, key), NBTHelper.getTag(stack2, key), true)) {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 	public static EntityItem toEntity(ItemStack stack, World world, double x, double y, double z) {
