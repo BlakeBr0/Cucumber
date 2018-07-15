@@ -29,8 +29,8 @@ public class GuiButtonEntry extends GuiButton {
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            this.drawTexturedModalRect(this.x, this.y, 0, i * 20, this.width / 2, this.height);
-            this.drawTexturedModalRect(this.x + this.width / 2, this.y, 200 - this.width / 2, i * 20, this.width / 2, this.height);
+            this.drawTexturedModalRect(this.x, this.y, 0, i * 16, this.width / 2, this.height);
+            this.drawTexturedModalRect(this.x + this.width / 2, this.y, 200 - this.width / 2, i * 16, this.width / 2, this.height);
             this.mouseDragged(mc, mouseX, mouseY);
 
             int j = 14737632;

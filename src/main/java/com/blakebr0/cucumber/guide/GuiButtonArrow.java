@@ -21,7 +21,7 @@ public class GuiButtonArrow extends GuiButton {
             this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
             int i = this.getHoverState(this.hovered);
             int j = this.flip ? this.width : 0;
-            this.drawTexturedModalRect(this.x, this.y, j, 60 + (i * 15), this.width, this.height);
+            this.drawTexturedModalRect(this.x, this.y, j, 49 + (i * 15), this.width, this.height);
         }
 	}
 }
