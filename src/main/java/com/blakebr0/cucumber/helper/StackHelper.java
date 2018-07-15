@@ -94,7 +94,7 @@ public class StackHelper {
 	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2, boolean wildcard) {
 		return !stack1.isEmpty() && !stack2.isEmpty()
 			   && (stack1.isItemEqual(stack2) || (wildcard && stack1.getItem() == stack2.getItem()
-			   && (stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE|| stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE)));
+			   && (stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE || stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE)));
 	}
 	
 	public static EntityItem toEntity(ItemStack stack, World world, double x, double y, double z) {

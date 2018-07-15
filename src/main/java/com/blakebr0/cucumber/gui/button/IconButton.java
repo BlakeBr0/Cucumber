@@ -27,8 +27,8 @@ public class IconButton extends GuiButton {
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            this.drawTexturedModalRect(this.x, this.y, this.textureX, this.textureY + i * 16, this.width, this.height);
-            this.drawTexturedModalRect(this.x + this.width / 2, this.y, 200 - this.width, this.textureY + i * 16, this.width / 2, this.height);
+            this.drawTexturedModalRect(this.x, this.y, this.textureX, this.textureY + i * this.height, this.width, this.height);
+            this.drawTexturedModalRect(this.x + this.width / 2, this.y, 200 - this.width, this.textureY + i * this.height, this.width / 2, this.height);
             this.mouseDragged(mc, mouseX, mouseY);
 		}
 	}

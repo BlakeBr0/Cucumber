@@ -15,6 +15,6 @@ public class GuiButtonArrow extends IconButton {
 	}
 	
 	public GuiButtonArrow(int id, int x, int y, String text, boolean invert) {
-		super(id, x, y, 29 + (invert ? 15 : 0), 15, 24, 0, text, TEXTURE);
+		super(id, x, y, 29, 15, 24 + (invert ? 29 : 0), 0, text, TEXTURE);
 	}
 }
