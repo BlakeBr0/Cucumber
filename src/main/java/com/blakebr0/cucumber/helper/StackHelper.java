@@ -78,6 +78,7 @@ public class StackHelper {
 				}
 			}
 		}
+		
 		return -1;
 	}
 
@@ -97,6 +98,14 @@ public class StackHelper {
 		return !stack1.isEmpty() && !stack2.isEmpty()
 			   && (stack1.isItemEqual(stack2) || (wildcard && stack1.getItem() == stack2.getItem()
 			   && (stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE || stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE)));
+	}
+	
+	public static boolean areStacksEqual(ItemStack stack1, ItemStack stack2) {
+		return areItemsEqual(stack1, stack2, false) && ItemStack.areItemStackTagsEqual(stack1, stack2);
+	}
+	
+	public static boolean canCombineStacks(ItemStack stack1, ItemStack stack2) {
+		return areStacksEqual(stack1, stack2) && (stack1.getCount() + stack2.getCount()) <= stack1.getMaxStackSize();
 	}
 	
 	/**
