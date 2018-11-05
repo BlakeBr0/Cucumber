@@ -12,14 +12,14 @@ public interface ICustomBow {
 	}
 
 	default ItemStack findAmmo(EntityPlayer player) {
-		if (this.isArrow(player.getHeldItem(EnumHand.OFF_HAND))) {
+		if (this.isArrOwO(player.getHeldItem(EnumHand.OFF_HAND))) {
 			return player.getHeldItem(EnumHand.OFF_HAND);
-		} else if (this.isArrow(player.getHeldItem(EnumHand.MAIN_HAND))) {
+		} else if (this.isArrOwO(player.getHeldItem(EnumHand.MAIN_HAND))) {
 			return player.getHeldItem(EnumHand.MAIN_HAND);
 		} else {
 			for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
 				ItemStack stack = player.inventory.getStackInSlot(i);
-				if (this.isArrow(stack)) {
+				if (this.isArrOwO(stack)) {
 					return stack;
 				}
 			}
@@ -28,7 +28,7 @@ public interface ICustomBow {
 		}
 	}
 
-	default boolean isArrow(ItemStack stack) {
+	default boolean isArrOwO(ItemStack stack) {
 		return stack.getItem() instanceof ItemArrow;
 	}
 }
