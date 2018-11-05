@@ -105,6 +105,7 @@ public class StackHelper {
 	}
 	
 	public static boolean canCombineStacks(ItemStack stack1, ItemStack stack2) {
+		if (!stack1.isEmpty() && stack2.isEmpty()) return true;
 		return areStacksEqual(stack1, stack2) && (stack1.getCount() + stack2.getCount()) <= stack1.getMaxStackSize();
 	}
 	
