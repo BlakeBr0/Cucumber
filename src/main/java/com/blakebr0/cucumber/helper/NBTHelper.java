@@ -138,7 +138,12 @@ public class NBTHelper {
 			stack.setTagCompound(tag);
 		}
 	}
-		
+	
+	public static NBTTagCompound getTagCompound(ItemStack stack) {
+		validateCompound(stack);
+		return stack.getTagCompound();
+	}
+	
 	public static CompoundTagHelper newCompoundTagHelper(String name) {
 		return new CompoundTagHelper(name);
 	}
