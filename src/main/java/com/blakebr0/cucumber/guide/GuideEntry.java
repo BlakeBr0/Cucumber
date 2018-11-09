@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuideEntry {
 	
 	private ArrayList<IEntryPage> pages = new ArrayList<>();
+	private HashMap<String, String> replacements = new HashMap<>();
 
 	private int id;
 	private String title;
@@ -46,6 +47,11 @@ public class GuideEntry {
 		this.pages.add(new PageText("guide.entry." + this.title + ".page." + (this.getPageCount() + 1)));
 		return this;
 	}
+	
+	public GuideEntry addTextReplacement(String key, String value) {
+		this.replacements.put(key, value);
+		return this;
+	}
 		
 	public ArrayList<IEntryPage> getPages() {
 		return this.pages;
@@ -61,6 +67,10 @@ public class GuideEntry {
 	
 	public boolean hasPages() {
 		return !this.pages.isEmpty();
+	}
+	
+	public HashMap<String, String> getTextReplacements() {
+		return this.replacements;
 	}
 	
 	public GuideEntry setIconStack(ItemStack stack) {
