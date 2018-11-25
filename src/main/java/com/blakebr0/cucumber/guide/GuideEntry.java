@@ -44,7 +44,7 @@ public class GuideEntry {
 	}
 	
 	public GuideEntry addPageText() {
-		this.pages.add(new PageText("guide.entry." + this.title + ".page." + (this.getPageCount() + 1)));
+		this.pages.add(new PageText("guide.entry." + this.title + ".page." + (this.getPageCount() + 1), this.replacements));
 		return this;
 	}
 	

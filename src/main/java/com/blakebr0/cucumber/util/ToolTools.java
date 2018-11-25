@@ -26,8 +26,7 @@ public class ToolTools {
 	 * or have created any of the code that came from those mods
 	 */
 
-	private static RayTraceResult getPosWithinReach(World world, EntityPlayer player, double distance, boolean p1,
-			boolean p2, boolean p3) {
+	private static RayTraceResult getPosWithinReach(World world, EntityPlayer player, double distance, boolean p1, boolean p2, boolean p3) {
 		float f = player.rotationPitch;
 		float f1 = player.rotationYaw;
 		double d0 = player.posX;
@@ -48,12 +47,8 @@ public class ToolTools {
 		return getBlockWithinReach(world, player, false, true, false);
 	}
 
-	public static RayTraceResult getBlockWithinReach(World world, EntityPlayer player, boolean stopOnLiquids,
-			boolean ignoreBlockWithoutBoundingBox, boolean returnLastUncollidableBlock) {
-		return getPosWithinReach(world,
-				player, player instanceof EntityPlayerMP
-						? ((EntityPlayerMP) player).interactionManager.getBlockReachDistance() : 5.0D,
-				stopOnLiquids, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock);
+	public static RayTraceResult getBlockWithinReach(World world, EntityPlayer player, boolean stopOnLiquids, boolean ignoreBlockWithoutBoundingBox, boolean returnLastUncollidableBlock) {
+		return getPosWithinReach(world, player, player instanceof EntityPlayerMP ? ((EntityPlayerMP) player).interactionManager.getBlockReachDistance() : 5.0D, stopOnLiquids, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock);
 	}
 
 	public static boolean breakBlocksAOE(ItemStack stack, World world, EntityPlayer player, BlockPos pos) {
@@ -81,6 +76,7 @@ public class ToolTools {
 					((EntityPlayerMP) player).connection.sendPacket(new SPacketBlockChange(world, pos));
 				}
 			}
+			
 			return true;
 		}
 
@@ -110,12 +106,11 @@ public class ToolTools {
 				block.onBlockDestroyedByPlayer(world, pos, state);
 			}
 
-			Minecraft.getMinecraft().getConnection()
-					.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos,
-							Minecraft.getMinecraft().objectMouseOver.sideHit));
+			Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
 
 			return true;
 		}
+		
 		return false;
 	}
 }

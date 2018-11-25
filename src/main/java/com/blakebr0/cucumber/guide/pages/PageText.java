@@ -11,7 +11,7 @@ public class PageText implements IEntryPage {
 	public String key;
 	public Map<String, String> textReplacements;
 	
-	public PageText(String key, Map textReplacements) {
+	public PageText(String key, Map<String, String> textReplacements) {
 		this.key = key;
 		this.textReplacements = textReplacements;
 	}

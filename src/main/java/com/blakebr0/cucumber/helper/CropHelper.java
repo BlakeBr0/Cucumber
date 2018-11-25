@@ -2,7 +2,6 @@ package com.blakebr0.cucumber.helper;
 
 import java.lang.reflect.Method;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -17,7 +16,7 @@ public class CropHelper {
 		GET_CROP = ReflectionHelper.findMethod(BlockCrops.class, "getCrop", "func_208486_d");
 	}
 	
-	public static Item getSeed(Block block) {
+	public static Item getSeed(BlockCrops block) {
 		try {
 			return (Item) GET_SEED.invoke(block);
 		} catch (Exception e) {
@@ -25,7 +24,7 @@ public class CropHelper {
 		}
 	}
 	
-	public static Item getCrop(Block block) {
+	public static Item getCrop(BlockCrops block) {
 		try {
 			return (Item) GET_CROP.invoke(block);
 		} catch (Exception e) {
