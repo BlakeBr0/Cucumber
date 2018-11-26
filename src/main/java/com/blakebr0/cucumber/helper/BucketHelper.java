@@ -3,6 +3,7 @@ package com.blakebr0.cucumber.helper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -18,7 +19,7 @@ public class BucketHelper {
 	}
 
 	public static int toBuckets(int i) {
-		return i - (i % 1000);
+		return i - (i % Fluid.BUCKET_VOLUME);
 	}
 	
 	public static ItemStack getFilledBucket(FluidStack fluid, Item bucket, int capacity) {
