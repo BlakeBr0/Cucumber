@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber.proxy;
 
 import com.blakebr0.cucumber.Cucumber;
+import com.blakebr0.cucumber.crafting.OreOutputRecipeValidator;
 import com.blakebr0.cucumber.event.MobDropHandler;
 import com.blakebr0.cucumber.guide.Guide;
 import com.blakebr0.cucumber.guide.GuideEntry;
@@ -87,6 +88,6 @@ public class CommonProxy {
 	}
 	
 	public void postInit(FMLPostInitializationEvent event) {
-		
+		OreOutputRecipeValidator.validate();
 	}
 }

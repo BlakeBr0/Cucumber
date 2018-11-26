@@ -7,25 +7,25 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-public class ShapedOreOutputRecipe extends ShapedOreRecipe {
+public class ShapelessOreOutputRecipe extends ShapelessOreRecipe {
 
 	public String ore;
 	public int amount;
-	private ItemStack output = ItemStack.EMPTY;
+	private ItemStack output;
 	
-	public ShapedOreOutputRecipe(String ore, int amount, Object... recipe) {
+	public ShapelessOreOutputRecipe(String ore, int amount, Object[] recipe) {
 		this(RecipeHelper.EMPTY_GROUP, ore, amount, recipe);
 	}
 	
-	public ShapedOreOutputRecipe(ResourceLocation group, String ore, int amount, Object... recipe) {
+	public ShapelessOreOutputRecipe(ResourceLocation group, String ore, int amount, Object[] recipe) {
 		super(group, ItemStack.EMPTY, recipe);
 		this.ore = ore;
 		this.amount = amount;
 		OreOutputRecipeValidator.ORE_RECIPES.add(this);
 	}
-	
+
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting inv) {
 		return this.getRecipeOutput().copy();
