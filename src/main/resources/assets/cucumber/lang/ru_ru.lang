@@ -1,0 +1,18 @@
+# CREATIVE TAB
+#itemGroup.cucumber=Cucumber
+
+# BLOCKS
+
+# ITEMS
+
+# GUIDE
+guide.cu.page_indicator=Страница %s / %s
+
+# TOOLTIPS
+tooltip.cu.exit=Выход
+tooltip.cu.back=Назад
+
+tooltip.cu.author=Автор: %s
+tooltip.cu.uses_left=Осталось использований: %s
+
+tooltip.cu.hold_shift_for_info=§7Зажмите §e§oSHIFT §r§7для инфо.
