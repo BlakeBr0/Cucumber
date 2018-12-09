@@ -9,11 +9,11 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 public class CropHelper {
 
 	private static final Method GET_SEED;
-	private static final Method GET_CROP;
+//	private static final Method GET_CROP;
 	
 	static {
 		GET_SEED = ReflectionHelper.findMethod(BlockCrops.class, "getSeed", "func_149866_i");
-		GET_CROP = ReflectionHelper.findMethod(BlockCrops.class, "getCrop", "func_208486_d");
+//		GET_CROP = ReflectionHelper.findMethod(BlockCrops.class, "getCrop", "func_208486_d");
 	}
 	
 	public static Item getSeed(BlockCrops block) {
@@ -24,11 +24,11 @@ public class CropHelper {
 		}
 	}
 	
-	public static Item getCrop(BlockCrops block) {
-		try {
-			return (Item) GET_CROP.invoke(block);
-		} catch (Exception e) {
-			return null;
-		}
-	}
+//	public static Item getCrop(BlockCrops block) {
+//		try {
+//			return (Item) GET_CROP.invoke(block);
+//		} catch (Exception e) {
+//			return null;
+//		}
+//	}
 }
