@@ -1,11 +1,11 @@
 package com.blakebr0.cucumber.fluid;
 
 import com.blakebr0.cucumber.iface.IFluidHolder;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
@@ -26,16 +26,8 @@ public class FluidHolderItemWrapper implements ICapabilityProvider {
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
-	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (!hasCapability(capability, facing))
-			return null;
-
-		return CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY.cast(new IFluidHandlerItem() {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
+		return CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY.orEmpty(capability, LazyOptional.of(() -> new IFluidHandlerItem() {
 
 			@Override
 			public IFluidTankProperties[] getTankProperties() {
@@ -64,6 +56,6 @@ public class FluidHolderItemWrapper implements ICapabilityProvider {
 			public ItemStack getContainer() {
 				return stack;
 			}
-		});
+		}));
 	}
 }

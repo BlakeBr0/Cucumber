@@ -7,16 +7,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 
 public class ItemInventoryWrapper implements IInventory {
-	
-	public ItemStack inventory;
-	public int size;
-	
-	public NonNullList<ItemStack> slots;
-	protected NBTTagCompound tag;
-	public boolean dirty = false;
+
+	private ItemStack inventory;
+	private int size;
+	private NonNullList<ItemStack> slots;
+	private NBTTagCompound tag;
+	private boolean dirty = false;
 	
 	public ItemInventoryWrapper(ItemStack inventory, int size) {
 		this.inventory = inventory;
@@ -28,96 +26,101 @@ public class ItemInventoryWrapper implements IInventory {
 	}
 	
 	public void load() {
-		NBTTagCompound nbt = inventory.getTagCompound();
-		if (!inventory.hasTagCompound() || !nbt.hasKey("Items")) {
-			if (inventory.hasTagCompound()) {
-				tag = nbt;
+		NBTTagCompound nbt = this.inventory.getTag();
+		if (!this.inventory.hasTag() || !nbt.hasKey("Items")) {
+			if (this.inventory.hasTag()) {
+				this.tag = nbt;
 				loadItems();
-				tag = new NBTTagCompound();
+				this.tag = new NBTTagCompound();
 				saveItems();
 			} else {
-				inventory.setTagInfo("Inventory", new NBTTagCompound());
+				this.inventory.setTagInfo("Inventory", new NBTTagCompound());
 			}
 		}
-		tag = nbt.getCompoundTag("Inventory");
+
+		this.tag = nbt.getCompound("Inventory");
 		loadItems();
 	}
 	
 	protected void loadItems() {
-		for (int i = 0; i < size; i++) {
-			if (tag.hasKey("Slot")) {
-				slots.set(i, new ItemStack(tag.getCompoundTag("Slot" + i)));
+		for (int i = 0; i < this.size; i++) {
+			if (this.tag.hasKey("Slot")) {
+				this.slots.set(i, ItemStack.read(tag.getCompound("Slot" + i)));
 			} else {
-				slots.set(i, ItemStack.EMPTY);
+				this.slots.set(i, ItemStack.EMPTY);
 			}
 		}
 	}
 	
 	protected void saveItems() {
-		for (int i = 0; i < size; i++) {
-			if (slots.get(i).isEmpty()) {
-				tag.removeTag("Slot" + i);
+		for (int i = 0; i < this.size; i++) {
+			if (this.slots.get(i).isEmpty()) {
+				this.tag.removeTag("Slot" + i);
 			} else{ 
-				tag.setTag("Slot" + i, slots.get(i).writeToNBT(new NBTTagCompound()));
+				this.tag.setTag("Slot" + i, this.slots.get(i).write(new NBTTagCompound()));
 			}
 		}
-		inventory.setTagInfo("Items", tag);
+
+		this.inventory.setTagInfo("Items", this.tag);
+	}
+
+	public ItemStack getInventory() {
+		return this.inventory;
+	}
+
+	public NonNullList<ItemStack> getStacks() {
+		return this.slots;
 	}
 	
 	public boolean getDirty() {
 		boolean dirt = dirty;
-		dirty = false;
+		this.dirty = false;
 		return dirt;
 	}
 
 	@Override
-	public String getName() {
-		return inventory.getDisplayName();
+	public ITextComponent getName() {
+		return this.inventory.getDisplayName();
 	}
 
 	@Override
 	public boolean hasCustomName() {
-		return inventory.hasDisplayName();
+		return this.inventory.hasDisplayName();
 	}
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TextComponentString(inventory.getDisplayName());
+		return this.inventory.getDisplayName();
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return size;
+		return this.size;
 	}
 
 	@Override
 	public boolean isEmpty() {
-		for (ItemStack s : slots) {
-			if (!s.isEmpty()) {
-				return false;
-			}
-		}
-		return true;
+		return !this.slots.stream().anyMatch(s -> !s.isEmpty());
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int index) {
-		return slots.get(index);
+		return this.slots.get(index);
 	}
 
 	@Override
 	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(slots, index, count);
+		return ItemStackHelper.getAndSplit(this.slots, index, count);
 	}
 
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(slots, index);
+		return ItemStackHelper.getAndRemove(this.slots, index);
 	}
 
 	@Override
 	public void setInventorySlotContents(int index, ItemStack stack) {
-		slots.set(index, stack);
+		this.slots.set(index, stack);
 	}
 
 	@Override
@@ -128,7 +131,7 @@ public class ItemInventoryWrapper implements IInventory {
 	@Override
 	public void markDirty() {
 		saveItems();
-		dirty = true;
+		this.dirty = true;
 	}
 
 	@Override
@@ -169,5 +172,10 @@ public class ItemInventoryWrapper implements IInventory {
 	@Override
 	public void clear() {
 		
+	}
+
+	@Override
+	public ITextComponent getCustomName() {
+		return null;
 	}
 }

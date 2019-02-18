@@ -6,7 +6,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.math.*;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * Pos3D - a way of performing operations on objects in a three dimensional environment.

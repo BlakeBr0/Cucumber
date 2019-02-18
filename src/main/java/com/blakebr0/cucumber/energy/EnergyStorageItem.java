@@ -1,9 +1,8 @@
 package com.blakebr0.cucumber.energy;
 
+import com.blakebr0.cucumber.helper.NBTHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.energy.IEnergyStorage;
 
 /*
  * Based on RedstoneFlux ItemEnergyContainer
@@ -20,47 +19,38 @@ public class EnergyStorageItem extends EnergyStorage {
 
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
-		if (!container.hasTagCompound()) {
-			container.setTagCompound(new NBTTagCompound());
-		}
-		
-		int energy = container.getTagCompound().getInteger("Energy");
+		int energy = NBTHelper.getInt(this.container, "Energy");
 		int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
 
 		if (!simulate) {
 			energy += energyReceived;
-			container.getTagCompound().setInteger("Energy", energy);
+			NBTHelper.setInt(this.container, "Energy", energy);
 		}
+
 		return energyReceived;
 	}
 
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
-		if (container.getTagCompound() == null || !container.getTagCompound().hasKey("Energy")) {
-			return 0;
-		}
-		
-		int energy = container.getTagCompound().getInteger("Energy");
+		int energy = NBTHelper.getInt(this.container, "Energy");
 		int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
 
 		if (!simulate) {
 			energy -= energyExtracted;
-			container.getTagCompound().setInteger("Energy", energy);
+			NBTHelper.setInt(this.container, "Energy", energy);
 		}
+
 		return energyExtracted;
 	}
 
 	@Override
 	public int getEnergyStored() {
-		if (container.getTagCompound() == null || !container.getTagCompound().hasKey("Energy")) {
-			return 0;
-		}
-		return container.getTagCompound().getInteger("Energy");
+		return NBTHelper.getInt(this.container, "Energy");
 	}
 
 	@Override
 	public int getMaxEnergyStored() {
-		return capacity;
+		return this.capacity;
 	}
 	
 	@Override

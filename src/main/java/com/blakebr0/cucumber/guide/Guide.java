@@ -1,14 +1,9 @@
 package com.blakebr0.cucumber.guide;
 
-import java.util.ArrayList;
-
-import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.registry.GuideRegistry;
 import com.blakebr0.cucumber.util.Utils;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import java.util.ArrayList;
 
 public class Guide {
 

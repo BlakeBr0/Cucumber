@@ -1,21 +1,14 @@
 package com.blakebr0.cucumber.network.messages;
 
-
 import com.blakebr0.cucumber.guide.GuideBookHelper;
-import com.blakebr0.cucumber.helper.NBTHelper;
-
-import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageUpdateGuideNBT implements IMessage {
+import java.util.function.Supplier;
+
+public class MessageUpdateGuideNBT {
 
 	private int topicsPage;
 	private int entryPage;
@@ -31,34 +24,28 @@ public class MessageUpdateGuideNBT implements IMessage {
 		this.entryId = entryId;
 	}
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		this.topicsPage = buf.readInt();
-		this.entryPage = buf.readInt();
-		this.entryId = buf.readInt();
+	public static MessageUpdateGuideNBT read(PacketBuffer buf) {
+		return new MessageUpdateGuideNBT(buf.readInt(), buf.readInt(), buf.readInt());
 	}
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.topicsPage);
-		buf.writeInt(this.entryPage);
-		buf.writeInt(this.entryId);
+	public static void write(MessageUpdateGuideNBT message, PacketBuffer buf) {
+		buf.writeInt(message.topicsPage);
+		buf.writeInt(message.entryPage);
+		buf.writeInt(message.entryId);
 	}
 
-	public static class Handler implements IMessageHandler<MessageUpdateGuideNBT, IMessage> {
+	public static void handle(MessageUpdateGuideNBT message, Supplier<NetworkEvent.Context> ctx) {
+		EntityPlayer player = ctx.get().getSender();
+		if (player != null) {
+			ctx.get().enqueueWork(() -> {
+				ItemStack stack = player.getHeldItem(player.getActiveHand());
 
-		@Override
-		public IMessage onMessage(MessageUpdateGuideNBT message, MessageContext ctx) {
-			FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handle(message, ctx));
-			return null;
+				GuideBookHelper.setTopicsPage(stack, message.topicsPage);
+				GuideBookHelper.setEntryPage(stack, message.entryPage);
+				GuideBookHelper.setEntryId(stack, message.entryId);
+			});
 		}
 
-		private void handle(MessageUpdateGuideNBT message, MessageContext ctx) {
-			ItemStack stack = ctx.getServerHandler().player.getHeldItem(ctx.getServerHandler().player.getActiveHand());
-			
-			GuideBookHelper.setTopicsPage(stack, message.topicsPage);
-			GuideBookHelper.setEntryPage(stack, message.entryPage);
-			GuideBookHelper.setEntryId(stack, message.entryId);
-		}
+		ctx.get().setPacketHandled(true);
 	}
 }

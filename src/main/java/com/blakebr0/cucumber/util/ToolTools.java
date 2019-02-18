@@ -9,10 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.server.SPacketBlockChange;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
@@ -26,7 +23,7 @@ public class ToolTools {
 	 * or have created any of the code that came from those mods
 	 */
 
-	private static RayTraceResult getPosWithinReach(World world, EntityPlayer player, double distance, boolean p1, boolean p2, boolean p3) {
+	private static RayTraceResult getPosWithinReach(World world, EntityPlayer player, double distance, RayTraceFluidMode fluidMode, boolean p1, boolean p2) {
 		float f = player.rotationPitch;
 		float f1 = player.rotationYaw;
 		double d0 = player.posX;
@@ -39,22 +36,21 @@ public class ToolTools {
 		float f5 = MathHelper.sin(-f * 0.017453292F);
 		float f6 = f3 * f4;
 		float f7 = f2 * f4;
-		Vec3d vec1 = vec.addVector((double) f6 * distance, (double) f5 * distance, (double) f7 * distance);
-		return world.rayTraceBlocks(vec, vec1, p1, p2, p3);
+		Vec3d vec1 = vec.add((double) f6 * distance, (double) f5 * distance, (double) f7 * distance);
+		return world.rayTraceBlocks(vec, vec1, fluidMode, p1, p2);
 	}
 
 	public static RayTraceResult getBlockWithinReach(World world, EntityPlayer player) {
-		return getBlockWithinReach(world, player, false, true, false);
+		return getBlockWithinReach(world, player, RayTraceFluidMode.NEVER, true, false);
 	}
 
-	public static RayTraceResult getBlockWithinReach(World world, EntityPlayer player, boolean stopOnLiquids, boolean ignoreBlockWithoutBoundingBox, boolean returnLastUncollidableBlock) {
-		return getPosWithinReach(world, player, player instanceof EntityPlayerMP ? ((EntityPlayerMP) player).interactionManager.getBlockReachDistance() : 5.0D, stopOnLiquids, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock);
+	public static RayTraceResult getBlockWithinReach(World world, EntityPlayer player, RayTraceFluidMode fluidMode, boolean ignoreBlockWithoutBoundingBox, boolean returnLastUncollidableBlock) {
+		return getPosWithinReach(world, player, player.getAttribute(EntityPlayer.REACH_DISTANCE).getValue(), fluidMode, ignoreBlockWithoutBoundingBox, returnLastUncollidableBlock);
 	}
 
 	public static boolean breakBlocksAOE(ItemStack stack, World world, EntityPlayer player, BlockPos pos) {
-		if (world.isAirBlock(pos)) {
+		if (world.isAirBlock(pos))
 			return false;
-		}
 
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
@@ -65,10 +61,10 @@ public class ToolTools {
 			world.playEvent(2001, pos, Block.getStateId(state));
 		}
 
-		if (player.capabilities.isCreativeMode) {
+		if (player.abilities.isCreativeMode) {
 			block.onBlockHarvested(world, pos, state, player);
-			if (block.removedByPlayer(state, world, pos, player, false)) {
-				block.onBlockDestroyedByPlayer(world, pos, state);
+			if (block.removedByPlayer(state, world, pos, player, false, state.getFluidState())) {
+				block.onPlayerDestroy(world, pos, state);
 			}
 
 			if (!world.isRemote) {
@@ -92,8 +88,8 @@ public class ToolTools {
 				}
 
 				TileEntity tile = world.getTileEntity(pos);
-				if (block.removedByPlayer(state, world, pos, player, true)) {
-					block.onBlockDestroyedByPlayer(world, pos, state);
+				if (block.removedByPlayer(state, world, pos, player, true, state.getFluidState())) {
+					block.onPlayerDestroy(world, pos, state);
 					block.harvestBlock(world, player, pos, state, tile, stack);
 					block.dropXpOnBlockBreak(world, pos, xp);
 				}
@@ -102,11 +98,11 @@ public class ToolTools {
 				return true;
 			}
 		} else {
-			if (block.removedByPlayer(state, world, pos, player, true)) {
-				block.onBlockDestroyedByPlayer(world, pos, state);
+			if (block.removedByPlayer(state, world, pos, player, true, state.getFluidState())) {
+				block.onPlayerDestroy(world, pos, state);
 			}
 
-			Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, Minecraft.getMinecraft().objectMouseOver.sideHit));
+			Minecraft.getInstance().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, pos, Minecraft.getInstance().objectMouseOver.sideHit));
 
 			return true;
 		}

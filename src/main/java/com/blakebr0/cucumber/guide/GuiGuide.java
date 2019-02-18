@@ -1,27 +1,22 @@
 package com.blakebr0.cucumber.guide;
 
-import java.io.IOException;
-
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.gui.button.GuiButtonExit;
-import com.blakebr0.cucumber.guide.pages.IEntryPage;
 import com.blakebr0.cucumber.helper.RenderHelper;
 import com.blakebr0.cucumber.helper.ResourceHelper;
 import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.cucumber.network.NetworkHandler;
 import com.blakebr0.cucumber.network.messages.MessageUpdateGuideNBT;
 import com.blakebr0.cucumber.util.Utils;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
-@SideOnly(Side.CLIENT)
+@OnlyIn(Dist.CLIENT)
 public class GuiGuide extends GuiScreen {
 
 	public static final ResourceLocation GUI_TEX = ResourceHelper.getResource(Cucumber.MOD_ID, "textures/gui/guide.png");
@@ -73,11 +68,11 @@ public class GuiGuide extends GuiScreen {
 	}
 	
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void render(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.renderEngine.bindTexture(GUI_TEX);
-		RenderHelper.drawTexturedModelRect(this.xStart, this.yStart, 0, 0, this.xSize, this.ySize, 512, 512);
+		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		this.mc.getTextureManager().bindTexture(GUI_TEX);
+		RenderHelper.drawTexturedModalRect(this.xStart, this.yStart, 0, 0, this.xSize, this.ySize, 512, 512);
 		
 		RenderHelper.drawScaledCenteredWrappedTextXY(this.fontRenderer, Colors.BOLD + this.guide.getName(), this.xStart + 95, this.yStart + 22, 1.0F, 120, -1, 0, false);
 		
@@ -92,38 +87,38 @@ public class GuiGuide extends GuiScreen {
 		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.topicsPage + 1, this.maxTopicsPage + 2), this.xStart + 96, this.yStart + 211, 0);
 		RenderHelper.drawCenteredText(this.fontRenderer, Utils.localize("guide.cu.page_indicator", this.entryPage + 1, Math.max(this.maxEntryPage + 2, 1)), this.xStart + 308, this.yStart + 211, 0);
 
-		super.drawScreen(mouseX, mouseY, partialTicks);
+		super.render(mouseX, mouseY, partialTicks);
 		
 		if (this.exit.isMouseOver()) {
 			this.drawHoveringText(this.exit.displayString, mouseX, mouseY);
 		}
 	}
 	
-	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
-		if (button instanceof GuiButtonEntry) {
-			this.entry = this.guide.getEntryById(button.id);
-			this.entryId = button.id;
-			this.entryPage = 0;
-			this.maxEntryPage = this.entry.getPageCount() - 2;
-			this.updateEntryButtons();
-			this.updatePageButtons();
-		} else if (button == this.exit) {
-			Minecraft.getMinecraft().displayGuiScreen(null);
-		} else if (button == this.prevEntry && this.topicsPage > 0) {
-			this.topicsPage -= 1;
-			this.updateEntryButtons();
-		} else if (button == this.nextEntry && this.topicsPage <= this.maxTopicsPage) {
-			this.topicsPage++;
-			this.updateEntryButtons();
-		} else if (button == this.prevPage) {
-			this.entryPage--;
-			this.updatePageButtons();
-		} else if (button == this.nextPage && this.entryPage <= this.maxEntryPage) {
-			this.entryPage++;
-			this.updatePageButtons();
-		}
-	}
+//	@Override // TODO: Move to buttons
+//	protected void actionPerformed(GuiButton button) throws IOException {
+//		if (button instanceof GuiButtonEntry) {
+//			this.entry = this.guide.getEntryById(button.id);
+//			this.entryId = button.id;
+//			this.entryPage = 0;
+//			this.maxEntryPage = this.entry.getPageCount() - 2;
+//			this.updateEntryButtons();
+//			this.updatePageButtons();
+//		} else if (button == this.exit) {
+//			Minecraft.getInstance().displayGuiScreen(null);
+//		} else if (button == this.prevEntry && this.topicsPage > 0) {
+//			this.topicsPage -= 1;
+//			this.updateEntryButtons();
+//		} else if (button == this.nextEntry && this.topicsPage <= this.maxTopicsPage) {
+//			this.topicsPage++;
+//			this.updateEntryButtons();
+//		} else if (button == this.prevPage) {
+//			this.entryPage--;
+//			this.updatePageButtons();
+//		} else if (button == this.nextPage && this.entryPage <= this.maxEntryPage) {
+//			this.entryPage++;
+//			this.updatePageButtons();
+//		}
+//	}
 	
 	@Override
 	public void onGuiClosed() {
@@ -137,7 +132,7 @@ public class GuiGuide extends GuiScreen {
 	}
 	
 	public void updateEntryButtons() {
-		this.buttonList.removeIf(b -> b.id < 10000);
+		this.buttons.removeIf(b -> b.id < 10000);
 		
 		this.prevEntry.enabled = this.topicsPage > 0;
 		this.nextEntry.enabled = this.topicsPage <= this.maxTopicsPage;

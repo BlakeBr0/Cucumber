@@ -1,7 +1,7 @@
 package com.blakebr0.cucumber.helper;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class CompoundTagHelper {
@@ -13,10 +13,10 @@ public class CompoundTagHelper {
 	}
 	
 	public NBTTagCompound getCompoundTag(ItemStack stack) {
-		return stack.getOrCreateSubCompound(this.name);
+		return stack.getOrCreateChildTag(this.name);
 	}
 	
-	public void setTag(ItemStack stack, String key, NBTBase value) {		
+	public void setTag(ItemStack stack, String key, INBTBase value) {
 		getCompoundTag(stack).setTag(key, value);
 	}
 	
@@ -29,7 +29,7 @@ public class CompoundTagHelper {
 	}
 
 	public void setInt(ItemStack stack, String key, int value) {
-		getCompoundTag(stack).setInteger(key, value);
+		getCompoundTag(stack).setInt(key, value);
 	}
 	
 	public void setLong(ItemStack stack, String key, long value) {
@@ -60,7 +60,7 @@ public class CompoundTagHelper {
 		getCompoundTag(stack).setBoolean(key, value);
 	}
 	
-	public NBTBase getTag(ItemStack stack, String key) {
+	public INBTBase getTag(ItemStack stack, String key) {
 		return getCompoundTag(stack).getTag(key);
 	}
 	
@@ -73,7 +73,7 @@ public class CompoundTagHelper {
 	}
 	
 	public int getInt(ItemStack stack, String key) {
-		return getCompoundTag(stack).getInteger(key);
+		return getCompoundTag(stack).getInt(key);
 	}
 	
 	public long getLong(ItemStack stack, String key) {

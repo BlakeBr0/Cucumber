@@ -24,27 +24,29 @@ public class ContainerItemInventory extends Container {
 	
 	@Override
 	public void detectAndSendChanges() {
-		ItemStack item = player.inventory.mainInventory.get(index);
-		if (item.isEmpty() || item.getItem() != inventory.inventory.getItem()) {
-			valid = false;
+		ItemStack item = this.player.inventory.mainInventory.get(this.index);
+		if (item.isEmpty() || item.getItem() != this.inventory.getInventory().getItem()) {
+			this.valid = false;
 			return;
 		}
+
 		super.detectAndSendChanges();
 	}
 
 	public void onSlotChanged() {
-		ItemStack item = player.inventory.mainInventory.get(index);
-		if (valid && !item.isEmpty() && item.getItem() == inventory.inventory.getItem()) {
-			player.inventory.mainInventory.set(index, inventory.inventory);
+		ItemStack item = this.player.inventory.mainInventory.get(this.index);
+		if (this.valid && !item.isEmpty() && item.getItem() == this.inventory.getInventory().getItem()) {
+			this.player.inventory.mainInventory.set(this.index, this.inventory.getInventory());
 		}
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		onSlotChanged();
-		if (inventory.getDirty() && !valid) {
+		if (this.inventory.getDirty() && !this.valid) {
 			player.inventory.setItemStack(ItemStack.EMPTY);
 		}
-		return valid;
+
+		return this.valid;
 	}
 }

@@ -1,50 +1,15 @@
 package com.blakebr0.cucumber.helper;
 
-import java.util.List;
-import java.util.Set;
-
-import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.List;
+import java.util.Set;
+
 public class StackHelper {
-
-	@Deprecated
-	public static ItemStack to(Object obj) {
-		if (obj instanceof Block) {
-			return new ItemStack((Block) obj);
-		} else if (obj instanceof Item) {
-			return new ItemStack((Item) obj);
-		} else {
-			return getNull();
-		}
-	}
-
-	@Deprecated
-	public static ItemStack to(Object obj, int amount) {
-		if (obj instanceof Block) {
-			return new ItemStack((Block) obj, amount, 0);
-		} else if (obj instanceof Item) {
-			return new ItemStack((Item) obj, amount, 0);
-		} else {
-			return getNull();
-		}
-	}
-
-	@Deprecated
-	public static ItemStack to(Object obj, int amount, int meta) {
-		if (obj instanceof Block) {
-			return new ItemStack((Block) obj, amount, meta);
-		} else if (obj instanceof Item) {
-			return new ItemStack((Item) obj, amount, meta);
-		} else {
-			return getNull();
-		}
-	}
 
 	public static ItemStack withSize(ItemStack stack, int size, boolean container) {
 		if (size <= 0) {
@@ -73,7 +38,7 @@ public class StackHelper {
 	public static int getPlaceFromList(List<ItemStack> list, ItemStack stack, boolean wildcard) {
 		if (list != null && list.size() > 0) {
 			for (int i = 0; i < list.size(); i++) {
-				if ((stack.isEmpty() && list.get(i).isEmpty() || areItemsEqual(stack, list.get(i), wildcard))) {
+				if ((stack.isEmpty() && list.get(i).isEmpty() || areItemsEqual(stack, list.get(i)))) {
 					return i;
 				}
 			}
@@ -81,27 +46,25 @@ public class StackHelper {
 		
 		return -1;
 	}
+	// TODO: Make use of the tag system for this?
+//	public static ItemStack fromOre(String oreDict, int stackSize) {
+//		ItemStack item = ItemStack.EMPTY;
+//		List<ItemStack> list = OreDictionary.getOres(oreDict);
+//
+//		if (!list.isEmpty()) {
+//			item = list.get(0).copy();
+//			item.setCount(stackSize);
+//		}
+//
+//		return item;
+//	}
 
-	public static ItemStack fromOre(String oreDict, int stackSize) {
-		ItemStack item = ItemStack.EMPTY;
-		List<ItemStack> list = OreDictionary.getOres(oreDict);
-		
-		if (!list.isEmpty()) {
-			item = list.get(0).copy();
-			item.setCount(stackSize);
-		}
-		
-		return item;
-	}
-
-	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2, boolean wildcard) {
-		return !stack1.isEmpty() && !stack2.isEmpty()
-			   && (stack1.isItemEqual(stack2) || (wildcard && stack1.getItem() == stack2.getItem()
-			   && (stack1.getItemDamage() == OreDictionary.WILDCARD_VALUE || stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE)));
+	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2) {
+		return !stack1.isEmpty() && !stack2.isEmpty() && stack1.isItemEqual(stack2);
 	}
 	
 	public static boolean areStacksEqual(ItemStack stack1, ItemStack stack2) {
-		return areItemsEqual(stack1, stack2, false) && ItemStack.areItemStackTagsEqual(stack1, stack2);
+		return areItemsEqual(stack1, stack2) && ItemStack.areItemStackTagsEqual(stack1, stack2);
 	}
 	
 	public static boolean canCombineStacks(ItemStack stack1, ItemStack stack2) {
@@ -116,11 +79,11 @@ public class StackHelper {
 	 * @return all the corresponding tags are the same
 	 */
 	public static boolean compareTags(ItemStack stack1, ItemStack stack2) {
-		if (!stack1.hasTagCompound()) return true;
-		if (stack1.hasTagCompound() && !stack2.hasTagCompound()) return false;
+		if (!stack1.hasTag()) return true;
+		if (stack1.hasTag() && !stack2.hasTag()) return false;
 		
-		Set<String> stack1Keys = stack1.getTagCompound().getKeySet();
-		Set<String> stack2Keys = stack2.getTagCompound().getKeySet();
+		Set<String> stack1Keys = stack1.getTag().keySet();
+		Set<String> stack2Keys = stack2.getTag().keySet();
 		
 		for (String key : stack1Keys) {
 			if (stack2Keys.contains(key)) {
@@ -137,15 +100,5 @@ public class StackHelper {
 	
 	public static EntityItem toEntity(ItemStack stack, World world, double x, double y, double z) {
 		return new EntityItem(world, x, y, z, stack);
-	}
-
-	@Deprecated
-	public static boolean isNull(ItemStack stack) {
-		return stack.isEmpty();
-	}
-
-	@Deprecated
-	public static ItemStack getNull() {
-		return ItemStack.EMPTY;
 	}
 }

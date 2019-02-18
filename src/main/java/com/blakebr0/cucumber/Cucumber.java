@@ -1,41 +1,42 @@
 package com.blakebr0.cucumber;
 
-import com.blakebr0.cucumber.proxy.CommonProxy;
-import com.blakebr0.cucumber.registry.ModRegistry;
-
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
+import com.blakebr0.cucumber.network.NetworkHandler;
+import com.blakebr0.cucumber.render.GlowingTextRenderer;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-@Mod(name = Cucumber.NAME, modid = Cucumber.MOD_ID, version = Cucumber.VERSION)
+@Mod(Cucumber.MOD_ID)
 public class Cucumber {
 
 	public static final String NAME = "Cucumber Library";
 	public static final String MOD_ID = "cucumber";
 	public static final String VERSION = "${version}";
-	
-	public static final ModRegistry REGISTRY = ModRegistry.create(MOD_ID);
-	
-	@SidedProxy(clientSide = "com.blakebr0.cucumber.proxy.ClientProxy", serverSide = "com.blakebr0.cucumber.proxy.ServerProxy")
-	public static CommonProxy proxy;
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		proxy.preInit(event);
+	public Cucumber() {
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postInit);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
 	}
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		proxy.init(event);
+	public void preInit(FMLCommonSetupEvent event) {
+		NetworkHandler.init();
 	}
 
-	@EventHandler
-	public void postInit(FMLPostInitializationEvent event) {
-		proxy.postInit(event);
+	public void init(InterModEnqueueEvent event) {
+
+	}
+
+	public void postInit(InterModProcessEvent event) {
+
+ 	}
+
+	public void clientInit(FMLClientSetupEvent event) {
+		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
 	}
 }

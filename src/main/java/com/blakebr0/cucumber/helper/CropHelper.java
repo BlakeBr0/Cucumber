@@ -1,19 +1,17 @@
 package com.blakebr0.cucumber.helper;
 
-import java.lang.reflect.Method;
-
 import net.minecraft.block.BlockCrops;
 import net.minecraft.item.Item;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
+import java.lang.reflect.Method;
 
 public class CropHelper {
 
 	private static final Method GET_SEED;
-//	private static final Method GET_CROP;
-	
+
 	static {
-		GET_SEED = ReflectionHelper.findMethod(BlockCrops.class, "getSeed", "func_149866_i");
-//		GET_CROP = ReflectionHelper.findMethod(BlockCrops.class, "getCrop", "func_208486_d");
+		GET_SEED = ObfuscationReflectionHelper.findMethod(BlockCrops.class, "func_149866_i");
 	}
 	
 	public static Item getSeed(BlockCrops block) {
@@ -23,12 +21,4 @@ public class CropHelper {
 			return null;
 		}
 	}
-	
-//	public static Item getCrop(BlockCrops block) {
-//		try {
-//			return (Item) GET_CROP.invoke(block);
-//		} catch (Exception e) {
-//			return null;
-//		}
-//	}
 }

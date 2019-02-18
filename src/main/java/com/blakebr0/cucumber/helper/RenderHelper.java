@@ -1,30 +1,21 @@
 package com.blakebr0.cucumber.helper;
 
-import java.util.List;
-
 import com.blakebr0.cucumber.render.GlowingTextRenderer;
 import com.blakebr0.cucumber.render.GlowingTextRenderer.ColorInfo;
 import com.blakebr0.cucumber.util.Utils;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 
+import java.util.List;
+
 public class RenderHelper {
-	
-	/*
-	 * Credit to elucent for embers https://github.com/RootsTeam/Embers/blob/master/src/main/java/teamroots/embers/gui/GuiCodex.java
-	 */
-	public static void drawGlowingText(FontRenderer font, String s, int x, int y, ColorInfo info) {
-		float sine = 0.5F * ((float) Math.sin(Math.toRadians(4.0F * ((float) GlowingTextRenderer.getTicks() + Minecraft.getMinecraft().getRenderPartialTicks()))) + 1.0F);
-		font.drawStringWithShadow(s, x, y, Utils.intColor(info.r + (int) (info.rl * sine), info.g + (int) (info.gl * sine), info.b + (int) (info.bl * sine)));
-	}
-	
+
     public static void drawCenteredText(FontRenderer font, String s, int x, int y, int color) {
         font.drawString(s, (x - font.getStringWidth(s) / 2), y, color);
     }
@@ -34,10 +25,14 @@ public class RenderHelper {
 	 */
 	public static void drawScaledWrappedText(FontRenderer font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
         GlStateManager.pushMatrix();
-        GlStateManager.scale(scale, scale, scale);
+        GlStateManager.scalef(scale, scale, scale);
         List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
         for (int i = 0; i < lines.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
-        	font.drawString(lines.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color, shadow);        
+        	if (shadow) {
+				font.drawStringWithShadow(lines.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
+			} else {
+				font.drawString(lines.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
+			}
         }
         GlStateManager.popMatrix();
 	}
@@ -48,10 +43,14 @@ public class RenderHelper {
 	
 	public static void drawScaledCenteredWrappedTextX(FontRenderer font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
         GlStateManager.pushMatrix();
-        GlStateManager.scale(scale, scale, scale);
+        GlStateManager.scalef(scale, scale, scale);
         List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
         for (int i = 0; i < lines.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
-        	font.drawString(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color, shadow);        
+        	if (shadow) {
+				font.drawStringWithShadow(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
+			} else {
+				font.drawString(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
+			}
         }
         GlStateManager.popMatrix();	
 	}
@@ -68,7 +67,7 @@ public class RenderHelper {
 		drawScaledCenteredWrappedTextX(font, s, x, y, scale, width, height, color, shadow);
 	}
 	
-	public static void drawTexturedModelRect(int x, int y, int textureX, int textureY, int width, int height) {
+	public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height) {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
@@ -87,7 +86,7 @@ public class RenderHelper {
 		tessellator.draw();
 	}
 	
-    public static void drawTexturedModelRect(double x, double y, double u, double v, double width, double height, double textureWidth, double textureHeight) {
+    public static void drawTexturedModalRect(double x, double y, double u, double v, double width, double height, double textureWidth, double textureHeight) {
         double f = 1.0D / textureWidth;
         double f1 = 1.0D / textureHeight;
         Tessellator tessellator = Tessellator.getInstance();
@@ -108,9 +107,9 @@ public class RenderHelper {
         tessellator.draw();
     }
     
-    public static void drawScaledItemIntoGui(RenderItem render, ItemStack stack, int x, int y, float scale) {
+    public static void drawScaledItemIntoGui(ItemRenderer render, ItemStack stack, int x, int y, float scale) {
     	GlStateManager.pushMatrix();
-    	GlStateManager.scale(scale, scale, scale);
+    	GlStateManager.scalef(scale, scale, scale);
     	net.minecraft.client.renderer.RenderHelper.enableGUIStandardItemLighting();
     	render.renderItemAndEffectIntoGUI(stack, (int) (x / scale), (int) (y / scale));
     	net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();

@@ -1,20 +1,12 @@
 package com.blakebr0.cucumber.guide;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.blakebr0.cucumber.guide.pages.IEntryPage;
 import com.blakebr0.cucumber.guide.pages.PageText;
 import com.blakebr0.cucumber.util.Utils;
-import com.google.common.collect.Maps;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GuideEntry {
 	

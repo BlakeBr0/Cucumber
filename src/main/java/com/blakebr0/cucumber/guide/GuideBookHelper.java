@@ -1,7 +1,6 @@
 package com.blakebr0.cucumber.guide;
 
 import com.blakebr0.cucumber.helper.NBTHelper;
-
 import net.minecraft.item.ItemStack;
 
 public class GuideBookHelper {

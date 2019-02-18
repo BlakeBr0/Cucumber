@@ -7,6 +7,7 @@ import com.blakebr0.cucumber.lib.Tooltips;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 public class ItemReusable extends ItemBase {
@@ -14,10 +15,7 @@ public class ItemReusable extends ItemBase {
 	private boolean damage;
 	
 	public ItemReusable(String name, int uses, boolean damage) {
-		super(name);
-		this.setMaxDamage(uses - 1);
-		this.setMaxStackSize(1);
-		this.setNoRepair();
+		super(name, new Properties().defaultMaxDamage(uses - 1).setNoRepair());
 		this.damage = damage;
 	}
 	
@@ -31,18 +29,18 @@ public class ItemReusable extends ItemBase {
 		ItemStack copy = stack.copy();
 		
 		if (this.damage) {
-			copy.setItemDamage(stack.getItemDamage() + 1);
+			copy.setDamage(stack.getDamage() + 1);
 		}
 		copy.setCount(1);
 		
 		return copy;
 	}
 	
-	@Override
-	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
+	@Override // TODO: Tooltip fixerino
+	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (this.damage) {
-			int damage = stack.getMaxDamage() - stack.getItemDamage() + 1;
-			tooltip.add(Tooltips.USES_LEFT + damage);
+			int damage = stack.getMaxDamage() - stack.getDamage() + 1;
+//			tooltip.add(Tooltips.USES_LEFT + damage);
 		}
 	}
 }
