@@ -27,7 +27,6 @@ public class ItemReusable extends ItemBase {
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
 		ItemStack copy = stack.copy();
-		
 		if (this.damage) {
 			copy.setDamage(stack.getDamage() + 1);
 		}
@@ -36,11 +35,11 @@ public class ItemReusable extends ItemBase {
 		return copy;
 	}
 	
-	@Override // TODO: Tooltip fixerino
+	@Override // TODO: Check out how args work with both string and itextcomponent implementations
 	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (this.damage) {
 			int damage = stack.getMaxDamage() - stack.getDamage() + 1;
-//			tooltip.add(Tooltips.USES_LEFT + damage);
+			tooltip.add(Tooltips.USES_LEFT.get().args(damage).build());
 		}
 	}
 }
