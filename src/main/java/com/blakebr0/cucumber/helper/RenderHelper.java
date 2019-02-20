@@ -28,13 +28,14 @@ public class RenderHelper {
         GlStateManager.scalef(scale, scale, scale);
         List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
         for (int i = 0; i < lines.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
-        	if (shadow) {
+			if (shadow) {
 				font.drawStringWithShadow(lines.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
 			} else {
 				font.drawString(lines.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
 			}
-        }
-        GlStateManager.popMatrix();
+		}
+        
+		GlStateManager.popMatrix();
 	}
 	
 	public static void drawScaledWrappedText(FontRenderer font, String s, int x, int y, float scale, float width, int color, boolean shadow) {
@@ -47,11 +48,12 @@ public class RenderHelper {
         List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
         for (int i = 0; i < lines.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
         	if (shadow) {
-				font.drawStringWithShadow(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
-			} else {
-				font.drawString(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
-			}
+        		font.drawStringWithShadow(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
+        	} else {
+        		font.drawString(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
+        	}
         }
+
         GlStateManager.popMatrix();	
 	}
 	
