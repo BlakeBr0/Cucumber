@@ -34,7 +34,7 @@ public class RenderHelper {
 				font.drawString(lines.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
 			}
 		}
-        
+
 		GlStateManager.popMatrix();
 	}
 	
