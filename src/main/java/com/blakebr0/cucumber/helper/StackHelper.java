@@ -4,7 +4,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.List;
 import java.util.Set;

@@ -27,7 +27,7 @@ public class ItemInventoryWrapper implements IInventory {
 	
 	public void load() {
 		NBTTagCompound nbt = this.inventory.getTag();
-		if (!this.inventory.hasTag() || !nbt.hasKey("Items")) {
+		if (!this.inventory.hasTag() || !nbt.contains("Items")) {
 			if (this.inventory.hasTag()) {
 				this.tag = nbt;
 				loadItems();
@@ -44,7 +44,7 @@ public class ItemInventoryWrapper implements IInventory {
 	
 	protected void loadItems() {
 		for (int i = 0; i < this.size; i++) {
-			if (this.tag.hasKey("Slot")) {
+			if (this.tag.contains("Slot")) {
 				this.slots.set(i, ItemStack.read(tag.getCompound("Slot" + i)));
 			} else {
 				this.slots.set(i, ItemStack.EMPTY);
@@ -55,9 +55,9 @@ public class ItemInventoryWrapper implements IInventory {
 	protected void saveItems() {
 		for (int i = 0; i < this.size; i++) {
 			if (this.slots.get(i).isEmpty()) {
-				this.tag.removeTag("Slot" + i);
+				this.tag.remove("Slot" + i);
 			} else{ 
-				this.tag.setTag("Slot" + i, this.slots.get(i).write(new NBTTagCompound()));
+				this.tag.put("Slot" + i, this.slots.get(i).write(new NBTTagCompound()));
 			}
 		}
 

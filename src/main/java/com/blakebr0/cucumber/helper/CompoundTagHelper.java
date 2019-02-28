@@ -17,51 +17,51 @@ public class CompoundTagHelper {
 	}
 	
 	public void setTag(ItemStack stack, String key, INBTBase value) {
-		getCompoundTag(stack).setTag(key, value);
+		getCompoundTag(stack).put(key, value);
 	}
 	
 	public void setByte(ItemStack stack, String key, byte value) {
-		getCompoundTag(stack).setByte(key, value);
+		getCompoundTag(stack).putByte(key, value);
 	}
 	
 	public void setShort(ItemStack stack, String key, short value) {
-		getCompoundTag(stack).setShort(key, value);
+		getCompoundTag(stack).putShort(key, value);
 	}
 
 	public void setInt(ItemStack stack, String key, int value) {
-		getCompoundTag(stack).setInt(key, value);
+		getCompoundTag(stack).putInt(key, value);
 	}
 	
 	public void setLong(ItemStack stack, String key, long value) {
-		getCompoundTag(stack).setLong(key, value);
+		getCompoundTag(stack).putLong(key, value);
 	}
 	
 	public void setFloat(ItemStack stack, String key, float value) {
-		getCompoundTag(stack).setFloat(key, value);
+		getCompoundTag(stack).putFloat(key, value);
 	}
 	
 	public void setDouble(ItemStack stack, String key, double value) {
-		getCompoundTag(stack).setDouble(key, value);
+		getCompoundTag(stack).putDouble(key, value);
 	}
 	
 	public void setString(ItemStack stack, String key, String value) {
-		getCompoundTag(stack).setString(key, value);
+		getCompoundTag(stack).putString(key, value);
 	}
 	
 	public void setByteArray(ItemStack stack, String key, byte[] value) {
-		getCompoundTag(stack).setByteArray(key, value);
+		getCompoundTag(stack).putByteArray(key, value);
 	}
 	
 	public void setIntArray(ItemStack stack, String key, int[] value) {
-		getCompoundTag(stack).setIntArray(key, value);
+		getCompoundTag(stack).putIntArray(key, value);
 	}
 	
 	public void setBoolean(ItemStack stack, String key, boolean value) {
-		getCompoundTag(stack).setBoolean(key, value);
+		getCompoundTag(stack).putBoolean(key, value);
 	}
 	
 	public INBTBase getTag(ItemStack stack, String key) {
-		return getCompoundTag(stack).getTag(key);
+		return getCompoundTag(stack).get(key);
 	}
 	
 	public byte getByte(ItemStack stack, String key) {
@@ -105,7 +105,7 @@ public class CompoundTagHelper {
 	}
 	
 	public boolean hasKey(ItemStack stack, String key) {
-		return getCompoundTag(stack).hasKey(key);
+		return getCompoundTag(stack).contains(key);
 	}
 	
 	public void flipBoolean(ItemStack stack, String key) {
@@ -114,7 +114,7 @@ public class CompoundTagHelper {
 	
 	public void removeTag(ItemStack stack, String key) {
 		if (hasKey(stack, key)) {
-			getCompoundTag(stack).removeTag(key);
+			getCompoundTag(stack).remove(key);
 		}
 	}
 }
