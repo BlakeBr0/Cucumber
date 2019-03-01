@@ -1,21 +1,19 @@
 package com.blakebr0.cucumber.item;
 
-import java.util.List;
-
 import com.blakebr0.cucumber.lib.Tooltips;
-
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemReusable extends ItemBase {
 	
 	private boolean damage;
 	
 	public ItemReusable(String name, int uses, boolean damage) {
-		super(name, new Properties().defaultMaxDamage(uses - 1).setNoRepair());
+		super(name, p -> p.defaultMaxDamage(uses - 1).setNoRepair());
 		this.damage = damage;
 	}
 	

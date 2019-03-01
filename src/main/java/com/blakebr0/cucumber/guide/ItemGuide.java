@@ -22,7 +22,7 @@ public class ItemGuide extends ItemBase implements IModelHelper {
 	private String author;
 	
 	public ItemGuide(String name, ItemGroup group, Guide guide) {
-		super("guide", new Properties().maxStackSize(1).group(group));
+		super(name, p -> p.maxStackSize(1).group(group));
 		this.guide = guide;
 		this.author = guide.getAuthor();
 		
