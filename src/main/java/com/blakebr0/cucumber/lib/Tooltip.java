@@ -53,7 +53,7 @@ public class Tooltip {
         }
 
         public ITextComponent build() {
-            return this.color != null ? new TextComponentTranslation(this.key, this.args).applyTextStyle(this.color) : new TextComponentTranslation(this.key, this.args);
+            return new TextComponentTranslation(this.key, this.args).applyTextStyle(this.color != null ? this.color : TextFormatting.GRAY);
         }
 
         public String buildString() {
