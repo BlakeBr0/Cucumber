@@ -1,4 +1,4 @@
 {
-  "tooltip.cucumber.uses_left": "Uses Left: %s",
+  "tooltip.cucumber.uses_left": "%s Uses Left",
   "tooltip.cucumber.unlimited_uses": "Unlimited Uses"
 }
