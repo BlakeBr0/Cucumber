@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber;
 
 import com.blakebr0.cucumber.network.NetworkHandler;
+import com.blakebr0.cucumber.render.ColorHandler;
 import com.blakebr0.cucumber.render.GlowingTextRenderer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -38,5 +39,6 @@ public class Cucumber {
 
 	public void clientInit(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
+		MinecraftForge.EVENT_BUS.register(new ColorHandler());
 	}
 }
