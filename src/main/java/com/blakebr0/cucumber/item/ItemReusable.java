@@ -42,7 +42,11 @@ public class ItemReusable extends ItemBase {
 	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (this.damage) {
 			int damage = stack.getMaxDamage() - stack.getDamage() + 1;
-			tooltip.add(Tooltips.USES_LEFT.args(damage).build());
+			if (damage == 1) {
+				tooltip.add(Tooltips.ONE_USE_LEFT.build());
+			} else {
+				tooltip.add(Tooltips.USES_LEFT.args(damage).build());
+			}
 		} else {
 			tooltip.add(Tooltips.UNLIMITED_USES.build());
 		}
