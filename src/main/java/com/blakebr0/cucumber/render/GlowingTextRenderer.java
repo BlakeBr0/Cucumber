@@ -53,9 +53,9 @@ public class GlowingTextRenderer {
 		stacks.put(stack, info);
 	}
 
-	public static void drawGlowingText(FontRenderer font, String s, int x, int y, ColorInfo info) {
+	public static int drawGlowingText(FontRenderer font, String s, int x, int y, ColorInfo info) {
 		float sine = 0.5F * ((float) Math.sin(Math.toRadians(4.0F * ((float) GlowingTextRenderer.getTicks() + Minecraft.getInstance().getRenderPartialTicks()))) + 1.0F);
-		font.drawStringWithShadow(s, x, y, Utils.intColor(info.r + (int) (info.rl * sine), info.g + (int) (info.gl * sine), info.b + (int) (info.bl * sine)));
+		return font.drawStringWithShadow(s, x, y, Utils.intColor(info.r + (int) (info.rl * sine), info.g + (int) (info.gl * sine), info.b + (int) (info.bl * sine)));
 	}
 
 	public static int getTicks() {
