@@ -27,7 +27,7 @@ minecraft {
     mappings channel: 'snapshot', version: '20190216-1.13.1'
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 
-    accessTransformer = file('src/main/resources/META-INF/cucumber_at.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // default run configurations.
     // these can be tweaked, removed, or duplicated as needed.
