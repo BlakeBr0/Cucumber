@@ -7,7 +7,6 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import java.lang.reflect.Method;
 
 public class CropHelper {
-
 	private static final Method GET_SEED;
 
 	static {

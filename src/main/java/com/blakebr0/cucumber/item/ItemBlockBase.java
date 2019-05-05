@@ -7,7 +7,6 @@ import net.minecraft.util.ResourceLocation;
 import java.util.function.Function;
 
 public class ItemBlockBase extends ItemBlock {
-
     public ItemBlockBase(Block block, Function<Properties, Properties> properties) {
         super(block, properties.apply(new Properties()));
 

@@ -10,7 +10,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 public abstract class SerializerBase<T> implements JsonSerializer<T>, JsonDeserializer<T> {
-
 	@Override
 	public T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		return context.deserialize(json, typeOfT);

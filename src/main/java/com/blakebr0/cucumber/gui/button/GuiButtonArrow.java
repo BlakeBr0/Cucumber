@@ -6,7 +6,6 @@ import com.blakebr0.cucumber.util.Utils;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiButtonArrow extends IconButton {
-
 	private static final ResourceLocation TEXTURE = ResourceHelper.getResource(Cucumber.MOD_ID, "textures/gui/icons.png");
 	
 	public GuiButtonArrow(int id, int x, int y) {

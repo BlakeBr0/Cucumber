@@ -5,7 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 
 public class GlowingTextFontRenderer extends FontRenderer {
-
     private final GlowingTextRenderer.ColorInfo info;
 
     public GlowingTextFontRenderer(FontRenderer parent, GlowingTextRenderer.ColorInfo info) {

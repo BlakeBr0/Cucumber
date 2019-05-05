@@ -5,8 +5,7 @@ import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class CompoundTagHelper {
-	
-	String name;
+	private String name;
 	
 	public CompoundTagHelper(String name) {
 		this.name = name;

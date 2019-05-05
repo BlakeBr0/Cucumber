@@ -8,7 +8,6 @@ import net.minecraft.util.BlockRenderLayer;
 import java.util.function.Function;
 
 public class BlockGlassBase extends BlockGlass {
-
     private final boolean translucent;
 
     public BlockGlassBase(String name, Material material, Function<Properties, Properties> properties) {

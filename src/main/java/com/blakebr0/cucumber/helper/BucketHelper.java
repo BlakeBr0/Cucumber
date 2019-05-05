@@ -7,7 +7,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class BucketHelper {
-
 	public static FluidStack getFluid(ItemStack stack) {
 		return FluidStack.loadFluidStackFromNBT(stack.getTag());
 	}

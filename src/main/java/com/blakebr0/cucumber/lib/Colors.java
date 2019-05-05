@@ -1,7 +1,6 @@
 package com.blakebr0.cucumber.lib;
 
 public class Colors {
-
 	public static final String BLACK = "\u00A70";
 	public static final String DARK_BLUE = "\u00A71";
 	public static final String DARK_GREEN = "\u00A72";

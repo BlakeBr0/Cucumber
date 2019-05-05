@@ -12,7 +12,6 @@ import net.minecraftforge.client.ForgeHooksClient;
 import org.lwjgl.opengl.GL14;
 
 public class GhostItemRenderer {
-
     public static void renderItemModel(Minecraft mc, ItemStack stack, float alpha) {
         if (!stack.isEmpty()) {
             mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);

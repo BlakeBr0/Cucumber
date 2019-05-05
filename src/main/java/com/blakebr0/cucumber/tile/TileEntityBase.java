@@ -8,7 +8,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 
 public class TileEntityBase extends TileEntity {
-
 	public TileEntityBase(TileEntityType<?> type) {
 		super(type);
 	}

@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ColorHandler {
-
     private static final Map<IBlockColor, Block[]> BLOCKS_COLORS = new HashMap<>();
     private static final Map<IItemColor, IItemProvider[]> ITEMS_COLORS = new HashMap<>();
 

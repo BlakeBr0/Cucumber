@@ -5,7 +5,6 @@ import net.minecraft.nbt.INBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class NBTHelper {
-	
 	public static void setTag(ItemStack stack, String key, INBTBase value) {
 		validateCompound(stack);
 		

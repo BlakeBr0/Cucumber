@@ -13,7 +13,6 @@ import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class FluidHolderItemWrapper implements ICapabilityProvider {
-
 	private ItemStack stack;
 	private IFluidHolder holder;
 	private boolean canFill, canDrain;
@@ -28,7 +27,6 @@ public class FluidHolderItemWrapper implements ICapabilityProvider {
 	@Override
 	public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
 		return CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY.orEmpty(capability, LazyOptional.of(() -> new IFluidHandlerItem() {
-
 			@Override
 			public IFluidTankProperties[] getTankProperties() {
 				return new IFluidTankProperties[] { new FluidTankProperties(holder.getFluid(stack), holder.getCapacity(stack), canFill, canDrain) };

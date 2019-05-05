@@ -7,7 +7,6 @@ import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
 
 public class NetworkHandler {
-
 	public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(ResourceHelper.getResource(Cucumber.MOD_ID, Cucumber.MOD_ID), () -> "1.0", s -> true, s -> true);
 	
 	public static void init() {

@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Random;
 
 public class Utils {
-
 	public static Random rand = new Random();
 
 	public static String localize(String key) {

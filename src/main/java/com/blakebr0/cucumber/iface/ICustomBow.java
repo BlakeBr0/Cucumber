@@ -6,12 +6,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 
 public interface ICustomBow {
-
 	default float getDrawSpeedMulti(ItemStack stack) {
 		return 1.0F;
 	}
 
-	public static ItemStack findAmmo(EntityPlayer player) {
+	static ItemStack findAmmo(EntityPlayer player) {
 		if (isArrow(player.getHeldItem(EnumHand.OFF_HAND))) {
 			return player.getHeldItem(EnumHand.OFF_HAND);
 		} else if (isArrow(player.getHeldItem(EnumHand.MAIN_HAND))) {
@@ -28,7 +27,7 @@ public interface ICustomBow {
 		}
 	}
 
-	public static boolean isArrow(ItemStack stack) {
+	static boolean isArrow(ItemStack stack) {
 		return stack.getItem() instanceof ItemArrow;
 	}
 }

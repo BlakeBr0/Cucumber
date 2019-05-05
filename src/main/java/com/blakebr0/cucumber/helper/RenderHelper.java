@@ -1,9 +1,5 @@
 package com.blakebr0.cucumber.helper;
 
-import com.blakebr0.cucumber.render.GlowingTextRenderer;
-import com.blakebr0.cucumber.render.GlowingTextRenderer.ColorInfo;
-import com.blakebr0.cucumber.util.Utils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import java.util.List;
 
 public class RenderHelper {
-
     public static void drawCenteredText(FontRenderer font, String s, int x, int y, int color) {
         font.drawString(s, (x - font.getStringWidth(s) / 2), y, color);
     }

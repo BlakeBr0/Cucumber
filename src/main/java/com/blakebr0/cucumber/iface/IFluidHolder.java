@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFluidHolder {
-
 	int getCapacity(ItemStack stack);
 
 	FluidStack getFluid(ItemStack stack);

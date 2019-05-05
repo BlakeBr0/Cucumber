@@ -4,7 +4,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ItemHolder<T extends Item> {
-
     private final T item;
 
     public ItemHolder(T item) {

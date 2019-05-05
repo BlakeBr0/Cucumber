@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GlowingTextRenderer {
-	
 	public static final ColorInfo ORANGE = new ColorInfo(255, 64, 16, 0, 64, 0);
 	public static final ColorInfo EPIC = new ColorInfo(255, 85, 255, -64, 0, 0);
 	

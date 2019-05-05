@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 // TODO: Implement mob drop handler
 public class MobDropHandler {
-	
 	private static Set<IDrop> drops = new HashSet<>();
 	
 	//@SubscribeEvent

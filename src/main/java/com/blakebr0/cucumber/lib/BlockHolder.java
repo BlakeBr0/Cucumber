@@ -4,7 +4,6 @@ import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
 public class BlockHolder<T extends Block> {
-
     private final T block;
 
     public BlockHolder(T block) {

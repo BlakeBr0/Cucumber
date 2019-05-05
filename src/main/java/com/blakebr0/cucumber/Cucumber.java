@@ -13,7 +13,6 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(Cucumber.MOD_ID)
 public class Cucumber {
-
 	public static final String NAME = "Cucumber Library";
 	public static final String MOD_ID = "cucumber";
 	public static final String VERSION = "${version}";

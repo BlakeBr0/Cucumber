@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 
 public class StackHelper {
-
 	public static ItemStack withSize(ItemStack stack, int size, boolean container) {
 		if (size <= 0) {
 			if (container && stack.getItem().hasContainerItem(stack)) {

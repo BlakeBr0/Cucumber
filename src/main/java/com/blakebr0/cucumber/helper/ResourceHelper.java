@@ -4,7 +4,6 @@ import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
 
 public class ResourceHelper {
-	
 	public static ResourceLocation getResource(String modid, String resource) {
 		return new ResourceLocation(modid, resource);
 	}

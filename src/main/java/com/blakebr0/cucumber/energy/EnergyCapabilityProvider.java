@@ -8,7 +8,6 @@ import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class EnergyCapabilityProvider implements ICapabilityProvider {
-
 	protected IEnergyStorage instance;
 	
 	public EnergyCapabilityProvider(IEnergyStorage instance) {

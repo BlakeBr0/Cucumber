@@ -8,7 +8,6 @@ import net.minecraft.world.World;
 import java.util.List;
 
 public final class VanillaPacketDispatcher {
-
 	public static void dispatchTEToNearbyPlayers(TileEntity tile) {
 		World world = tile.getWorld();
 		List players = world.playerEntities;

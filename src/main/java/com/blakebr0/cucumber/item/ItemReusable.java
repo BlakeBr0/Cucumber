@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public class ItemReusable extends ItemBase {
-	
 	private boolean damage;
 
 	public ItemReusable(String name, Function<Properties, Properties> properties) {
@@ -30,9 +29,8 @@ public class ItemReusable extends ItemBase {
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
 		ItemStack copy = stack.copy();
-		if (this.damage) {
+		if (this.damage)
 			copy.setDamage(stack.getDamage() + 1);
-		}
 		copy.setCount(1);
 		
 		return copy;

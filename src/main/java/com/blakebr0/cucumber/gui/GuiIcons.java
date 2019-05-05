@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiIcons {
-
 	public static final ResourceLocation ICONS = ResourceHelper.getResource(Cucumber.MOD_ID, "textures/gui/icons.png");
 	
 	public static void drawX(int x, int y) {

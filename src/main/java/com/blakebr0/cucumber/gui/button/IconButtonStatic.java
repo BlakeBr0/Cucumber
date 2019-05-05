@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public class IconButtonStatic extends GuiButton {
-	
 	private ResourceLocation texture;
 	private int textureX, textureY;
 

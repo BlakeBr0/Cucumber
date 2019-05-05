@@ -14,7 +14,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 public class ToolTools {
-
 	/*
 	 * Parts of the code used in this class is derived from Actually Additions,
 	 * by Ellpeck (https://github.com/Ellpeck/ActuallyAdditions) Draconic
@@ -22,7 +21,6 @@ public class ToolTools {
 	 * (https://github.com/brandon3055/Draconic-Evolution) I do not claim to own
 	 * or have created any of the code that came from those mods
 	 */
-
 	private static RayTraceResult getPosWithinReach(World world, EntityPlayer player, double distance, RayTraceFluidMode fluidMode, boolean p1, boolean p2) {
 		float f = player.rotationPitch;
 		float f1 = player.rotationYaw;

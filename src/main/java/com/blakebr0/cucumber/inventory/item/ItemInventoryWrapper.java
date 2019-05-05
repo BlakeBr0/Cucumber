@@ -9,7 +9,6 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 
 public class ItemInventoryWrapper implements IInventory {
-
 	private ItemStack inventory;
 	private int size;
 	private NonNullList<ItemStack> slots;

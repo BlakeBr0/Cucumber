@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class BowFovHandler {
-
 	@SubscribeEvent
 	public static void onFovChanged(FOVUpdateEvent event) {
 		EntityPlayer entity = event.getEntity();

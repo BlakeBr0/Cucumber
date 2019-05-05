@@ -5,7 +5,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 
 public class Tooltip {
-
     private final String key;
 
     public Tooltip(String key) {
