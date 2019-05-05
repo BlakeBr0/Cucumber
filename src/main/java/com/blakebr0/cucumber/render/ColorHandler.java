@@ -9,12 +9,13 @@ import net.minecraft.util.IItemProvider;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ColorHandler {
-    private static final Map<IBlockColor, Block[]> BLOCKS_COLORS = new HashMap<>();
-    private static final Map<IItemColor, IItemProvider[]> ITEMS_COLORS = new HashMap<>();
+    private static final Map<IBlockColor, Block[]> BLOCKS_COLORS = Collections.synchronizedMap(new HashMap<>());
+    private static final Map<IItemColor, IItemProvider[]> ITEMS_COLORS = Collections.synchronizedMap(new HashMap<>());
 
     public static void registerBlocks(IBlockColor color, Block... blocks) {
         BLOCKS_COLORS.put(color, blocks);
