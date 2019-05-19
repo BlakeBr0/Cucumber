@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber;
 
+import com.blakebr0.cucumber.event.BowFovHandler;
 import com.blakebr0.cucumber.network.NetworkHandler;
 import com.blakebr0.cucumber.render.ColorHandler;
 import com.blakebr0.cucumber.render.GlowingTextRenderer;
@@ -18,26 +19,27 @@ public class Cucumber {
 	public static final String VERSION = "${version}";
 
 	public Cucumber() {
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::preInit);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::postInit);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientInit);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModProcess);
+		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
 	}
 
-	public void preInit(FMLCommonSetupEvent event) {
-		NetworkHandler.init();
+	public void onCommonSetup(FMLCommonSetupEvent event) {
+		NetworkHandler.onCommonSetup();
 	}
 
-	public void init(InterModEnqueueEvent event) {
+	public void onInterModEnqueue(InterModEnqueueEvent event) {
 
 	}
 
-	public void postInit(InterModProcessEvent event) {
+	public void onInterModProcess(InterModProcessEvent event) {
 
  	}
 
-	public void clientInit(FMLClientSetupEvent event) {
+	public void onClientSetup(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
 		MinecraftForge.EVENT_BUS.register(new ColorHandler());
+		MinecraftForge.EVENT_BUS.register(new BowFovHandler());
 	}
 }

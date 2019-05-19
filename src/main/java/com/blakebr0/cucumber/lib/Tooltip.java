@@ -32,7 +32,6 @@ public class Tooltip {
     }
 
     public class TooltipBuilder {
-
         private final String key;
         private Object[] args = new Object[0];
         private TextFormatting color;
