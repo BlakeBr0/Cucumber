@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.util;
 
-import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -10,12 +10,12 @@ import java.util.List;
 public final class VanillaPacketDispatcher {
 	public static void dispatchTEToNearbyPlayers(TileEntity tile) {
 		World world = tile.getWorld();
-		List players = world.playerEntities;
+		List players = world.getPlayers();
 		for (Object player : players) {
-			if (player instanceof EntityPlayerMP) {
-				EntityPlayerMP mp = (EntityPlayerMP) player;
+			if (player instanceof ServerPlayerEntity) {
+				ServerPlayerEntity mp = (ServerPlayerEntity) player;
 				if (pointDistancePlane(mp.posX, mp.posZ, tile.getPos().getX() + 0.5, tile.getPos().getZ() + 0.5) < 64) {
-					((EntityPlayerMP) player).connection.sendPacket(tile.getUpdatePacket());
+					((ServerPlayerEntity) player).connection.sendPacket(tile.getUpdatePacket());
 				}
 			}
 		}

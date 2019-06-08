@@ -3,8 +3,8 @@ package com.blakebr0.cucumber.gui;
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.helper.RenderHelper;
 import com.blakebr0.cucumber.helper.ResourceHelper;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiIcons {

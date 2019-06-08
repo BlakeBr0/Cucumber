@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.helper;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -22,7 +22,7 @@ public class RenderHelper {
         GlStateManager.pushMatrix();
         GlStateManager.scalef(scale, scale, scale);
         List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
-        for (int i = 0; i < lines.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
+        for (int i = 0; i < lines.size() && (!(height > -1) || i * font.FONT_HEIGHT < height); i++) {
 			if (shadow) {
 				font.drawStringWithShadow(lines.get(i), x / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
 			} else {
@@ -41,7 +41,7 @@ public class RenderHelper {
         GlStateManager.pushMatrix();
         GlStateManager.scalef(scale, scale, scale);
         List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
-        for (int i = 0; i < lines.size() && (height > -1 ? i * font.FONT_HEIGHT < height : true); i++) {
+        for (int i = 0; i < lines.size() && (!(height > -1) || i * font.FONT_HEIGHT < height); i++) {
         	if (shadow) {
         		font.drawStringWithShadow(lines.get(i), (x - font.getStringWidth(lines.get(i)) / 2) / scale, y / scale + (i * (int) (font.FONT_HEIGHT * scale)), color);
         	} else {
@@ -68,17 +68,17 @@ public class RenderHelper {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.pos((double) (x + 0), (double) (y + height), (double) 0)
-					 .tex((double) ((float) (textureX + 0) * 0.00390625F), (double) ((float) (textureY + height) * 0.00390625F))
+		bufferbuilder.pos((double) x, (double) (y + height), 0D)
+					 .tex((double) (float) textureX * 0.00390625F, (double) (float) (textureY + height) * 0.00390625F)
 					 .endVertex();
-		bufferbuilder.pos((double) (x + width), (double) (y + height), (double) 0)
-					 .tex((double) ((float) (textureX + width) * 0.00390625F), (double) ((float) (textureY + height) * 0.00390625F))
+		bufferbuilder.pos((double) x + width, (double) (y + height), 0D)
+					 .tex((double) (float) (textureX + width) * 0.00390625F, (double) (float) (textureY + height) * 0.00390625F)
 					 .endVertex();
-		bufferbuilder.pos((double) (x + width), (double) (y + 0), (double) 0)
-					 .tex((double) ((float) (textureX + width) * 0.00390625F), (double) ((float) (textureY + 0) * 0.00390625F))
+		bufferbuilder.pos((double) (x + width), (double) y, (double) 0)
+					 .tex((double) (float) (textureX + width) * 0.00390625F, (double) (float) textureY * 0.00390625F)
 					 .endVertex();
-		bufferbuilder.pos((double) (x + 0), (double) (y + 0), (double) 0)
-					 .tex((double) ((float) (textureX + 0) * 0.00390625F), (double) ((float) (textureY + 0) * 0.00390625F))
+		bufferbuilder.pos((double) x, (double) y, (double) 0)
+					 .tex((double) (float) (textureX * 0.00390625F), (double) (float) textureY * 0.00390625F)
 					 .endVertex();
 		tessellator.draw();
 	}

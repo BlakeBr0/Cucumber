@@ -30,9 +30,10 @@ public class Utils {
 		return NumberFormat.getInstance().format(obj);
 	}
 
-	public static boolean isShiftKeyDown() {
-		return InputMappings.isKeyDown(340) || InputMappings.isKeyDown(344);
-	}
+	// TODO Figure out what to do about isKeyDown
+//	public static boolean isShiftKeyDown() {
+//		return InputMappings.isKeyDown(340) || InputMappings.isKeyDown(344);
+//	}
 
 	public static List<String> asList(String string) {
 		return Collections.singletonList(string);

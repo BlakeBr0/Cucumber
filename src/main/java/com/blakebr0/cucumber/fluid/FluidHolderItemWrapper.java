@@ -2,7 +2,7 @@ package com.blakebr0.cucumber.fluid;
 
 import com.blakebr0.cucumber.iface.IFluidHolder;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -25,7 +25,7 @@ public class FluidHolderItemWrapper implements ICapabilityProvider {
 	}
 
 	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction direction) {
 		return CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY.orEmpty(capability, LazyOptional.of(() -> new IFluidHandlerItem() {
 			@Override
 			public IFluidTankProperties[] getTankProperties() {

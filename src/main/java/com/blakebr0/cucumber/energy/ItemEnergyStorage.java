@@ -8,10 +8,10 @@ import net.minecraftforge.energy.EnergyStorage;
  * Based on RedstoneFlux ItemEnergyContainer
  * https://github.com/CoFH/RedstoneFlux/blob/master/src/main/java/cofh/redstoneflux/impl/ItemEnergyContainer.java
  */
-public class EnergyStorageItem extends EnergyStorage {
+public class ItemEnergyStorage extends EnergyStorage {
 	private ItemStack container;
 	
-	public EnergyStorageItem(ItemStack stack, int capacity) {
+	public ItemEnergyStorage(ItemStack stack, int capacity) {
 		super(capacity);
 		this.container = stack;
 	}

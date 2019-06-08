@@ -9,7 +9,7 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.function.Function;
 
-public class ItemReusable extends ItemBase {
+public class ItemReusable extends BaseItem {
 	private boolean damage;
 
 	public ItemReusable(String name, Function<Properties, Properties> properties) {

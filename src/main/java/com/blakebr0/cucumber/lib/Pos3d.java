@@ -1,11 +1,14 @@
 package com.blakebr0.cucumber.lib;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumFacing.Axis;
-import net.minecraft.util.math.*;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 
 /**
  * Pos3D - a way of performing operations on objects in a three dimensional environment.
@@ -26,7 +29,7 @@ public class Pos3d extends Vec3d {
 	}
 
 	public Pos3d(RayTraceResult mop) {
-		this(mop.getBlockPos());
+		this(mop.getHitVec());
 	}
 
 	public Pos3d(double x, double y, double z) {
@@ -57,22 +60,22 @@ public class Pos3d extends Vec3d {
 	 * @param tag - tag compound to read from
 	 * @return the Pos3D from the tag compound
 	 */
-	public static Pos3d read(NBTTagCompound tag) {
+	public static Pos3d read(CompoundNBT tag) {
 		return new Pos3d(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
 	}
 
 	/**
 	 * Writes this Pos3D's data to an NBTTagCompound.
 	 *
-	 * @param nbtTags - tag compound to write to
+	 * @param tag - tag compound to write to
 	 * @return the tag compound with this Pos3D's data
 	 */
-	public NBTTagCompound write(NBTTagCompound nbtTags) {
-		nbtTags.putDouble("x", x);
-		nbtTags.putDouble("y", y);
-		nbtTags.putDouble("z", z);
+	public CompoundNBT write(CompoundNBT tag) {
+		tag.putDouble("x", x);
+		tag.putDouble("y", y);
+		tag.putDouble("z", z);
 
-		return nbtTags;
+		return tag;
 	}
 
 	/**
@@ -88,11 +91,11 @@ public class Pos3d extends Vec3d {
 	/**
 	 * Creates a new Pos3D from the motion of an entity.
 	 *
-	 * @param entity Entitiy to get the motion from
+	 * @param entity Entity to get the motion from
 	 * @return Pos3D representing the motion of the given entity
 	 */
 	public static Pos3d fromMotion(Entity entity) {
-		return new Pos3d(entity.motionX, entity.motionY, entity.motionZ);
+		return new Pos3d(entity.getMotion().getX(), entity.getMotion().getY(), entity.getMotion().getZ());
 	}
 
 	/**
@@ -127,18 +130,18 @@ public class Pos3d extends Vec3d {
 	/**
 	 * Performs the same operation as translate(x, y, z), but by a set amount in a EnumFacing
 	 */
-	public Pos3d translate(EnumFacing direction, double amount) {
+	public Pos3d translate(Direction direction, double amount) {
 		return translate(direction.getDirectionVec().getX() * amount, direction.getDirectionVec().getY() * amount, direction.getDirectionVec().getZ() * amount);
 	}
 
 	/**
 	 * Performs the same operation as translate(x, y, z), but by a set amount in a EnumFacing
 	 */
-	public Pos3d translateExcludingSide(EnumFacing direction, double amount) {
+	public Pos3d translateExcludingSide(Direction direction, double amount) {
 		double xPos = x, yPos = y, zPos = z;
-		if (direction.getAxis() != Axis.X) xPos += amount;
-		if (direction.getAxis() != Axis.Y) yPos += amount;
-		if (direction.getAxis() != Axis.Z) zPos += amount;
+		if (direction.getAxis() != Direction.Axis.X) xPos += amount;
+		if (direction.getAxis() != Direction.Axis.Y) yPos += amount;
+		if (direction.getAxis() != Direction.Axis.Z) zPos += amount;
 
 		return new Pos3d(xPos, yPos, zPos);
 	}

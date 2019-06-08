@@ -2,8 +2,8 @@ package com.blakebr0.cucumber.energy;
 
 import net.minecraftforge.energy.EnergyStorage;
 
-public class EnergyStorageCustom extends EnergyStorage {
-	public EnergyStorageCustom(int capacity) {
+public class CustomEnergyStorage extends EnergyStorage {
+	public CustomEnergyStorage(int capacity) {
 		super(capacity);
 	}
 

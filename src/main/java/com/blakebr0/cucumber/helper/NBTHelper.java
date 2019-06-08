@@ -1,11 +1,11 @@
 package com.blakebr0.cucumber.helper;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBTBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 
 public class NBTHelper {
-	public static void setTag(ItemStack stack, String key, INBTBase value) {
+	public static void setTag(ItemStack stack, String key, INBT value) {
 		validateCompound(stack);
 		
 		stack.getTag().put(key, value);
@@ -71,7 +71,7 @@ public class NBTHelper {
 		stack.getTag().putBoolean(key, value);
 	}
 	
-	public static INBTBase getTag(ItemStack stack, String key) {
+	public static INBT getTag(ItemStack stack, String key) {
 		return stack.hasTag() ? stack.getTag().get(key) : null;
 	}
 	
@@ -133,12 +133,12 @@ public class NBTHelper {
 	
 	public static void validateCompound(ItemStack stack) {
 		if (!stack.hasTag()) {
-			NBTTagCompound tag = new NBTTagCompound();
+			CompoundNBT tag = new CompoundNBT();
 			stack.setTag(tag);
 		}
 	}
 	
-	public static NBTTagCompound getTagCompound(ItemStack stack) {
+	public static CompoundNBT getTagCompound(ItemStack stack) {
 		validateCompound(stack);
 		return stack.getTag();
 	}

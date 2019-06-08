@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.lib;
 
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class Localizable {
     private final String key;
@@ -55,7 +55,7 @@ public class Localizable {
         }
 
         public ITextComponent build() {
-            ITextComponent component = new TextComponentTranslation(this.key, this.args);
+            ITextComponent component = new TranslationTextComponent(this.key, this.args);
             if (this.color != null)
                 component.applyTextStyle(this.color);
 

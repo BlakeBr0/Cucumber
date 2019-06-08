@@ -1,18 +1,17 @@
 package com.blakebr0.cucumber.inventory.item;
 
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.text.ITextComponent;
 
 public class ItemInventoryWrapper implements IInventory {
 	private ItemStack inventory;
 	private int size;
 	private NonNullList<ItemStack> slots;
-	private NBTTagCompound tag;
+	private CompoundNBT tag;
 	private boolean dirty = false;
 	
 	public ItemInventoryWrapper(ItemStack inventory, int size) {
@@ -25,15 +24,15 @@ public class ItemInventoryWrapper implements IInventory {
 	}
 	
 	public void load() {
-		NBTTagCompound nbt = this.inventory.getTag();
+		CompoundNBT nbt = this.inventory.getTag();
 		if (!this.inventory.hasTag() || !nbt.contains("Items")) {
 			if (this.inventory.hasTag()) {
 				this.tag = nbt;
 				loadItems();
-				this.tag = new NBTTagCompound();
+				this.tag = new CompoundNBT();
 				saveItems();
 			} else {
-				this.inventory.setTagInfo("Inventory", new NBTTagCompound());
+				this.inventory.setTagInfo("Inventory", new CompoundNBT());
 			}
 		}
 
@@ -56,7 +55,7 @@ public class ItemInventoryWrapper implements IInventory {
 			if (this.slots.get(i).isEmpty()) {
 				this.tag.remove("Slot" + i);
 			} else{ 
-				this.tag.put("Slot" + i, this.slots.get(i).write(new NBTTagCompound()));
+				this.tag.put("Slot" + i, this.slots.get(i).write(new CompoundNBT()));
 			}
 		}
 
@@ -75,21 +74,6 @@ public class ItemInventoryWrapper implements IInventory {
 		boolean dirt = dirty;
 		this.dirty = false;
 		return dirt;
-	}
-
-	@Override
-	public ITextComponent getName() {
-		return this.inventory.getDisplayName();
-	}
-
-	@Override
-	public boolean hasCustomName() {
-		return this.inventory.hasDisplayName();
-	}
-
-	@Override
-	public ITextComponent getDisplayName() {
-		return this.inventory.getDisplayName();
 	}
 
 	@Override
@@ -134,17 +118,17 @@ public class ItemInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public boolean isUsableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public void openInventory(EntityPlayer player) {
+	public void openInventory(PlayerEntity player) {
 		
 	}
 
 	@Override
-	public void closeInventory(EntityPlayer player) {
+	public void closeInventory(PlayerEntity player) {
 		markDirty();
 	}
 
@@ -154,27 +138,7 @@ public class ItemInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public int getField(int id) {
-		return 0;
-	}
-
-	@Override
-	public void setField(int id, int value) {
-		
-	}
-
-	@Override
-	public int getFieldCount() {
-		return 0;
-	}
-
-	@Override
 	public void clear() {
 		
-	}
-
-	@Override
-	public ITextComponent getCustomName() {
-		return null;
 	}
 }

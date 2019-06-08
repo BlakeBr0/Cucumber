@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.helper;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBTBase;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.INBT;
 
 public class CompoundTagHelper {
 	private String name;
@@ -11,11 +11,11 @@ public class CompoundTagHelper {
 		this.name = name;
 	}
 	
-	public NBTTagCompound getCompoundTag(ItemStack stack) {
+	public CompoundNBT getCompoundTag(ItemStack stack) {
 		return stack.getOrCreateChildTag(this.name);
 	}
 	
-	public void setTag(ItemStack stack, String key, INBTBase value) {
+	public void setTag(ItemStack stack, String key, INBT value) {
 		getCompoundTag(stack).put(key, value);
 	}
 	
@@ -59,7 +59,7 @@ public class CompoundTagHelper {
 		getCompoundTag(stack).putBoolean(key, value);
 	}
 	
-	public INBTBase getTag(ItemStack stack, String key) {
+	public INBT getTag(ItemStack stack, String key) {
 		return getCompoundTag(stack).get(key);
 	}
 	

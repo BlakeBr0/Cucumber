@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.helper;
 
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.world.World;
@@ -44,18 +44,6 @@ public class StackHelper {
 		
 		return -1;
 	}
-	// TODO: Make use of the tag system for this?
-//	public static ItemStack fromOre(String oreDict, int stackSize) {
-//		ItemStack item = ItemStack.EMPTY;
-//		List<ItemStack> list = OreDictionary.getOres(oreDict);
-//
-//		if (!list.isEmpty()) {
-//			item = list.get(0).copy();
-//			item.setCount(stackSize);
-//		}
-//
-//		return item;
-//	}
 
 	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2) {
 		return !stack1.isEmpty() && !stack2.isEmpty() && stack1.isItemEqual(stack2);
@@ -96,7 +84,7 @@ public class StackHelper {
 		return true;
 	}
 	
-	public static EntityItem toEntity(ItemStack stack, World world, double x, double y, double z) {
-		return new EntityItem(world, x, y, z, stack);
+	public static ItemEntity toEntity(ItemStack stack, World world, double x, double y, double z) {
+		return new ItemEntity(world, x, y, z, stack);
 	}
 }

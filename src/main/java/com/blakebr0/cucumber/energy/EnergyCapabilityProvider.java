@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.energy;
 
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Direction;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
@@ -15,7 +15,7 @@ public class EnergyCapabilityProvider implements ICapabilityProvider {
 	}
 
 	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> capability, EnumFacing facing) {
+	public <T> LazyOptional<T> getCapability(Capability<T> capability, Direction direction) {
 		return CapabilityEnergy.ENERGY.orEmpty(capability, LazyOptional.of(() -> this.instance));
 	}
 }

@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.lib;
 
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.TranslationTextComponent;
 
 public class Tooltip {
     private final String key;
@@ -51,7 +51,7 @@ public class Tooltip {
         }
 
         public ITextComponent build() {
-            return new TextComponentTranslation(this.key, this.args).applyTextStyle(this.color != null ? this.color : TextFormatting.GRAY);
+            return new TranslationTextComponent(this.key, this.args).applyTextStyle(this.color != null ? this.color : TextFormatting.GRAY);
         }
 
         public String buildString() {

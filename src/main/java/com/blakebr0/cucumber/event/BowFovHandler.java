@@ -1,7 +1,7 @@
 package com.blakebr0.cucumber.event;
 
 import com.blakebr0.cucumber.iface.ICustomBow;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
@@ -11,7 +11,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 public class BowFovHandler {
 	@SubscribeEvent
 	public static void onFovChanged(FOVUpdateEvent event) {
-		EntityPlayer entity = event.getEntity();
+		PlayerEntity entity = event.getEntity();
 		if (entity == null) return;
 		
 		ItemStack stack = entity.getActiveItemStack();
