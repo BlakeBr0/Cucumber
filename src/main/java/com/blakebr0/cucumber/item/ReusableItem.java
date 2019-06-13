@@ -9,14 +9,14 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.function.Function;
 
-public class ItemReusable extends BaseItem {
+public class ReusableItem extends BaseItem {
 	private boolean damage;
 
-	public ItemReusable(String name, Function<Properties, Properties> properties) {
+	public ReusableItem(String name, Function<Properties, Properties> properties) {
 		this(name, 0, properties);
 	}
 	
-	public ItemReusable(String name, int uses, Function<Properties, Properties> properties) {
+	public ReusableItem(String name, int uses, Function<Properties, Properties> properties) {
 		super(name, properties.compose(p -> p.defaultMaxDamage(Math.max(uses - 1, 0)).setNoRepair()));
 		this.damage = uses > 0;
 	}

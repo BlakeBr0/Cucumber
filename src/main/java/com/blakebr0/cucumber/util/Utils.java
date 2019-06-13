@@ -1,7 +1,6 @@
 package com.blakebr0.cucumber.util;
 
 import net.minecraft.client.util.InputMappings;
-import net.minecraftforge.fml.ForgeI18n;
 
 import java.awt.*;
 import java.text.NumberFormat;
@@ -11,14 +10,6 @@ import java.util.Random;
 
 public class Utils {
 	public static Random rand = new Random();
-
-	public static String localize(String key) {
-		return ForgeI18n.parseMessage(key);
-	}
-	
-	public static String localize(String key, Object... format) {
-		return ForgeI18n.parseMessage(key, format);
-	}
 
 	/**
 	 * Adds commas to the specified numerical value

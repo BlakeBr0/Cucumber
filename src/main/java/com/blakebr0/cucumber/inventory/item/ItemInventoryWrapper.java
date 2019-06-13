@@ -83,7 +83,7 @@ public class ItemInventoryWrapper implements IInventory {
 
 	@Override
 	public boolean isEmpty() {
-		return !this.slots.stream().anyMatch(s -> !s.isEmpty());
+		return this.slots.stream().allMatch(ItemStack::isEmpty);
 	}
 
 	@Override

@@ -60,7 +60,7 @@ public class ToolTools {
 			world.playEvent(2001, pos, Block.getStateId(state));
 		}
 
-		if (player.field_71075_bZ.isCreativeMode) {
+		if (player.abilities.isCreativeMode) {
 			block.onBlockHarvested(world, pos, state, player);
 			if (block.removedByPlayer(state, world, pos, player, false, state.getFluidState())) {
 				block.onPlayerDestroy(world, pos, state);

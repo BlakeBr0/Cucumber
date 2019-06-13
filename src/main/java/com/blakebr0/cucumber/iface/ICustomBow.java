@@ -16,8 +16,8 @@ public interface ICustomBow {
 		} else if (isArrow(player.getHeldItem(Hand.MAIN_HAND))) {
 			return player.getHeldItem(Hand.MAIN_HAND);
 		} else {
-			for (int i = 0; i < player.field_71071_by.getSizeInventory(); i++) {
-				ItemStack stack = player.field_71071_by.getStackInSlot(i);
+			for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
+				ItemStack stack = player.inventory.getStackInSlot(i);
 				if (isArrow(stack)) {
 					return stack;
 				}
