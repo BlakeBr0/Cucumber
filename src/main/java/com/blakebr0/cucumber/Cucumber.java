@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber;
 
 import com.blakebr0.cucumber.event.BowFovHandler;
+import com.blakebr0.cucumber.event.TagTooltipHandler;
 import com.blakebr0.cucumber.network.NetworkHandler;
 import com.blakebr0.cucumber.render.ColorHandler;
 import com.blakebr0.cucumber.render.GlowingTextRenderer;
@@ -41,5 +42,6 @@ public class Cucumber {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
 		MinecraftForge.EVENT_BUS.register(new ColorHandler());
 		MinecraftForge.EVENT_BUS.register(new BowFovHandler());
+		MinecraftForge.EVENT_BUS.register(new TagTooltipHandler());
 	}
 }

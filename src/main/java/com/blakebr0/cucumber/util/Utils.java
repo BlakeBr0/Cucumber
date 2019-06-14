@@ -1,7 +1,5 @@
 package com.blakebr0.cucumber.util;
 
-import net.minecraft.client.util.InputMappings;
-
 import java.awt.*;
 import java.text.NumberFormat;
 import java.util.Collections;
@@ -20,11 +18,6 @@ public class Utils {
 	public static String format(Object obj) {
 		return NumberFormat.getInstance().format(obj);
 	}
-
-	// TODO Figure out what to do about isKeyDown
-//	public static boolean isShiftKeyDown() {
-//		return InputMappings.isKeyDown(340) || InputMappings.isKeyDown(344);
-//	}
 
 	public static List<String> asList(String string) {
 		return Collections.singletonList(string);
