@@ -40,7 +40,6 @@ public class Cucumber {
 
 	public void onClientSetup(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
-		MinecraftForge.EVENT_BUS.register(new ColorHandler());
 		MinecraftForge.EVENT_BUS.register(new BowFovHandler());
 		MinecraftForge.EVENT_BUS.register(new TagTooltipHandler());
 	}
