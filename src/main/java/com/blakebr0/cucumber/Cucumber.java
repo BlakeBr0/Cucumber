@@ -3,7 +3,6 @@ package com.blakebr0.cucumber;
 import com.blakebr0.cucumber.event.BowFovHandler;
 import com.blakebr0.cucumber.event.TagTooltipHandler;
 import com.blakebr0.cucumber.network.NetworkHandler;
-import com.blakebr0.cucumber.render.ColorHandler;
 import com.blakebr0.cucumber.render.GlowingTextRenderer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
