@@ -13,7 +13,7 @@ apply plugin: 'idea'
 
 version = '2.0.0'
 group = 'com.blakebr0.cucumber'
-archivesBaseName = 'Cucumber-1.14.2'
+archivesBaseName = 'Cucumber-1.14.3'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
@@ -39,7 +39,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.2-26.0.62'
+    minecraft 'net.minecraftforge:forge:1.14.3-27.0.1'
 }
 
 jar {
