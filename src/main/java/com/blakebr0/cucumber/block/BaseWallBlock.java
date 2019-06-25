@@ -4,12 +4,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.WallBlock;
 
 public class BaseWallBlock extends WallBlock {
-    public BaseWallBlock(String name, Block block) {
-        this(name, Properties.from(block));
+    public BaseWallBlock(Block block) {
+        this(Properties.from(block));
     }
 
-    public BaseWallBlock(String name, Properties properties) {
+    public BaseWallBlock(Properties properties) {
         super(properties);
-        this.setRegistryName(name);
     }
 }

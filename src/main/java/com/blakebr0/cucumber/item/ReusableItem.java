@@ -11,14 +11,24 @@ import java.util.function.Function;
 
 public class ReusableItem extends BaseItem {
 	private boolean damage;
+	private boolean tooltip;
 
-	public ReusableItem(String name, Function<Properties, Properties> properties) {
-		this(name, 0, properties);
+	public ReusableItem(Function<Properties, Properties> properties) {
+		this(true, properties);
 	}
-	
-	public ReusableItem(String name, int uses, Function<Properties, Properties> properties) {
-		super(name, properties.compose(p -> p.defaultMaxDamage(Math.max(uses - 1, 0)).setNoRepair()));
+
+	public ReusableItem(boolean tooltip, Function<Properties, Properties> properties) {
+		this(0, tooltip, properties);
+	}
+
+	public ReusableItem(int uses, Function<Properties, Properties> properties) {
+		this(uses, true, properties);
+	}
+
+	public ReusableItem(int uses, boolean tooltip, Function<Properties, Properties> properties) {
+		super(properties.compose(p -> p.defaultMaxDamage(Math.max(uses - 1, 0)).setNoRepair()));
 		this.damage = uses > 0;
+		this.tooltip = tooltip;
 	}
 	
 	@Override
@@ -38,15 +48,17 @@ public class ReusableItem extends BaseItem {
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
-		if (this.damage) {
-			int damage = stack.getMaxDamage() - stack.getDamage() + 1;
-			if (damage == 1) {
-				tooltip.add(Tooltips.ONE_USE_LEFT.build());
+		if (this.tooltip) {
+			if (this.damage) {
+				int damage = stack.getMaxDamage() - stack.getDamage() + 1;
+				if (damage == 1) {
+					tooltip.add(Tooltips.ONE_USE_LEFT.build());
+				} else {
+					tooltip.add(Tooltips.USES_LEFT.args(damage).build());
+				}
 			} else {
-				tooltip.add(Tooltips.USES_LEFT.args(damage).build());
+				tooltip.add(Tooltips.UNLIMITED_USES.build());
 			}
-		} else {
-			tooltip.add(Tooltips.UNLIMITED_USES.build());
 		}
 	}
 }
