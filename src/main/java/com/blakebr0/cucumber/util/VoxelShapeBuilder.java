@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.util;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 
@@ -7,12 +8,13 @@ public class VoxelShapeBuilder {
     private VoxelShape leftShape;
     private VoxelShape lastOrShape;
 
-    public VoxelShapeBuilder fromShapes(VoxelShape... shapes) {
+    public static VoxelShapeBuilder fromShapes(VoxelShape... shapes) {
+        VoxelShapeBuilder builder = new VoxelShapeBuilder();
         for (VoxelShape shape : shapes) {
-            this.shape(shape);
+            builder.shape(shape);
         }
 
-        return this;
+        return builder;
     }
 
     public VoxelShapeBuilder shape(VoxelShape shape) {
@@ -30,6 +32,11 @@ public class VoxelShapeBuilder {
         }
 
         return this;
+    }
+
+    public VoxelShapeBuilder cuboid(double x1, double y1, double z1, double x2, double y2, double z2) {
+        VoxelShape shape = Block.makeCuboidShape(x1, y1, z1, x2, y2, z2);
+        return this.shape(shape);
     }
 
     public VoxelShape build() {
