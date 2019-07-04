@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.tile;
+package com.blakebr0.cucumber.tileentity;
 
 import com.blakebr0.cucumber.util.VanillaPacketDispatcher;
 import net.minecraft.nbt.CompoundNBT;
@@ -27,8 +27,7 @@ public class BaseTileEntity extends TileEntity {
 		return this.write(new CompoundNBT());
 	}
 
-	@Override
-	public void markDirty() {
+	public void markDirtyAndDispatch() {
 		super.markDirty();
 		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
 	}
