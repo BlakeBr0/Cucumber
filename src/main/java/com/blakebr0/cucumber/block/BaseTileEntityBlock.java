@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.block;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -15,6 +16,11 @@ public class BaseTileEntityBlock extends BaseBlock implements ITileEntityProvide
 
     public BaseTileEntityBlock(Material material, SoundType sound, float hardness, float resistance) {
         super(material, sound, hardness, resistance);
+    }
+
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return null;
     }
 
     @Override
