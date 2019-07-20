@@ -13,12 +13,12 @@ apply plugin: 'idea'
 
 version = '2.0.0'
 group = 'com.blakebr0.cucumber'
-archivesBaseName = 'Cucumber-1.14.3'
+archivesBaseName = 'Cucumber-1.14.4'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20190613-1.14.2'
+    mappings channel: 'snapshot', version: '20190719-1.14.3'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
     
@@ -39,7 +39,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.14.3-27.0.1'
+    minecraft 'net.minecraftforge:forge:1.14.4-28.0.2'
 }
 
 jar {
