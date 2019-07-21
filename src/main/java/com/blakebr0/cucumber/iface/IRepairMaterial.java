@@ -1,9 +1,0 @@
-package com.blakebr0.cucumber.iface;
-
-import net.minecraft.item.ItemStack;
-
-public interface IRepairMaterial {
-	void setRepairMaterial(ItemStack stack);
-
-	ItemStack getRepairMaterial();
-}
