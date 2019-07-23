@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber;
 
+import com.blakebr0.cucumber.crafting.ModConditions;
 import com.blakebr0.cucumber.event.BowFovHandler;
 import com.blakebr0.cucumber.event.TagTooltipHandler;
 import com.blakebr0.cucumber.network.NetworkHandler;
@@ -23,6 +24,8 @@ public class Cucumber {
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModProcess);
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+
+		new ModConditions();
 	}
 
 	public void onCommonSetup(FMLCommonSetupEvent event) {
