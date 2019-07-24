@@ -16,6 +16,7 @@ public class ModConditions {
         CONDITION_ENABLED = CraftingHelper.register(location, json -> {
             String id = json.get("item").getAsString();
             Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(id));
+            if (item == null) return () -> false;
             return () -> !(item instanceof IEnableable) || ((IEnableable) item).isEnabled();
         });
     }
