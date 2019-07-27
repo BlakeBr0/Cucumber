@@ -5,7 +5,7 @@ loaderVersion="[28,)" #mandatory
 # A URL to refer people to when problems occur with this mod
 issueTrackerURL="https://github.com/BlakeBr0/Cucumber/issues" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
-displayURL="https://minecraft.curseforge.com/projects/cucumber" #optional
+displayURL="https://www.curseforge.com/minecraft/mc-mods/cucumber" #optional
 # A file name (in the root of the mod JAR) containing a logo for display
 # logoFile="examplemod.png" #optional
 # A text field displayed in the mod UI

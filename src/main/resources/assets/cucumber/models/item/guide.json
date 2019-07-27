@@ -1,7 +1,0 @@
-{
-  "parent":"item/generated",
-  "textures": {
-    "layer0":"cucumber:items/guide_cover",
-    "layer1":"cucumber:items/guide_paper"
-  }
-}
