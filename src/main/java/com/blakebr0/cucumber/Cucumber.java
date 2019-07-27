@@ -1,12 +1,18 @@
 package com.blakebr0.cucumber;
 
+import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.crafting.ModConditions;
 import com.blakebr0.cucumber.event.BowFovHandler;
 import com.blakebr0.cucumber.event.TagTooltipHandler;
 import com.blakebr0.cucumber.network.NetworkHandler;
 import com.blakebr0.cucumber.render.GlowingTextRenderer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
@@ -20,26 +26,33 @@ public class Cucumber {
 	public static final String VERSION = "${version}";
 
 	public Cucumber() {
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onCommonSetup);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModEnqueue);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onInterModProcess);
-		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onClientSetup);
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+
+		bus.register(this);
+
+		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
 
 		new ModConditions();
 	}
 
+	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
-		NetworkHandler.onCommonSetup();
+		DeferredWorkQueue.runLater(() -> {
+			NetworkHandler.onCommonSetup();
+		});
 	}
 
+	@SubscribeEvent
 	public void onInterModEnqueue(InterModEnqueueEvent event) {
 
 	}
 
+	@SubscribeEvent
 	public void onInterModProcess(InterModProcessEvent event) {
 
  	}
 
+ 	@SubscribeEvent
 	public void onClientSetup(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
 		MinecraftForge.EVENT_BUS.register(new BowFovHandler());
