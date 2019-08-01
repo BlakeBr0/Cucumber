@@ -41,8 +41,10 @@ public class ReusableItem extends BaseItem {
 		ItemStack copy = stack.copy();
 		if (this.damage)
 			copy.setDamage(stack.getDamage() + 1);
+		if (copy.getDamage() >= stack.getMaxDamage())
+			return ItemStack.EMPTY;
+
 		copy.setCount(1);
-		
 		return copy;
 	}
 	
