@@ -7,11 +7,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderTooltipEvent;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,7 +27,7 @@ public class GlowingTextRenderer {
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onTick(TickEvent.ClientTickEvent event) {
-		if (event.side == LogicalSide.CLIENT && event.phase == Phase.START) {
+		if (event.side == LogicalSide.CLIENT && event.phase == TickEvent.Phase.START) {
 			ticks++;
 		}
 	}
