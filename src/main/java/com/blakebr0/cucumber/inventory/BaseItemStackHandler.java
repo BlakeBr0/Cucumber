@@ -5,10 +5,13 @@ import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 public class BaseItemStackHandler extends ItemStackHandler {
     private final Runnable onContentsChanged;
+    private final Map<Integer, Integer> slotSizeMap;
     private BiFunction<Integer, ItemStack, Boolean> slotValidator = null;
     private int maxStackSize = 64;
     private int[] outputSlots = null;
@@ -20,6 +23,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
     public BaseItemStackHandler(int size, Runnable onContentsChanged) {
         super(size);
         this.onContentsChanged = onContentsChanged;
+        this.slotSizeMap = new HashMap<>();
     }
 
     @Override
@@ -38,7 +42,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public int getSlotLimit(int slot) {
-        return this.maxStackSize;
+        return this.slotSizeMap.containsKey(slot) ? this.slotSizeMap.get(slot) : this.maxStackSize;
     }
 
     @Override
@@ -56,18 +60,19 @@ public class BaseItemStackHandler extends ItemStackHandler {
         return this.stacks;
     }
 
-    public BaseItemStackHandler setSlotLimit(int size) {
+    public void setDefaultSlotLimit(int size) {
         this.maxStackSize = size;
-        return this;
     }
 
-    public BaseItemStackHandler setSlotValidator(BiFunction<Integer, ItemStack, Boolean> validator) {
+    public void addSlotLimit(int slot, int size) {
+        this.slotSizeMap.put(slot, size);
+    }
+
+    public void setSlotValidator(BiFunction<Integer, ItemStack, Boolean> validator) {
         this.slotValidator = validator;
-        return this;
     }
 
-    public BaseItemStackHandler setOutputSlots(int... slots) {
+    public void setOutputSlots(int... slots) {
         this.outputSlots = slots;
-        return this;
     }
 }
