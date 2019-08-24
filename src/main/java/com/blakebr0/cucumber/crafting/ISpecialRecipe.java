@@ -14,6 +14,10 @@ public interface ISpecialRecipe {
     ISpecialRecipeSerializer<?> getSerializer();
     ISpecialRecipeType<?> getType();
 
+    default boolean matches(IItemHandler inventory) {
+        return this.matches(inventory, 0, inventory.getSlots());
+    }
+
     default boolean matches(IItemHandler inventory, int startIndex, int endIndex) {
         NonNullList<ItemStack> inputs = NonNullList.create();
         for (int i = startIndex; i < endIndex; i++) {
