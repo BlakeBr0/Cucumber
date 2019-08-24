@@ -12,6 +12,7 @@ public interface ISpecialRecipe {
     NonNullList<Ingredient> getIngredients();
     ResourceLocation getId();
     ISpecialRecipeSerializer<?> getSerializer();
+    ISpecialRecipeType<?> getType();
 
     default boolean matches(IItemHandler inventory, int startIndex, int endIndex) {
         NonNullList<ItemStack> inputs = NonNullList.create();
