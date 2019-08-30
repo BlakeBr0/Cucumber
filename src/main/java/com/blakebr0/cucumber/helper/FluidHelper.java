@@ -5,6 +5,6 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class FluidHelper {
 	public static Rarity getFluidRarity(FluidStack fluid) {
-		return fluid.getFluid().getRarity();
+		return fluid.getFluid().getAttributes().getRarity();
 	}
 }

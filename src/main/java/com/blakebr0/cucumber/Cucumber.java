@@ -1,7 +1,7 @@
 package com.blakebr0.cucumber;
 
 import com.blakebr0.cucumber.config.ModConfigs;
-import com.blakebr0.cucumber.crafting.ModConditions;
+import com.blakebr0.cucumber.crafting.ModRecipeSerializers;
 import com.blakebr0.cucumber.event.BowFovHandler;
 import com.blakebr0.cucumber.event.TagTooltipHandler;
 import com.blakebr0.cucumber.network.NetworkHandler;
@@ -23,16 +23,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class Cucumber {
 	public static final String NAME = "Cucumber Library";
 	public static final String MOD_ID = "cucumber";
-	public static final String VERSION = "${version}";
 
 	public Cucumber() {
 		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
 		bus.register(this);
+		bus.register(new ModRecipeSerializers());
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
-
-		new ModConditions();
 	}
 
 	@SubscribeEvent

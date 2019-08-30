@@ -2,8 +2,6 @@ package com.blakebr0.cucumber.helper;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 
 public class BucketHelper {
@@ -13,11 +11,11 @@ public class BucketHelper {
 
 	public static int getFluidAmount(ItemStack stack) {
 		FluidStack fluid = getFluid(stack);
-		return fluid == null ? 0 : fluid.amount;
+		return fluid == null ? 0 : fluid.getAmount();
 	}
 
 	public static int toBuckets(int i) {
-		return i - (i % Fluid.BUCKET_VOLUME);
+		return i - (i % 1000);
 	}
 	
 	public static ItemStack getFilledBucket(FluidStack fluid, Item bucket, int capacity) {
