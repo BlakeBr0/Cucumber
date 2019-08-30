@@ -30,7 +30,7 @@ A library of shared code that all of my mods depend on.
 [[dependencies.cucumber]]
     modId="forge"
     mandatory=true
-    versionRange="[28.0.45,)"
+    versionRange="[28.0.74,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.cucumber]]
