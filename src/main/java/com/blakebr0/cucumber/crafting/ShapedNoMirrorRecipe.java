@@ -52,7 +52,7 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
                 int l = j - p_77573_3_;
                 Ingredient ingredient = Ingredient.EMPTY;
                 if (k >= 0 && l >= 0 && k < this.getRecipeWidth() && l < this.getRecipeHeight()) {
-                   ingredient = this.getIngredients().get(this.getRecipeWidth() - k - 1 + l * this.getRecipeWidth());
+                    ingredient = this.getIngredients().get(k + l * this.getRecipeWidth());
                 }
 
                 if (!ingredient.test(inventory.getStackInSlot(i + j * inventory.getWidth()))) {
