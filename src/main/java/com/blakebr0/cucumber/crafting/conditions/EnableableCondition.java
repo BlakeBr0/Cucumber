@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.iface.IEnableable;
 import com.google.gson.JsonObject;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.util.JSONUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
@@ -26,7 +27,7 @@ public class EnableableCondition implements ICondition {
     @Override
     public boolean test() {
         Item item = ForgeRegistries.ITEMS.getValue(this.item);
-        if (item == null) return false;
+        if (item == Items.AIR) return false;
         return !(item instanceof IEnableable) || ((IEnableable) item).isEnabled();
     }
 
