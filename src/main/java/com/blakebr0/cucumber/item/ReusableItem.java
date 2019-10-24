@@ -39,12 +39,15 @@ public class ReusableItem extends BaseItem {
 	@Override
 	public ItemStack getContainerItem(ItemStack stack) {
 		ItemStack copy = stack.copy();
-		if (this.damage)
-			copy.setDamage(stack.getDamage() + 1);
+		copy.setCount(1);
+
+		if (!this.damage)
+			return copy;
+
+		copy.setDamage(stack.getDamage() + 1);
 		if (copy.getDamage() >= stack.getMaxDamage())
 			return ItemStack.EMPTY;
 
-		copy.setCount(1);
 		return copy;
 	}
 	
