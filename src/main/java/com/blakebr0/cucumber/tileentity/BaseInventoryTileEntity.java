@@ -1,9 +1,11 @@
 package com.blakebr0.cucumber.tileentity;
 
 import com.blakebr0.cucumber.inventory.BaseItemStackHandler;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -35,5 +37,10 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity {
         }
 
         return super.getCapability(cap, side);
+    }
+
+    public boolean isUsableByPlayer(PlayerEntity player) {
+        BlockPos pos = this.getPos();
+        return player.getDistanceSq(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
     }
 }
