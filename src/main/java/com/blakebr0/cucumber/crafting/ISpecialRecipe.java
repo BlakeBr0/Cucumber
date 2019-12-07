@@ -1,18 +1,31 @@
 package com.blakebr0.cucumber.crafting;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
-public interface ISpecialRecipe {
-    ItemStack getOutput();
-    NonNullList<Ingredient> getIngredients();
-    ResourceLocation getId();
-    ISpecialRecipeSerializer<?> getSerializer();
-    ISpecialRecipeType<?> getType();
+public interface ISpecialRecipe extends IRecipe<IInventory> {
+    @Override
+    default ItemStack getCraftingResult(IInventory inv) {
+        return this.getCraftingResult(new InvWrapper(inv));
+    }
+
+    @Override
+    default boolean matches(IInventory inv, World world) {
+        return this.matches(new InvWrapper(inv));
+    }
+
+    @Override
+    default NonNullList<ItemStack> getRemainingItems(IInventory inv) {
+        return this.getRemainingItems(new InvWrapper(inv));
+    }
+
+    ItemStack getCraftingResult(IItemHandler inventory);
 
     default boolean matches(IItemHandler inventory) {
         return this.matches(inventory, 0, inventory.getSlots());
