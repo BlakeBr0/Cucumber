@@ -1,5 +1,7 @@
 package com.blakebr0.cucumber.inventory;
 
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
@@ -56,8 +58,20 @@ public class BaseItemStackHandler extends ItemStackHandler {
             this.onContentsChanged.run();
     }
 
+    public ItemStack insertItemSuper(int slot, ItemStack stack, boolean simulate) {
+        return super.insertItem(slot, stack, simulate);
+    }
+
+    public ItemStack extractItemSuper(int slot, int amount, boolean simulate) {
+        return super.extractItem(slot, amount, simulate);
+    }
+
     public NonNullList<ItemStack> getStacks() {
         return this.stacks;
+    }
+
+    public int[] getOutputSlots() {
+        return this.outputSlots;
     }
 
     public void setDefaultSlotLimit(int size) {
@@ -74,5 +88,9 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     public void setOutputSlots(int... slots) {
         this.outputSlots = slots;
+    }
+
+    public IInventory toIInventory() {
+        return new Inventory(this.stacks.toArray(new ItemStack[0]));
     }
 }
