@@ -1,11 +1,10 @@
 package com.blakebr0.cucumber.gui.button;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 
 public class IconButton extends AbstractButton {
 	private ResourceLocation texture;
@@ -22,11 +21,11 @@ public class IconButton extends AbstractButton {
 	public void renderButton(int mouseX, int mouseY, float partialTicks) {
 		Minecraft minecraft = Minecraft.getInstance();
 		minecraft.getTextureManager().bindTexture(this.texture);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, this.alpha);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
 		int i = this.getYImage(this.isHovered());
-		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		RenderSystem.enableBlend();
+		RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		this.blit(this.x, this.y, this.textureX, this.textureY + i * 20, this.width / 2, this.height);
 	}
 

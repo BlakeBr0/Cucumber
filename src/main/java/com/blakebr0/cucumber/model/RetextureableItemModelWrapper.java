@@ -17,17 +17,18 @@ public class RetextureableItemModelWrapper extends BlockModel {
         this.parent = model.parent;
     }
 
-    // Yoinked from VanillaModelWrapper
-    @Override
-    public RetextureableBlockModelWrapper retexture(ImmutableMap<String, String> textures) {
-        BlockModel newModel = new BlockModel(this.model.getParentLocation(), new ArrayList<>(),
-                Maps.newHashMap(this.model.textures), this.model.isAmbientOcclusion(), this.model.isGui3d(), //New Textures man VERY IMPORTANT
-                model.getAllTransforms(), Lists.newArrayList(model.getOverrides()));
-        newModel.name = this.model.name;
-        newModel.parent = this.model.parent;
-
-        textures.forEach(newModel.textures::put);
-
-        return new RetextureableBlockModelWrapper(newModel);
-    }
+    // TODO: IMPLEMENT
+//    // Yoinked from VanillaModelWrapper
+//    @Override
+//    public RetextureableBlockModelWrapper retexture(ImmutableMap<String, String> textures) {
+//        BlockModel newModel = new BlockModel(this.model.getParentLocation(), new ArrayList<>(),
+//                Maps.newHashMap(this.model.textures), this.model.isAmbientOcclusion(), this.model.isGui3d(), //New Textures man VERY IMPORTANT
+//                model.getAllTransforms(), Lists.newArrayList(model.getOverrides()));
+//        newModel.name = this.model.name;
+//        newModel.parent = this.model.parent;
+//
+//        textures.forEach(newModel.textures::put);
+//
+//        return new RetextureableBlockModelWrapper(newModel);
+//    }
 }

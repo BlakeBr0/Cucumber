@@ -9,26 +9,18 @@ import net.minecraft.world.IWorldReader;
 
 import java.util.function.Function;
 
-public class BaseOreBlock extends BaseLayeredBlock {
+public class BaseOreBlock extends BaseBlock {
     private final int minExp;
     private final int maxExp;
 
     public BaseOreBlock(Material material, Function<Properties, Properties> properties, int minExp, int maxExp) {
-        this(material, properties, minExp, maxExp, false);
-    }
-
-    public BaseOreBlock(Material material, SoundType sound, float hardness, float resistance, int minExp, int maxExp) {
-        this(material, sound, hardness, resistance, minExp, maxExp, false);
-    }
-
-    public BaseOreBlock(Material material, Function<Properties, Properties> properties, int minExp, int maxExp, boolean translucent) {
-        super(material, properties, translucent);
+        super(material, properties);
         this.minExp = minExp;
         this.maxExp = maxExp;
     }
 
-    public BaseOreBlock(Material material, SoundType sound, float hardness, float resistance, int minExp, int maxExp, boolean translucent) {
-        super(material, sound, hardness, resistance, translucent);
+    public BaseOreBlock(Material material, SoundType sound, float hardness, float resistance, int minExp, int maxExp) {
+        super(material, sound, hardness, resistance);
         this.minExp = minExp;
         this.maxExp = maxExp;
     }
