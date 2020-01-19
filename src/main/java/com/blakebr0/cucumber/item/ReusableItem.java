@@ -2,6 +2,9 @@ package com.blakebr0.cucumber.item;
 
 import com.blakebr0.cucumber.lib.Tooltips;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.enchantment.UnbreakingEnchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
@@ -43,6 +46,12 @@ public class ReusableItem extends BaseItem {
 
 		if (!this.damage)
 			return copy;
+
+		int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+		for (int i = 0; i < unbreaking; i++) {
+			if (UnbreakingEnchantment.negateDamage(stack, unbreaking, random))
+				return copy;
+		}
 
 		copy.setDamage(stack.getDamage() + 1);
 		if (copy.getDamage() >= stack.getMaxDamage())
