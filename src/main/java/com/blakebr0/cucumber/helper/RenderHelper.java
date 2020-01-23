@@ -69,47 +69,47 @@ public class RenderHelper {
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
 		bufferbuilder.vertex(x, y + height, 0D)
-					 .texture((float) textureX * 0.00390625F, (float) (textureY + height) * 0.00390625F)
-					 .endVertex();
+				.texture((float) textureX * 0.00390625F, (float) (textureY + height) * 0.00390625F)
+				.endVertex();
 		bufferbuilder.vertex(x + width, y + height, 0D)
-					 .texture((float) (textureX + width) * 0.00390625F, (float) (textureY + height) * 0.00390625F)
-					 .endVertex();
+				.texture((float) (textureX + width) * 0.00390625F, (float) (textureY + height) * 0.00390625F)
+				.endVertex();
 		bufferbuilder.vertex(x + width, y, 0)
-					 .texture((float) (textureX + width) * 0.00390625F, (float) textureY * 0.00390625F)
-					 .endVertex();
+				.texture((float) (textureX + width) * 0.00390625F, (float) textureY * 0.00390625F)
+				.endVertex();
 		bufferbuilder.vertex(x, y, 0)
-					 .texture((float) (textureX * 0.00390625F), (float) textureY * 0.00390625F)
-					 .endVertex();
+				.texture((float) textureX * 0.00390625F, (float) textureY * 0.00390625F)
+				.endVertex();
 		tessellator.draw();
 	}
 
 	public static void drawTexturedModalRect(double x, double y, double u, double v, double width, double height, double textureWidth, double textureHeight) {
-        double f = 1.0D / textureWidth;
-        double f1 = 1.0D / textureHeight;
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.vertex(x, (y + height), 0)
-        			 .texture((float) (u * f), (float) ((v + height) * f1))
-        			 .endVertex();
-        bufferbuilder.vertex(x + width, y + height, 0)
-        			 .texture((float) ((u + width) * f), (float) ((v + height) * f1))
-        			 .endVertex();
-        bufferbuilder.vertex(x + width, y, 0)
-        			 .texture((float) ((u + width) * f), (float) (v * f1))
-        			 .endVertex();
-        bufferbuilder.vertex(x, y, 0)
-        			 .texture((float) (u * f), (float) (v * f1))
-        			 .endVertex();
-        tessellator.draw();
+		double f = 1.0D / textureWidth;
+		double f1 = 1.0D / textureHeight;
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+		bufferbuilder.vertex(x, (y + height), 0)
+				.texture((float) (u * f), (float) ((v + height) * f1))
+				.endVertex();
+		bufferbuilder.vertex(x + width, y + height, 0)
+				.texture((float) ((u + width) * f), (float) ((v + height) * f1))
+				.endVertex();
+		bufferbuilder.vertex(x + width, y, 0)
+				.texture((float) ((u + width) * f), (float) (v * f1))
+				.endVertex();
+		bufferbuilder.vertex(x, y, 0)
+				.texture((float) (u * f), (float) (v * f1))
+				.endVertex();
+		tessellator.draw();
 	}
 
 	public static void drawScaledItemIntoGui(ItemRenderer render, ItemStack stack, int x, int y, float scale) {
 		RenderSystem.pushMatrix();
 		RenderSystem.scalef(scale, scale, scale);
-    	net.minecraft.client.renderer.RenderHelper.enable();
-    	render.renderItemAndEffectIntoGUI(stack, (int) (x / scale), (int) (y / scale));
-    	net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
-    	RenderSystem.popMatrix();
+		net.minecraft.client.renderer.RenderHelper.enable();
+		render.renderItemAndEffectIntoGUI(stack, (int) (x / scale), (int) (y / scale));
+		net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
+		RenderSystem.popMatrix();
 	}
 }
