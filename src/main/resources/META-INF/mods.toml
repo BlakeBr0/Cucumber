@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[30,)"
+loaderVersion="[31,)"
 
 [[mods]]
     issueTrackerURL="https://github.com/BlakeBr0/Cucumber/issues"
@@ -15,15 +15,15 @@ loaderVersion="[30,)"
     A library of shared code that all of my mods depend on.
     '''
 
-[[dependencies.cucumber]]
-    modId="forge"
-    mandatory=true
-    versionRange="[30.0,)"
-    ordering="NONE"
-    side="BOTH"
-[[dependencies.cucumber]]
-    modId="minecraft"
-    mandatory=true
-    versionRange="[1.15.1]"
-    ordering="NONE"
-    side="BOTH"
+  [[dependencies.cucumber]]
+      modId="forge"
+      mandatory=true
+      versionRange="[31.0,)"
+      ordering="NONE"
+      side="BOTH"
+  [[dependencies.cucumber]]
+      modId="minecraft"
+      mandatory=true
+      versionRange="[1.15.2,1.16]"
+      ordering="NONE"
+      side="BOTH"

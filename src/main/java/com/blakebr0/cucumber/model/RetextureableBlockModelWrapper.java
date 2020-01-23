@@ -15,7 +15,7 @@ public class RetextureableBlockModelWrapper extends BlockModel {
     private final BlockModel model;
 
     public RetextureableBlockModelWrapper(BlockModel model) {
-        super(model.getParentLocation(), model.getElements(), model.textures, model.ambientOcclusion, model.isGui3d(), model.getAllTransforms(), model.getOverrides());
+        super(model.getParentLocation(), model.getElements(), model.textures, model.ambientOcclusion, model.func_230176_c_(), model.getAllTransforms(), model.getOverrides());
         this.model = model;
         this.name = model.name;
         this.parent = model.parent;
