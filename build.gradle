@@ -18,7 +18,7 @@ archivesBaseName = 'Cucumber-1.15.2'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200115-mixed-1.15.1'
+    mappings channel: 'snapshot', version: '20200205-1.15.1'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
