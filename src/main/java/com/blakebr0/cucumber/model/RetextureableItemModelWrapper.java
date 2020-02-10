@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.renderer.model.BlockModel;
 import net.minecraft.client.renderer.model.Material;
-import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class RetextureableItemModelWrapper extends BlockModel {
         newModel.parent = this.model.parent;
 
         textures.forEach((key, value) -> {
-            newModel.textures.put(key, Either.left(new Material(PlayerContainer.BLOCK_ATLAS_TEXTURE, new ResourceLocation(value))));
+            newModel.textures.put(key, Either.left(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(value))));
         });
 
         return new RetextureableBlockModelWrapper(newModel);

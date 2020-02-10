@@ -8,7 +8,7 @@ import com.mojang.datafixers.util.Either;
 import net.minecraft.client.renderer.model.BlockModel;
 import net.minecraft.client.renderer.model.BlockPart;
 import net.minecraft.client.renderer.model.Material;
-import net.minecraft.inventory.container.PlayerContainer;
+import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.List;
@@ -48,7 +48,7 @@ public class RetextureableBlockModelWrapper extends BlockModel {
                 removed.add(e.getKey());
                 newModel.textures.remove(e.getKey());
             } else {
-                newModel.textures.put(e.getKey(), Either.left(new Material(PlayerContainer.BLOCK_ATLAS_TEXTURE, new ResourceLocation(e.getValue()))));
+                newModel.textures.put(e.getKey(), Either.left(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(e.getValue()))));
             }
         }
 

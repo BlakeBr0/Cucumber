@@ -68,17 +68,17 @@ public class RenderHelper {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.vertex(x, y + height, 0D)
-				.texture((float) textureX * 0.00390625F, (float) (textureY + height) * 0.00390625F)
+		bufferbuilder.pos(x, y + height, 0D)
+				.tex((float) textureX * 0.00390625F, (float) (textureY + height) * 0.00390625F)
 				.endVertex();
-		bufferbuilder.vertex(x + width, y + height, 0D)
-				.texture((float) (textureX + width) * 0.00390625F, (float) (textureY + height) * 0.00390625F)
+		bufferbuilder.pos(x + width, y + height, 0D)
+				.tex((float) (textureX + width) * 0.00390625F, (float) (textureY + height) * 0.00390625F)
 				.endVertex();
-		bufferbuilder.vertex(x + width, y, 0)
-				.texture((float) (textureX + width) * 0.00390625F, (float) textureY * 0.00390625F)
+		bufferbuilder.pos(x + width, y, 0)
+				.tex((float) (textureX + width) * 0.00390625F, (float) textureY * 0.00390625F)
 				.endVertex();
-		bufferbuilder.vertex(x, y, 0)
-				.texture((float) textureX * 0.00390625F, (float) textureY * 0.00390625F)
+		bufferbuilder.pos(x, y, 0)
+				.tex((float) textureX * 0.00390625F, (float) textureY * 0.00390625F)
 				.endVertex();
 		tessellator.draw();
 	}
@@ -89,17 +89,17 @@ public class RenderHelper {
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-		bufferbuilder.vertex(x, (y + height), 0)
-				.texture((float) (u * f), (float) ((v + height) * f1))
+		bufferbuilder.pos(x, (y + height), 0)
+				.tex((float) (u * f), (float) ((v + height) * f1))
 				.endVertex();
-		bufferbuilder.vertex(x + width, y + height, 0)
-				.texture((float) ((u + width) * f), (float) ((v + height) * f1))
+		bufferbuilder.pos(x + width, y + height, 0)
+				.tex((float) ((u + width) * f), (float) ((v + height) * f1))
 				.endVertex();
-		bufferbuilder.vertex(x + width, y, 0)
-				.texture((float) ((u + width) * f), (float) (v * f1))
+		bufferbuilder.pos(x + width, y, 0)
+				.tex((float) ((u + width) * f), (float) (v * f1))
 				.endVertex();
-		bufferbuilder.vertex(x, y, 0)
-				.texture((float) (u * f), (float) (v * f1))
+		bufferbuilder.pos(x, y, 0)
+				.tex((float) (u * f), (float) (v * f1))
 				.endVertex();
 		tessellator.draw();
 	}
@@ -107,7 +107,7 @@ public class RenderHelper {
 	public static void drawScaledItemIntoGui(ItemRenderer render, ItemStack stack, int x, int y, float scale) {
 		RenderSystem.pushMatrix();
 		RenderSystem.scalef(scale, scale, scale);
-		net.minecraft.client.renderer.RenderHelper.enable();
+		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
 		render.renderItemAndEffectIntoGUI(stack, (int) (x / scale), (int) (y / scale));
 		net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
 		RenderSystem.popMatrix();
