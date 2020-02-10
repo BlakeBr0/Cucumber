@@ -1,10 +1,10 @@
 package com.blakebr0.cucumber.inventory.slot;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.container.Slot;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class SingleSlot extends Slot {
-	public SingleSlot(IInventory inventory, int index, int xPosition, int yPosition) {
+public class SingleSlot extends SlotItemHandler {
+	public SingleSlot(IItemHandler inventory, int index, int xPosition, int yPosition) {
 		super(inventory, index, xPosition, yPosition);
 	}
 
