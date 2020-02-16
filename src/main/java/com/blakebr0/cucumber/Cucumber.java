@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber;
 
+import com.blakebr0.cucumber.command.ModCommands;
 import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.crafting.ModRecipeSerializers;
 import com.blakebr0.cucumber.event.BowFovHandler;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
+import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(Cucumber.MOD_ID)
@@ -30,6 +32,8 @@ public class Cucumber {
 		bus.register(this);
 		bus.register(new ModRecipeSerializers());
 
+		MinecraftForge.EVENT_BUS.register(this);
+
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
 	}
 
@@ -40,20 +44,15 @@ public class Cucumber {
 		});
 	}
 
-	@SubscribeEvent
-	public void onInterModEnqueue(InterModEnqueueEvent event) {
-
-	}
-
-	@SubscribeEvent
-	public void onInterModProcess(InterModProcessEvent event) {
-
- 	}
-
  	@SubscribeEvent
 	public void onClientSetup(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
 		MinecraftForge.EVENT_BUS.register(new BowFovHandler());
 		MinecraftForge.EVENT_BUS.register(new TagTooltipHandler());
+	}
+
+	@SubscribeEvent
+	public void onServerStarting(FMLServerStartingEvent event) {
+		ModCommands.onServerStarting(event.getCommandDispatcher());
 	}
 }
