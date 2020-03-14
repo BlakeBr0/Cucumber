@@ -45,82 +45,14 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
         return result;
     }
 
-    private static NonNullList<Ingredient> deserializeIngredients(String[] pattern, Map<String, Ingredient> keys, int patternWidth, int patternHeight) {
-        NonNullList<Ingredient> nonnulllist = NonNullList.withSize(patternWidth * patternHeight, Ingredient.EMPTY);
-        Set<String> set = Sets.newHashSet(keys.keySet());
-        set.remove(" ");
-
-        for (int i = 0; i < pattern.length; i++) {
-            for (int j = 0; j < pattern[i].length(); j++) {
-                String s = pattern[i].substring(j, j + 1);
-                Ingredient ingredient = keys.get(s);
-                if (ingredient == null) {
-                    throw new JsonSyntaxException("Pattern references symbol '" + s + "' but it's not defined in the key");
-                }
-
-                set.remove(s);
-                nonnulllist.set(j + patternWidth * i, ingredient);
-            }
-        }
-
-        if (!set.isEmpty()) {
-            throw new JsonSyntaxException("Key defines symbols that aren't used in pattern: " + set);
-        } else {
-            return nonnulllist;
-        }
-    }
-
-    private static String[] patternFromJson(JsonArray jsonArr) {
-        String[] astring = new String[jsonArr.size()];
-        if (astring.length > 3) {
-            throw new JsonSyntaxException("Invalid pattern: too many rows, " + 3 + " is maximum");
-        } else if (astring.length == 0) {
-            throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
-        } else {
-            for (int i = 0; i < astring.length; ++i) {
-                String s = JSONUtils.getString(jsonArr.get(i), "pattern[" + i + "]");
-                if (s.length() > 3) {
-                    throw new JsonSyntaxException("Invalid pattern: too many columns, " + 3 + " is maximum");
-                }
-
-                if (i > 0 && astring[0].length() != s.length()) {
-                    throw new JsonSyntaxException("Invalid pattern: each row must be the same width");
-                }
-
-                astring[i] = s;
-            }
-
-            return astring;
-        }
-    }
-
-    private static Map<String, Ingredient> deserializeKey(JsonObject json) {
-        Map<String, Ingredient> map = Maps.newHashMap();
-
-        for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-            if (entry.getKey().length() != 1) {
-                throw new JsonSyntaxException("Invalid key entry: '" + entry.getKey() + "' is an invalid symbol (must be 1 character only).");
-            }
-
-            if (" ".equals(entry.getKey())) {
-                throw new JsonSyntaxException("Invalid key entry: ' ' is a reserved symbol.");
-            }
-
-            map.put(entry.getKey(), Ingredient.deserialize(entry.getValue()));
-        }
-
-        map.put(" ", Ingredient.EMPTY);
-        return map;
-    }
-
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ShapedTransferDamageRecipe> {
         public ShapedTransferDamageRecipe read(ResourceLocation recipeId, JsonObject json) {
             String s = JSONUtils.getString(json, "group", "");
-            Map<String, Ingredient> map = ShapedTransferDamageRecipe.deserializeKey(JSONUtils.getJsonObject(json, "key"));
-            String[] astring = ShapedTransferDamageRecipe.patternFromJson(JSONUtils.getJsonArray(json, "pattern"));
+            Map<String, Ingredient> map = ShapedRecipe.deserializeKey(JSONUtils.getJsonObject(json, "key"));
+            String[] astring = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(JSONUtils.getJsonArray(json, "pattern")));
             int i = astring[0].length();
             int j = astring.length;
-            NonNullList<Ingredient> nonnulllist = ShapedTransferDamageRecipe.deserializeIngredients(astring, map, i, j);
+            NonNullList<Ingredient> nonnulllist = ShapedRecipe.deserializeIngredients(astring, map, i, j);
             ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
             return new ShapedTransferDamageRecipe(recipeId, s, i, j, nonnulllist, itemstack);
         }
