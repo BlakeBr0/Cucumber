@@ -1,11 +1,7 @@
-package com.blakebr0.cucumber.crafting;
+package com.blakebr0.cucumber.crafting.recipe;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.blakebr0.cucumber.crafting.ModRecipeSerializers;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -19,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 import java.util.Map;
-import java.util.Set;
 
 // Shaped recipe but no mirroring >:(
 public class ShapedNoMirrorRecipe extends ShapedRecipe {

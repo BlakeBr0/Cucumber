@@ -2,6 +2,8 @@ package com.blakebr0.cucumber.crafting;
 
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.crafting.conditions.EnableableCondition;
+import com.blakebr0.cucumber.crafting.recipe.ShapedNoMirrorRecipe;
+import com.blakebr0.cucumber.crafting.recipe.ShapedTransferDamageRecipe;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.crafting.CraftingHelper;
