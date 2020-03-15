@@ -8,10 +8,10 @@ import java.util.function.Function;
 
 public class BaseGlassBlock extends GlassBlock {
     public BaseGlassBlock(Material material, Function<Properties, Properties> properties) {
-        super(properties.apply(Properties.create(material)));
+        super(properties.apply(Properties.create(material)).notSolid());
     }
 
     public BaseGlassBlock(Material material, SoundType sound, float hardness, float resistance) {
-        super(Properties.create(material).sound(sound).hardnessAndResistance(hardness, resistance));
+        super(Properties.create(material).sound(sound).hardnessAndResistance(hardness, resistance).notSolid());
     }
 }
