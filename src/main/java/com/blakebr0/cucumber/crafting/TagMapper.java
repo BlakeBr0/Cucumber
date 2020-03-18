@@ -42,7 +42,7 @@ public class TagMapper {
                     reader = new FileReader(file);
                     json = parser.parse(reader).getAsJsonObject();
 
-                    json.entrySet().forEach(entry -> {
+                    json.entrySet().stream().filter(e -> !"__comment".equals(e.getKey())).forEach(entry -> {
                         String tag = entry.getKey();
                         String item = entry.getValue().getAsString();
 
@@ -57,7 +57,9 @@ public class TagMapper {
                 }
             } else {
                 try (Writer writer = new FileWriter(file)) {
-                    GSON.toJson(new Object(), writer);
+                    JsonObject object = new JsonObject();
+                    object.addProperty("__comment", "Instructions: https://mods.blakebr0.com/docs/cucumber/tags-config");
+                    GSON.toJson(object, writer);
                 } catch (IOException e) {
                     LOGGER.error("An error occurred while creating cucumber-tags.json", e);
                 }
