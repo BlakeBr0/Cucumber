@@ -1,0 +1,13 @@
+{
+  "tooltip.cucumber.hold_shift_for_info": "자세한 정보를 보려면 §e§oSHIFT §r§7를 누르세요.",
+  "tooltip.cucumber.uses_left": "%s은(는) 왼쪽을 사용합니다.",
+  "tooltip.cucumber.one_use_left": "1은 왼쪽을 사용합니다.",
+  "tooltip.cucumber.unlimited_uses": "무제한 사용합니다.",
+  "tooltip.cucumber.hold_ctrl_for_tags": "태그를 보려면 CTRL를 누르세요.",
+  "tooltip.cucumber.block_tags": "블록 태그:",
+  "tooltip.cucumber.item_tags": "아이템 태그:",
+  "tooltip.cucumber.not_yet_implemented": "아직 구현되지 않았습니다.",
+
+  "message.cucumber.filled_energy": "이 블록이 당신의 에너지를 빼앗아 갔어요!",
+  "message.cucumber.filled_energy_error": "이 블록은 당신의 에너지를 흡수할 수 없습니다."
+}
