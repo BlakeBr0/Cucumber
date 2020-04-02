@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber.crafting;
 
 import com.blakebr0.cucumber.Cucumber;
+import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class TagMapper {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
@@ -30,6 +32,7 @@ public class TagMapper {
     private static final Map<String, String> TAG_TO_ITEM_MAP = new HashMap<>();
 
     public static void reloadTagMappings() {
+        Stopwatch stopwatch = Stopwatch.createStarted();
         File dir = FMLPaths.CONFIGDIR.get().toFile();
 
         if (dir.exists() && dir.isDirectory()) {
@@ -42,7 +45,10 @@ public class TagMapper {
                     reader = new FileReader(file);
                     json = parser.parse(reader).getAsJsonObject();
 
-                    json.entrySet().stream().filter(e -> !"__comment".equals(e.getKey())).forEach(entry -> {
+                    json.entrySet().stream().filter(e -> {
+                        String value = e.getValue().getAsString();
+                        return !"__comment".equalsIgnoreCase(e.getKey()) && !value.isEmpty() && !"null".equalsIgnoreCase(value);
+                    }).forEach(entry -> {
                         String tag = entry.getKey();
                         String item = entry.getValue().getAsString();
 
@@ -65,6 +71,9 @@ public class TagMapper {
                 }
             }
         }
+
+        stopwatch.stop();
+        LOGGER.info("Loaded cucumber-tags.json in {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
     public static Item getItemForTag(String tagId) {
@@ -90,7 +99,7 @@ public class TagMapper {
                 if (json != null) {
                     if (json.has(tagId)) {
                         String itemId = json.get(tagId).getAsString();
-                        if (itemId.isEmpty() || "null".equals(itemId))
+                        if (itemId.isEmpty() || "null".equalsIgnoreCase(itemId))
                             return addTagToFile(tagId, json, file);
 
                         TAG_TO_ITEM_MAP.put(tagId, itemId);
