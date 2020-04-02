@@ -63,7 +63,7 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
         public ShapedNoMirrorRecipe read(ResourceLocation recipeId, JsonObject json) {
             String s = JSONUtils.getString(json, "group", "");
             Map<String, Ingredient> map = ShapedRecipe.deserializeKey(JSONUtils.getJsonObject(json, "key"));
-            String[] astring = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(JSONUtils.getJsonArray(json, "pattern")));
+            String[] astring = ShapedRecipe.patternFromJson(JSONUtils.getJsonArray(json, "pattern"));
             int i = astring[0].length();
             int j = astring.length;
             NonNullList<Ingredient> nonnulllist = ShapedRecipe.deserializeIngredients(astring, map, i, j);
