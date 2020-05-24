@@ -21,11 +21,17 @@ public class RetextureableItemModelWrapper extends BlockModel {
         this.parent = model.parent;
     }
 
-    // Yoinked from VanillaModelWrapper
+    // TODO: 1.16: Fix this to return RetexturableItemModelWrapper
     public RetextureableBlockModelWrapper retexture(ImmutableMap<String, String> textures) {
-        BlockModel newModel = new BlockModel(this.model.getParentLocation(), new ArrayList<>(),
-                Maps.newHashMap(this.model.textures), this.model.isAmbientOcclusion(), GuiLight.FRONT, //New Textures man VERY IMPORTANT
-                model.getAllTransforms(), Lists.newArrayList(model.getOverrides()));
+        BlockModel newModel = new BlockModel(
+                this.model.getParentLocation(),
+                new ArrayList<>(),
+                Maps.newHashMap(this.model.textures),
+                this.model.isAmbientOcclusion(),
+                this.model.func_230176_c_(),
+                this.model.getAllTransforms(),
+                Lists.newArrayList(this.model.getOverrides())
+        );
         newModel.name = this.model.name;
         newModel.parent = this.model.parent;
 
