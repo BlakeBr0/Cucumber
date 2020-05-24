@@ -9,7 +9,7 @@ import net.minecraft.util.NonNullList;
 
 import java.util.function.Function;
 
-public class BaseBlockItem extends BlockItem {
+public class BaseBlockItem extends BlockItem implements IEnableable {
     public BaseBlockItem(Block block, Function<Properties, Properties> properties) {
         super(block, properties.apply(new Properties()));
     }
@@ -23,5 +23,13 @@ public class BaseBlockItem extends BlockItem {
         } else {
             super.fillItemGroup(group, items);
         }
+    }
+
+    @Override
+    public boolean isEnabled() {
+        if (this.getBlock() instanceof IEnableable)
+            return ((IEnableable) this.getBlock()).isEnabled();
+
+        return true;
     }
 }
