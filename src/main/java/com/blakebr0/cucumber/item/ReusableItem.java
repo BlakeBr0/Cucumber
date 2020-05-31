@@ -8,13 +8,15 @@ import net.minecraft.enchantment.UnbreakingEnchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.function.Function;
 
 public class ReusableItem extends BaseItem {
-	private boolean damage;
-	private boolean tooltip;
+	private final boolean damage;
+	private final boolean tooltip;
 
 	public ReusableItem(Function<Properties, Properties> properties) {
 		this(true, properties);
@@ -54,12 +56,13 @@ public class ReusableItem extends BaseItem {
 		}
 
 		copy.setDamage(stack.getDamage() + 1);
-		if (copy.getDamage() >= stack.getMaxDamage())
+		if (copy.getDamage() > stack.getMaxDamage())
 			return ItemStack.EMPTY;
 
 		return copy;
 	}
-	
+
+	@OnlyIn(Dist.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (this.tooltip) {
