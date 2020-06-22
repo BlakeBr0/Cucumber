@@ -18,7 +18,7 @@ archivesBaseName = 'Cucumber-1.15.2'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200205-1.15.1'
+    mappings channel: 'snapshot', version: '20200216-1.15.1'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -30,7 +30,7 @@ minecraft {
             property 'forge.logging.console.level', 'info'
 
             ideaModule "${project.name}.main"
-            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath};${project.file("out/production/classes").canonicalPath}"
+            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath}${File.pathSeparator}${project.file("out/production/classes").canonicalPath}"
         }
 
         server {
@@ -40,7 +40,7 @@ minecraft {
             property 'forge.logging.console.level', 'info'
 
             ideaModule "${project.name}.main"
-            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath};${project.file("out/production/classes").canonicalPath}"
+            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath}${File.pathSeparator}${project.file("out/production/classes").canonicalPath}"
         }
     }
 }
