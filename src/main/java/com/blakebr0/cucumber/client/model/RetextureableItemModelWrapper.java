@@ -1,11 +1,11 @@
-package com.blakebr0.cucumber.model;
+package com.blakebr0.cucumber.client.model;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.renderer.model.BlockModel;
-import net.minecraft.client.renderer.model.Material;
+import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 
@@ -21,8 +21,7 @@ public class RetextureableItemModelWrapper extends BlockModel {
         this.parent = model.parent;
     }
 
-    // TODO: 1.16: Fix this to return RetexturableItemModelWrapper
-    public RetextureableBlockModelWrapper retexture(ImmutableMap<String, String> textures) {
+    public RetextureableItemModelWrapper retexture(ImmutableMap<String, String> textures) {
         BlockModel newModel = new BlockModel(
                 this.model.getParentLocation(),
                 new ArrayList<>(),
@@ -36,9 +35,9 @@ public class RetextureableItemModelWrapper extends BlockModel {
         newModel.parent = this.model.parent;
 
         textures.forEach((key, value) -> {
-            newModel.textures.put(key, Either.left(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(value))));
+            newModel.textures.put(key, Either.left(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(value))));
         });
 
-        return new RetextureableBlockModelWrapper(newModel);
+        return new RetextureableItemModelWrapper(newModel);
     }
 }

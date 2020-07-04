@@ -1,29 +1,17 @@
 package com.blakebr0.cucumber.util;
 
 import java.text.NumberFormat;
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
-public class Utils {
-	public static Random rand = new Random();
+public final class Utils {
+	public static final Random RANDOM = new Random();
 
-	/**
-	 * Adds commas to the specified numerical value
-	 * 
-	 * @param obj the number
-	 * @return the formatted number
-	 */
 	public static String format(Object obj) {
 		return NumberFormat.getInstance().format(obj);
 	}
 
-	public static List<String> asList(String string) {
-		return Collections.singletonList(string);
-	}
-
 	public static int randInt(int min, int max) {
-		return rand.nextInt(max - min + 1) + min;
+		return RANDOM.nextInt(max - min + 1) + min;
 	}
 	
 	public static int intColor(int r, int g, int b) {
@@ -118,7 +106,7 @@ public class Utils {
 					break;
 			}
 		}
-		return 0xff000000 | (r << 16) | (g << 8) | (b << 0);
+		return 0xff000000 | (r << 16) | (g << 8) | b;
 	}
 
 

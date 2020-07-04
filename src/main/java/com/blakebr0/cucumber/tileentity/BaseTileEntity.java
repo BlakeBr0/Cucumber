@@ -27,6 +27,10 @@ public class BaseTileEntity extends TileEntity {
 		return this.write(new CompoundNBT());
 	}
 
+	public void read(CompoundNBT tag) {
+		this.func_230337_a_(this.getBlockState(), tag);
+	}
+
 	public void markDirtyAndDispatch() {
 		super.markDirty();
 		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);

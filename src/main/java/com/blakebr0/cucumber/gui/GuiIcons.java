@@ -6,6 +6,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
+// TODO: 1.16: reevaluate
 public class GuiIcons {
 	public static final ResourceLocation ICONS = new ResourceLocation(Cucumber.MOD_ID, "textures/gui/icons.png");
 	

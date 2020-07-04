@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
 
-public class VoxelShapeBuilder {
+public final class VoxelShapeBuilder {
     private VoxelShape leftShape;
     private VoxelShape lastOrShape;
 

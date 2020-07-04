@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 
+// TODO: 1.16: reevaluate
 public class CompoundTagHelper {
 	private String name;
 	

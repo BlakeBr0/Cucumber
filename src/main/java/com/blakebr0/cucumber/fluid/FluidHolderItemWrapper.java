@@ -9,8 +9,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 
 public class FluidHolderItemWrapper implements ICapabilityProvider {
-	private ItemStack stack;
-	private IFluidHolder holder;
+	private final ItemStack stack;
+	private final IFluidHolder holder;
 
 	public FluidHolderItemWrapper(ItemStack stack, IFluidHolder holder) {
 		this.stack = stack;

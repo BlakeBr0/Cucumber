@@ -3,6 +3,7 @@ package com.blakebr0.cucumber.inventory.item;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.container.Container;
+import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.ItemStack;
 
 /*
@@ -15,8 +16,8 @@ public class ItemInventoryContainer extends Container {
 	protected final int index;
 	protected boolean valid = true;
 
-	public ItemInventoryContainer(ItemStack inv, int size, PlayerInventory inventory) {
-		super(null, 0);
+	public ItemInventoryContainer(ContainerType<?> type, ItemStack inv, int size, PlayerInventory inventory) {
+		super(type, 0);
 		this.inventory = inventory;
 		this.index = inventory.currentItem;
 		this.wrapper = new ItemInventoryWrapper(inv, size);
@@ -24,8 +25,8 @@ public class ItemInventoryContainer extends Container {
 	
 	@Override
 	public void detectAndSendChanges() {
-		ItemStack item = this.inventory.mainInventory.get(this.index);
-		if (item.isEmpty() || item.getItem() != this.wrapper.getInventory().getItem()) {
+		ItemStack stack = this.inventory.mainInventory.get(this.index);
+		if (stack.isEmpty() || stack.getItem() != this.wrapper.getInventory().getItem()) {
 			this.valid = false;
 			return;
 		}
@@ -33,20 +34,20 @@ public class ItemInventoryContainer extends Container {
 		super.detectAndSendChanges();
 	}
 
-	public void onSlotChanged() {
-		ItemStack item = this.inventory.mainInventory.get(this.index);
-		if (this.valid && !item.isEmpty() && item.getItem() == this.wrapper.getInventory().getItem()) {
-			this.inventory.mainInventory.set(this.index, this.wrapper.getInventory());
-		}
-	}
-
 	@Override
 	public boolean canInteractWith(PlayerEntity player) {
-		onSlotChanged();
+		this.onSlotChanged();
 		if (this.wrapper.getDirty() && !this.valid) {
 			player.inventory.setItemStack(ItemStack.EMPTY);
 		}
 
 		return this.valid;
+	}
+
+	public void onSlotChanged() {
+		ItemStack stack = this.inventory.mainInventory.get(this.index);
+		if (this.valid && !stack.isEmpty() && stack.getItem() == this.wrapper.getInventory().getItem()) {
+			this.inventory.mainInventory.set(this.index, this.wrapper.getInventory());
+		}
 	}
 }

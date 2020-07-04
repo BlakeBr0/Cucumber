@@ -1,6 +1,8 @@
 package com.blakebr0.cucumber.lib;
 
-public class Tooltips {
+import com.blakebr0.cucumber.util.Tooltip;
+
+public final class Tooltips {
 	public static final Tooltip USES_LEFT = new Tooltip("tooltip.cucumber.uses_left");
 	public static final Tooltip ONE_USE_LEFT = new Tooltip("tooltip.cucumber.one_use_left");
 	public static final Tooltip UNLIMITED_USES = new Tooltip("tooltip.cucumber.unlimited_uses");

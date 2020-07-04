@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.inventory;
 
-import com.blakebr0.cucumber.lib.TriFunction;
+import com.blakebr0.cucumber.util.TriFunction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
 import net.minecraftforge.common.util.LazyOptional;

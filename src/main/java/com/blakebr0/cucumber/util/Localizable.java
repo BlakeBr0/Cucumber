@@ -1,5 +1,6 @@
-package com.blakebr0.cucumber.lib;
+package com.blakebr0.cucumber.util;
 
+import net.minecraft.util.text.IFormattableTextComponent;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -35,7 +36,7 @@ public class Localizable {
         return new LocalizableBuilder(this.key).buildString();
     }
 
-    public class LocalizableBuilder {
+    public static class LocalizableBuilder {
         private final String key;
         private Object[] args = new Object[0];
         private TextFormatting color;
@@ -54,16 +55,16 @@ public class Localizable {
             return this;
         }
 
-        public ITextComponent build() {
-            ITextComponent component = new TranslationTextComponent(this.key, this.args);
+        public IFormattableTextComponent build() {
+            IFormattableTextComponent component = new TranslationTextComponent(this.key, this.args);
             if (this.color != null)
-                component.applyTextStyle(this.color);
+                component.func_240701_a_(this.color);
 
             return component;
         }
 
         public String buildString() {
-            return this.build().getFormattedText();
+            return this.build().getString();
         }
     }
 }

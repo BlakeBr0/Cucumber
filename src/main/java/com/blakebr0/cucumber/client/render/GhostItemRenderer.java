@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.render;
+package com.blakebr0.cucumber.client.render;
 
 import com.blakebr0.cucumber.client.ModRenderTypes;
 import com.mojang.blaze3d.matrix.MatrixStack;
@@ -20,6 +20,7 @@ import org.lwjgl.opengl.GL14;
 
 import java.util.Random;
 
+// TODO: 1.16: reevaluate
 public final class GhostItemRenderer {
     public static void renderItemModel(ItemStack stack, MatrixStack matrix, IRenderTypeBuffer buffer, float alpha) {
         if (!stack.isEmpty()) {
@@ -79,7 +80,7 @@ public final class GhostItemRenderer {
                 IVertexBuilder ivertexbuilder = bufferIn.getBuffer(ModRenderTypes.GHOST);
                 renderModel(modelIn, itemStackIn, combinedLightIn, combinedOverlayIn, matrixStackIn, ivertexbuilder, itemRenderer);
             } else {
-                itemStackIn.getItem().getItemStackTileEntityRenderer().render(itemStackIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+                itemStackIn.getItem().getItemStackTileEntityRenderer().func_239207_a_(itemStackIn, transformTypeIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
             }
 
             matrixStackIn.pop();

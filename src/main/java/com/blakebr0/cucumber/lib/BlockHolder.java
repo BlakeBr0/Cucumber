@@ -3,6 +3,7 @@ package com.blakebr0.cucumber.lib;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 
+// TODO: 1.16 reevaluate
 public class BlockHolder<T extends Block> {
     private final T block;
 

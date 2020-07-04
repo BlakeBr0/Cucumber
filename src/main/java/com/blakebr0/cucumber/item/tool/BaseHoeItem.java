@@ -11,11 +11,11 @@ import java.util.function.Function;
 
 public class BaseHoeItem extends HoeItem {
     public BaseHoeItem(IItemTier tier, Function<Properties, Properties> properties) {
-        this(tier, -2.0F, properties);
+        this(tier, -1, -2.0F, properties);
     }
 
-    public BaseHoeItem(IItemTier tier, float attackSpeed, Function<Properties, Properties> properties) {
-        super(tier, attackSpeed, properties.apply(new Properties()));
+    public BaseHoeItem(IItemTier tier, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
+        super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
     }
 
     @Override

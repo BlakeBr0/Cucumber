@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.model;
+package com.blakebr0.cucumber.client.model;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -7,7 +7,7 @@ import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Either;
 import net.minecraft.client.renderer.model.BlockModel;
 import net.minecraft.client.renderer.model.BlockPart;
-import net.minecraft.client.renderer.model.Material;
+import net.minecraft.client.renderer.model.RenderMaterial;
 import net.minecraft.client.renderer.texture.AtlasTexture;
 import net.minecraft.util.ResourceLocation;
 
@@ -26,7 +26,6 @@ public class RetextureableBlockModelWrapper extends BlockModel {
         this.parent = model.parent;
     }
 
-    // Yoinked from VanillaModelWrapper
     public RetextureableBlockModelWrapper retexture(ImmutableMap<String, String> textures) {
         if (textures.isEmpty())
             return this;
@@ -48,13 +47,13 @@ public class RetextureableBlockModelWrapper extends BlockModel {
                 removed.add(e.getKey());
                 newModel.textures.remove(e.getKey());
             } else {
-                newModel.textures.put(e.getKey(), Either.left(new Material(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(e.getValue()))));
+                newModel.textures.put(e.getKey(), Either.left(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(e.getValue()))));
             }
         }
 
         // Map the model's texture references as if it was the parent of a model with the retexture map as its textures.
-        Map<String, Either<Material, String>> remapped = Maps.newHashMap();
-        for (Map.Entry<String, Either<Material, String>> e : newModel.textures.entrySet()) {
+        Map<String, Either<RenderMaterial, String>> remapped = Maps.newHashMap();
+        for (Map.Entry<String, Either<RenderMaterial, String>> e : newModel.textures.entrySet()) {
             Optional<String> right = e.getValue().right();
             if (right.isPresent() && right.get().startsWith("#")) {
                 String key = right.get().substring(1);

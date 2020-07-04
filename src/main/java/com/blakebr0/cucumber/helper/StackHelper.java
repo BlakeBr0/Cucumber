@@ -1,14 +1,13 @@
 package com.blakebr0.cucumber.helper;
 
-import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTUtil;
-import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Set;
 
-public class StackHelper {
+// TODO: 1.16: reevaluate
+public final class StackHelper {
 	public static ItemStack withSize(ItemStack stack, int size, boolean container) {
 		if (size <= 0) {
 			if (container && stack.getItem().hasContainerItem(stack)) {
@@ -68,8 +67,8 @@ public class StackHelper {
 		if (!stack1.hasTag()) return true;
 		if (stack1.hasTag() && !stack2.hasTag()) return false;
 		
-		Set<String> stack1Keys = stack1.getTag().keySet();
-		Set<String> stack2Keys = stack2.getTag().keySet();
+		Set<String> stack1Keys = NBTHelper.getTagCompound(stack1).keySet();
+		Set<String> stack2Keys = NBTHelper.getTagCompound(stack2).keySet();
 		
 		for (String key : stack1Keys) {
 			if (stack2Keys.contains(key)) {
@@ -82,9 +81,5 @@ public class StackHelper {
 		}
 		
 		return true;
-	}
-	
-	public static ItemEntity toEntity(ItemStack stack, World world, double x, double y, double z) {
-		return new ItemEntity(world, x, y, z, stack);
 	}
 }

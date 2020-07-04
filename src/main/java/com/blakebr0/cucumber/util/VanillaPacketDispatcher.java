@@ -24,8 +24,7 @@ public final class VanillaPacketDispatcher {
 		for (Object player : players) {
 			if (player instanceof ServerPlayerEntity) {
 				ServerPlayerEntity mPlayer = (ServerPlayerEntity) player;
-				BlockPos playerPos = mPlayer.getPosition();
-				if (pointDistancePlane(playerPos.getX(), playerPos.getZ(), pos.getX() + 0.5, pos.getZ() + 0.5) < 64) {
+				if (pointDistancePlane(mPlayer.getPosX(), mPlayer.getPosZ(), pos.getX() + 0.5, pos.getZ() + 0.5) < 64) {
 					mPlayer.connection.sendPacket(packet);
 				}
 			}

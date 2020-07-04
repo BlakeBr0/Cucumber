@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.tags.ITag;
 import net.minecraft.tags.ItemTags;
-import net.minecraft.tags.Tag;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -115,8 +115,8 @@ public class TagMapper {
     }
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
-        Tag<Item> tag = ItemTags.getCollection().getOrCreate(new ResourceLocation(tagId));
-        Item item = tag.getAllElements().stream().findFirst().orElse(Items.AIR);
+        ITag<Item> tag = ItemTags.getCollection().getOrCreate(new ResourceLocation(tagId));
+        Item item = tag.func_230236_b_().stream().findFirst().orElse(Items.AIR);
 
         String itemId = "null";
         if (item.getRegistryName() != null && item != Items.AIR) {

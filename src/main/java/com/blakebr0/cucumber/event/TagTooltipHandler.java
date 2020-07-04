@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.event;
 
 import com.blakebr0.cucumber.config.ModConfigs;
-import com.blakebr0.cucumber.lib.Tooltip;
 import com.blakebr0.cucumber.lib.Tooltips;
+import com.blakebr0.cucumber.util.Localizable;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -17,7 +17,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import java.util.List;
 import java.util.Set;
 
-public class TagTooltipHandler {
+public final class TagTooltipHandler {
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onRenderTooltip(ItemTooltipEvent event) {
         if (!ModConfigs.ENABLE_TAG_TOOLTIPS.get())
@@ -29,12 +29,12 @@ public class TagTooltipHandler {
             Set<ResourceLocation> itemTags = item.getTags();
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
                 List<ITextComponent> lines = event.getToolTip();
-                if (Screen.hasControlDown()) {
+                if (Screen.func_231174_t_()) {
                     if (!blockTags.isEmpty()) {
                         lines.add(Tooltips.BLOCK_TAGS.color(TextFormatting.DARK_GRAY).build());
                         blockTags.stream()
                                 .map(Object::toString)
-                                .map(t -> new Tooltip(t).color(TextFormatting.DARK_GRAY).build())
+                                .map(t -> Localizable.of(t).color(TextFormatting.DARK_GRAY).build())
                                 .forEach(lines::add);
                     }
 
@@ -42,7 +42,7 @@ public class TagTooltipHandler {
                         lines.add(Tooltips.ITEM_TAGS.color(TextFormatting.DARK_GRAY).build());
                         itemTags.stream()
                                 .map(Object::toString)
-                                .map(t -> new Tooltip(t).color(TextFormatting.DARK_GRAY).build())
+                                .map(t -> Localizable.of(t).color(TextFormatting.DARK_GRAY).build())
                                 .forEach(lines::add);
                     }
                 } else {

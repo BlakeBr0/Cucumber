@@ -1,13 +1,12 @@
 package com.blakebr0.cucumber;
 
+import com.blakebr0.cucumber.client.render.GlowingTextRenderer;
 import com.blakebr0.cucumber.command.ModCommands;
 import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.crafting.ModRecipeSerializers;
 import com.blakebr0.cucumber.crafting.TagMapper;
 import com.blakebr0.cucumber.event.BowFovHandler;
 import com.blakebr0.cucumber.event.TagTooltipHandler;
-import com.blakebr0.cucumber.network.NetworkHandler;
-import com.blakebr0.cucumber.render.GlowingTextRenderer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,7 +38,6 @@ public class Cucumber {
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		DeferredWorkQueue.runLater(() -> {
-			NetworkHandler.onCommonSetup();
 			TagMapper.reloadTagMappings();
 		});
 	}

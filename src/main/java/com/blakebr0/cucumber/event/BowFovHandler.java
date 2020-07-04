@@ -8,9 +8,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
-public class BowFovHandler {
+public final class BowFovHandler {
 	@SubscribeEvent
-	public static void onFovChanged(FOVUpdateEvent event) {
+	public void onFovChanged(FOVUpdateEvent event) {
 		PlayerEntity entity = event.getEntity();
 		if (entity == null) return;
 		

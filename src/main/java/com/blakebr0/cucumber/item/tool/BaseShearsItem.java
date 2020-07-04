@@ -10,15 +10,15 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShearsItem;
+import net.minecraft.loot.LootContext;
+import net.minecraft.loot.LootParameters;
 import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootParameters;
-import net.minecraftforge.common.IShearable;
+import net.minecraftforge.common.IForgeShearable;
 
 import java.util.List;
 import java.util.Random;
@@ -48,7 +48,7 @@ public class BaseShearsItem extends ShearsItem {
 
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-        if (block instanceof IShearable) {
+        if (block instanceof IForgeShearable) {
             TileEntity tile = world.getTileEntity(pos);
             LootContext.Builder context = (new LootContext.Builder((ServerWorld) world))
                     .withRandom(world.getRandom())

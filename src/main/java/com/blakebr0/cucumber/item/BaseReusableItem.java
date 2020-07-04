@@ -14,23 +14,23 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import java.util.List;
 import java.util.function.Function;
 
-public class ReusableItem extends BaseItem {
+public class BaseReusableItem extends BaseItem {
 	private final boolean damage;
 	private final boolean tooltip;
 
-	public ReusableItem(Function<Properties, Properties> properties) {
+	public BaseReusableItem(Function<Properties, Properties> properties) {
 		this(true, properties);
 	}
 
-	public ReusableItem(boolean tooltip, Function<Properties, Properties> properties) {
+	public BaseReusableItem(boolean tooltip, Function<Properties, Properties> properties) {
 		this(0, tooltip, properties);
 	}
 
-	public ReusableItem(int uses, Function<Properties, Properties> properties) {
+	public BaseReusableItem(int uses, Function<Properties, Properties> properties) {
 		this(uses, true, properties);
 	}
 
-	public ReusableItem(int uses, boolean tooltip, Function<Properties, Properties> properties) {
+	public BaseReusableItem(int uses, boolean tooltip, Function<Properties, Properties> properties) {
 		super(properties.compose(p -> p.defaultMaxDamage(Math.max(uses - 1, 0)).setNoRepair()));
 		this.damage = uses > 0;
 		this.tooltip = tooltip;

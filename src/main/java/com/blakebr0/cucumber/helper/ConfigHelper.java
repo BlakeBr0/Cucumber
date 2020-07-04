@@ -7,7 +7,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
 
-public class ConfigHelper {
+public final class ConfigHelper {
     public static void load(ForgeConfigSpec config, String location) {
         Path path = FMLPaths.CONFIGDIR.get().resolve(location);
         CommentedFileConfig data = CommentedFileConfig.builder(path).sync().autosave().writingMode(WritingMode.REPLACE).build();

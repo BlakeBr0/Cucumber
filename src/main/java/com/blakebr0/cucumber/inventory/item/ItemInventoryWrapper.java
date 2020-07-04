@@ -7,10 +7,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 
+// TODO: 1.16: reevaluate
 public class ItemInventoryWrapper implements IInventory {
-	private ItemStack inventory;
-	private int size;
-	private NonNullList<ItemStack> slots;
+	private final ItemStack inventory;
+	private final int size;
+	private final NonNullList<ItemStack> slots;
 	private CompoundNBT tag;
 	private boolean dirty = false;
 	

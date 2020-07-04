@@ -3,6 +3,7 @@ package com.blakebr0.cucumber.lib;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+// TODO: 1.16: reevaluate
 public class ItemHolder<T extends Item> {
     private final T item;
 

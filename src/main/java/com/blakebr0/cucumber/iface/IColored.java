@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ILightReader;
+import net.minecraft.world.IBlockDisplayReader;
 
 public interface IColored {
 	default int getColor(int index) {
@@ -19,7 +19,7 @@ public interface IColored {
 
 	class BlockColors implements IBlockColor {
 		@Override
-		public int getColor(BlockState state, ILightReader world, BlockPos pos, int index) {
+		public int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int index) {
 			return ((IColored) state.getBlock()).getColor(index);
 		}
 	}

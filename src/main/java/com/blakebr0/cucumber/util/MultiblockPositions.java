@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MultiblockPositions {
+public final class MultiblockPositions {
     private final List<BlockPos> positions;
 
     public MultiblockPositions(List<BlockPos> positions) {

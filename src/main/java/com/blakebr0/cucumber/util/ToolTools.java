@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
+// TODO: 1.16: reevaluate
 public class ToolTools {
 	/*
 	 * Parts of the code used in this class is derived from Actually Additions,
