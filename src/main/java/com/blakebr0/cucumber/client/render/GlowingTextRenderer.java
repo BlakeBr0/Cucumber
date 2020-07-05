@@ -1,7 +1,5 @@
 package com.blakebr0.cucumber.client.render;
 
-import com.blakebr0.cucumber.util.Utils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextProperties;

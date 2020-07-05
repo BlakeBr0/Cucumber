@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.event;
+package com.blakebr0.cucumber.handler;
 
 import com.blakebr0.cucumber.iface.ICustomBow;
 import net.minecraft.entity.player.PlayerEntity;

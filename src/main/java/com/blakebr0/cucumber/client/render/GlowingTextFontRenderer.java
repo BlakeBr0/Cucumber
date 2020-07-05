@@ -1,9 +1,5 @@
 package com.blakebr0.cucumber.client.render;
 
-import com.blakebr0.cucumber.util.Utils;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
-
 // TODO: 1.16: reevaluate
 //public class GlowingTextFontRenderer extends FontRenderer {
 //    private final GlowingTextRenderer.ColorInfo info;

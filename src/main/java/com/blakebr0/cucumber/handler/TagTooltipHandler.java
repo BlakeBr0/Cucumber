@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.event;
+package com.blakebr0.cucumber.handler;
 
 import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.lib.Tooltips;
@@ -29,7 +29,7 @@ public final class TagTooltipHandler {
             Set<ResourceLocation> itemTags = item.getTags();
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
                 List<ITextComponent> lines = event.getToolTip();
-                if (Screen.func_231174_t_()) {
+                if (Screen.func_231172_r_()) {
                     if (!blockTags.isEmpty()) {
                         lines.add(Tooltips.BLOCK_TAGS.color(TextFormatting.DARK_GRAY).build());
                         blockTags.stream()

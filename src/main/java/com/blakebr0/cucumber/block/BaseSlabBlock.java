@@ -5,8 +5,6 @@ import net.minecraft.block.SlabBlock;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 
-import java.util.function.Supplier;
-
 public class BaseSlabBlock extends SlabBlock {
     public BaseSlabBlock(Block block) {
         this(Properties.from(block));

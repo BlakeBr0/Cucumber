@@ -10,8 +10,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.ITextProperties;
 
-import java.util.List;
-
 // TODO: 1.16: reevaluate
 public final class RenderHelper {
 	public static void drawCenteredText(FontRenderer font, MatrixStack stack, String text, int x, int y, int color) {

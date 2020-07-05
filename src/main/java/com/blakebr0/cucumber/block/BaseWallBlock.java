@@ -5,8 +5,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.WallBlock;
 import net.minecraft.block.material.Material;
 
-import java.util.function.Supplier;
-
 public class BaseWallBlock extends WallBlock {
     public BaseWallBlock(Block block) {
         this(Properties.from(block));
