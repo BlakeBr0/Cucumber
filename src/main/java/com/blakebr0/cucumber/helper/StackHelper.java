@@ -3,45 +3,31 @@ package com.blakebr0.cucumber.helper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTUtil;
 
-import java.util.List;
 import java.util.Set;
 
-// TODO: 1.16: reevaluate
 public final class StackHelper {
 	public static ItemStack withSize(ItemStack stack, int size, boolean container) {
 		if (size <= 0) {
-			if (container && stack.getItem().hasContainerItem(stack)) {
-				return stack.getItem().getContainerItem(stack);
+			if (container && stack.hasContainerItem()) {
+				return stack.getContainerItem();
 			} else {
 				return ItemStack.EMPTY;
 			}
 		}
-		
+
+		stack = stack.copy();
 		stack.setCount(size);
+
 		return stack;
 	}
 
-	public static ItemStack increase(ItemStack stack, int amount) {
-		stack.grow(amount);
-		return withSize(stack, stack.getCount(), false);
+	public static ItemStack grow(ItemStack stack, int amount) {
+		return withSize(stack, stack.getCount() + amount, false);
 	}
 
-	public static ItemStack decrease(ItemStack stack, int amount, boolean container) {
+	public static ItemStack shrink(ItemStack stack, int amount, boolean container) {
 		if (stack.isEmpty()) return ItemStack.EMPTY;
-		stack.shrink(amount);
-		return withSize(stack, stack.getCount(), container);
-	}
-
-	public static int getPlaceFromList(List<ItemStack> list, ItemStack stack, boolean wildcard) {
-		if (list != null && list.size() > 0) {
-			for (int i = 0; i < list.size(); i++) {
-				if ((stack.isEmpty() && list.get(i).isEmpty() || areItemsEqual(stack, list.get(i)))) {
-					return i;
-				}
-			}
-		}
-		
-		return -1;
+		return withSize(stack, stack.getCount() - amount, container);
 	}
 
 	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2) {
@@ -51,10 +37,29 @@ public final class StackHelper {
 	public static boolean areStacksEqual(ItemStack stack1, ItemStack stack2) {
 		return areItemsEqual(stack1, stack2) && ItemStack.areItemStackTagsEqual(stack1, stack2);
 	}
-	
+
+	/**
+	 * Checks if stack2 can be added to stack1
+	 * @param stack1 the current stack
+	 * @param stack2 the additional stack
+	 * @return can these stacks be combined
+	 */
 	public static boolean canCombineStacks(ItemStack stack1, ItemStack stack2) {
 		if (!stack1.isEmpty() && stack2.isEmpty()) return true;
 		return areStacksEqual(stack1, stack2) && (stack1.getCount() + stack2.getCount()) <= stack1.getMaxStackSize();
+	}
+
+	/**
+	 * Combines stack2 into stack1
+	 * @param stack1 the current stack
+	 * @param stack2 the additional stack
+	 * @return the new combined stack
+	 */
+	public static ItemStack combineStacks(ItemStack stack1, ItemStack stack2) {
+		if (stack1.isEmpty())
+			return stack2;
+
+		return grow(stack1, stack2.getCount());
 	}
 	
 	/**

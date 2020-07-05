@@ -1,7 +1,7 @@
 package com.blakebr0.cucumber.gui;
 
 import com.blakebr0.cucumber.Cucumber;
-import com.blakebr0.cucumber.helper.RenderHelper;
+import com.blakebr0.cucumber.client.helper.RenderHelper;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;

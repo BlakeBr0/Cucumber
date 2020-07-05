@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.helper;
+package com.blakebr0.cucumber.client.helper;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;

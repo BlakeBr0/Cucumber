@@ -1,7 +1,6 @@
 package com.blakebr0.cucumber.util;
 
 import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.TranslationTextComponent;
 
@@ -24,7 +23,7 @@ public class Tooltip {
         return new TooltipBuilder(this.key).color(color);
     }
 
-    public ITextComponent build() {
+    public IFormattableTextComponent build() {
         return new TooltipBuilder(this.key).build();
     }
 
