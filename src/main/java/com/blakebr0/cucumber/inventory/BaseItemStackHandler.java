@@ -93,4 +93,25 @@ public class BaseItemStackHandler extends ItemStackHandler {
     public IInventory toIInventory() {
         return new Inventory(this.stacks.toArray(new ItemStack[0]));
     }
+
+    /**
+     * Creates a deep copy of this BaseItemStackHandler, including new copies of the items
+     * @return the copy of this BaseItemStackHandler
+     */
+    public BaseItemStackHandler copy() {
+        BaseItemStackHandler newInventory = new BaseItemStackHandler(this.getSlots(), this.onContentsChanged);
+
+        newInventory.setDefaultSlotLimit(this.maxStackSize);
+        newInventory.setSlotValidator(this.slotValidator);
+        newInventory.setOutputSlots(this.outputSlots);
+
+        this.slotSizeMap.forEach(newInventory::addSlotLimit);
+
+        for (int i = 0; i < this.getSlots(); i++) {
+            ItemStack stack = this.getStackInSlot(i);
+            newInventory.setStackInSlot(i, stack.copy());
+        }
+
+        return newInventory;
+    }
 }
