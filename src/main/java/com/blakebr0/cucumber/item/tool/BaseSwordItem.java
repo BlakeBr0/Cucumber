@@ -10,12 +10,17 @@ import net.minecraft.util.NonNullList;
 import java.util.function.Function;
 
 public class BaseSwordItem extends SwordItem {
+    private final float attackDamage;
+    private final float attackSpeed;
+
     public BaseSwordItem(IItemTier tier, Function<Properties, Properties> properties) {
         this(tier, 3, -2.4F, properties);
     }
 
     public BaseSwordItem(IItemTier tier, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
+        this.attackDamage = attackDamage;
+        this.attackSpeed = attackSpeed;
     }
 
     @Override
@@ -27,5 +32,14 @@ public class BaseSwordItem extends SwordItem {
         } else {
             super.fillItemGroup(group, items);
         }
+    }
+
+    @Override
+    public float getAttackDamage() {
+        return this.attackDamage;
+    }
+
+    public float getAttackSpeed() {
+        return this.attackSpeed;
     }
 }

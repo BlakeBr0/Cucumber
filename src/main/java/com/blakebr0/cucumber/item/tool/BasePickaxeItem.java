@@ -10,12 +10,17 @@ import net.minecraft.util.NonNullList;
 import java.util.function.Function;
 
 public class BasePickaxeItem extends PickaxeItem {
+    private final float attackDamage;
+    private final float attackSpeed;
+
     public BasePickaxeItem(IItemTier tier, Function<Properties, Properties> properties) {
         this(tier, 1, -2.8F, properties);
     }
 
     public BasePickaxeItem(IItemTier tier, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
+        this.attackDamage = attackDamage;
+        this.attackSpeed = attackSpeed;
     }
 
     @Override
@@ -27,5 +32,13 @@ public class BasePickaxeItem extends PickaxeItem {
         } else {
             super.fillItemGroup(group, items);
         }
+    }
+
+    public float getAttackDamage() {
+        return this.attackDamage;
+    }
+
+    public float getAttackSpeed() {
+        return this.attackSpeed;
     }
 }

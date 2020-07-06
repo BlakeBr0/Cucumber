@@ -10,12 +10,17 @@ import net.minecraft.util.NonNullList;
 import java.util.function.Function;
 
 public class BaseAxeItem extends AxeItem {
+    private final float attackDamage;
+    private final float attackSpeed;
+
     public BaseAxeItem(IItemTier tier, Function<Properties, Properties> properties) {
         this(tier, 6.0F, -3.0F, properties);
     }
 
     public BaseAxeItem(IItemTier tier, float attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
+        this.attackDamage = attackDamage;
+        this.attackSpeed = attackSpeed;
     }
 
     @Override
@@ -27,5 +32,13 @@ public class BaseAxeItem extends AxeItem {
         } else {
             super.fillItemGroup(group, items);
         }
+    }
+
+    public float getAttackDamage() {
+        return this.attackDamage;
+    }
+
+    public float getAttackSpeed() {
+        return this.attackSpeed;
     }
 }
