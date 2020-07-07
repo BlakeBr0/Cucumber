@@ -28,7 +28,7 @@ public class BaseTileEntity extends TileEntity {
 	}
 
 	public void read(CompoundNBT tag) {
-		this.func_230337_a_(this.getBlockState(), tag);
+		this.read(this.getBlockState(), tag);
 	}
 
 	public void markDirtyAndDispatch() {

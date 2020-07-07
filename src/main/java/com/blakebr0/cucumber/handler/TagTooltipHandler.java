@@ -29,7 +29,7 @@ public final class TagTooltipHandler {
             Set<ResourceLocation> itemTags = item.getTags();
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
                 List<ITextComponent> lines = event.getToolTip();
-                if (Screen.func_231172_r_()) {
+                if (Screen.hasControlDown()) {
                     if (!blockTags.isEmpty()) {
                         lines.add(Tooltips.BLOCK_TAGS.color(TextFormatting.DARK_GRAY).build());
                         blockTags.stream()

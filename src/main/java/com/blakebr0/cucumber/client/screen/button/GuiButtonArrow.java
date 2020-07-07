@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.gui.button;
+package com.blakebr0.cucumber.client.screen.button;
 
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.util.Localizable;

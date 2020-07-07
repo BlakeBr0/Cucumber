@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.gui;
+package com.blakebr0.cucumber.client.screen;
 
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.client.helper.RenderHelper;

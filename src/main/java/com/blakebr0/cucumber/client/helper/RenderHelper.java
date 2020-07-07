@@ -13,7 +13,7 @@ import net.minecraft.util.text.ITextProperties;
 // TODO: 1.16: reevaluate
 public final class RenderHelper {
 	public static void drawCenteredText(FontRenderer font, MatrixStack stack, String text, int x, int y, int color) {
-		font.func_238405_a_(stack, text, (x - font.getStringWidth(text) / 2F), y, color);
+		font.drawString(stack, text, (x - font.getStringWidth(text) / 2F), y, color);
 	}
 
 	/*

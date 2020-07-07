@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.gui.button;
+package com.blakebr0.cucumber.client.screen.button;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.widget.button.AbstractButton;
@@ -16,8 +16,8 @@ public class IconButton extends AbstractButton {
 		this.texture = texture;
 	}
 	
-	@Override
-	public void func_230430_a_(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	@Override // TODO
+	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
 //		Minecraft minecraft = Minecraft.getInstance();
 //		minecraft.getTextureManager().bindTexture(this.texture);
 //		RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
@@ -29,7 +29,7 @@ public class IconButton extends AbstractButton {
 	}
 
 	@Override
-	public void func_230930_b_() {
+	public void onPress() {
 
 	}
 }
