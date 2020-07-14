@@ -20,7 +20,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(Cucumber.MOD_ID)
-public class Cucumber {
+public final class Cucumber {
 	public static final String NAME = "Cucumber Library";
 	public static final String MOD_ID = "cucumber";
 

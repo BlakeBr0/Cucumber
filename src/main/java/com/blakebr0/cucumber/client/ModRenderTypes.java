@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
-public class ModRenderTypes {
+public final class ModRenderTypes {
     public static final RenderType GHOST = RenderType.makeType(
             "cucumber:ghost",
             DefaultVertexFormats.BLOCK, GL11.GL_QUADS, 256,
