@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.tileentity;
 
-import com.blakebr0.cucumber.util.VanillaPacketDispatcher;
+import com.blakebr0.cucumber.helper.TileEntityHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -33,6 +33,6 @@ public class BaseTileEntity extends TileEntity {
 
 	public void markDirtyAndDispatch() {
 		super.markDirty();
-		VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
+		TileEntityHelper.dispatchToNearbyPlayers(this);
 	}
 }
