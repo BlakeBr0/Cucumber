@@ -12,7 +12,8 @@ public final class BowFovHandler {
 	@SubscribeEvent
 	public void onFovChanged(FOVUpdateEvent event) {
 		PlayerEntity entity = event.getEntity();
-		if (entity == null) return;
+		if (entity == null)
+			return;
 		
 		ItemStack stack = entity.getActiveItemStack();
 		if (!stack.isEmpty()) {

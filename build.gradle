@@ -18,7 +18,7 @@ archivesBaseName = 'Cucumber-1.16.1'
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: '20200514-1.16'
+    mappings channel: 'snapshot', version: '20200707-1.16.1'
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -46,7 +46,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.1-32.0.47'
+    minecraft 'net.minecraftforge:forge:1.16.1-32.0.57'
 }
 
 jar {
@@ -61,24 +61,4 @@ jar {
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
-}
-
-task deobfJar(type: Jar) {
-    classifier = 'deobf'
-    from sourceSets.main.output
-    manifest {
-        attributes([
-            "Specification-Title": "Cucumber",
-            "Specification-Vendor": "BlakeBr0",
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" : "BlakeBr0",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-        ])
-    }
-}
-
-artifacts {
-    archives deobfJar
 }
