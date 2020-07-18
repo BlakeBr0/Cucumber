@@ -6,33 +6,51 @@ import net.minecraft.util.text.TranslationTextComponent;
 
 public class Localizable {
     private final String key;
+    private final TextFormatting defaultColor;
 
-    private Localizable(String key) {
+    protected Localizable(String key) {
+        this(key, null);
+    }
+
+    protected Localizable(String key, TextFormatting defaultColor) {
         this.key = key;
+        this.defaultColor = defaultColor;
     }
 
     public static Localizable of(String key) {
         return new Localizable(key);
     }
 
+    public static Localizable of(String key, TextFormatting defaultColor) {
+        return new Localizable(key, defaultColor);
+    }
+
     public String getKey() {
         return this.key;
     }
 
+    public TextFormatting getDefaultColor() {
+        return this.defaultColor;
+    }
+
     public LocalizableBuilder args(Object... args) {
-        return new LocalizableBuilder(this.key).args(args);
+        return this.builder().args(args);
     }
 
     public LocalizableBuilder color(TextFormatting color) {
-        return new LocalizableBuilder(this.key).color(color);
+        return this.builder().color(color);
     }
 
     public IFormattableTextComponent build() {
-        return new LocalizableBuilder(this.key).build();
+        return this.builder().build();
     }
 
     public String buildString() {
-        return new LocalizableBuilder(this.key).buildString();
+        return this.builder().buildString();
+    }
+
+    private LocalizableBuilder builder() {
+        return new LocalizableBuilder(this.key).color(this.defaultColor);
     }
 
     public static class LocalizableBuilder {
