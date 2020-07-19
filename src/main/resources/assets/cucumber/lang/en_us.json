@@ -7,6 +7,9 @@
   "tooltip.cucumber.block_tags": "Block Tags:",
   "tooltip.cucumber.item_tags": "Item Tags:",
   "tooltip.cucumber.not_yet_implemented": "Not Yet Implemented",
+  "tooltip.cucumber.close": "Close",
+  "tooltip.cucumber.back": "Back",
+  "tooltip.cucumber.forward": "Forward",
 
   "message.cucumber.filled_energy": "This block has taken your energy!",
   "message.cucumber.filled_energy_error": "This block is unable to take your energy."

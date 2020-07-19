@@ -10,7 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public final class BowFovHandler {
 	@SubscribeEvent
-	public void onFovChanged(FOVUpdateEvent event) {
+	public void onFOVUpdate(FOVUpdateEvent event) {
 		PlayerEntity entity = event.getEntity();
 		if (entity == null)
 			return;

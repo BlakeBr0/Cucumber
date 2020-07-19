@@ -5,6 +5,7 @@ import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+// TODO: 1.16: reevaluate
 public class IconButton extends AbstractButton {
 	private final ResourceLocation texture;
 	private final int textureX, textureY;
@@ -16,7 +17,7 @@ public class IconButton extends AbstractButton {
 		this.texture = texture;
 	}
 	
-	@Override // TODO
+	@Override
 	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
 //		Minecraft minecraft = Minecraft.getInstance();
 //		minecraft.getTextureManager().bindTexture(this.texture);

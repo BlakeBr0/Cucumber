@@ -19,7 +19,7 @@ import java.util.Set;
 
 public final class TagTooltipHandler {
     @SubscribeEvent(priority = EventPriority.LOW)
-    public void onRenderTooltip(ItemTooltipEvent event) {
+    public void onItemTooltip(ItemTooltipEvent event) {
         if (!ModConfigs.ENABLE_TAG_TOOLTIPS.get())
             return;
 

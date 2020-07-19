@@ -5,6 +5,7 @@ import net.minecraft.client.gui.widget.button.AbstractButton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+// TODO: 1.16: reevaluate
 public class IconButtonStatic extends AbstractButton {
 	private final ResourceLocation texture;
 	private final int textureX, textureY;
