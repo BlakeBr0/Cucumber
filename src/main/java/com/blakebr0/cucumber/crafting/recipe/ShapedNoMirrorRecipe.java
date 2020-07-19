@@ -40,11 +40,11 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
         return ModRecipeSerializers.CRAFTING_SHAPED_NO_MIRROR;
     }
 
-    private boolean checkMatch(CraftingInventory inventory, int p_77573_2_, int p_77573_3_) {
+    private boolean checkMatch(CraftingInventory inventory, int x, int y) {
         for (int i = 0; i < inventory.getWidth(); ++i) {
             for (int j = 0; j < inventory.getHeight(); ++j) {
-                int k = i - p_77573_2_;
-                int l = j - p_77573_3_;
+                int k = i - x;
+                int l = j - y;
                 Ingredient ingredient = Ingredient.EMPTY;
                 if (k >= 0 && l >= 0 && k < this.getRecipeWidth() && l < this.getRecipeHeight()) {
                     ingredient = this.getIngredients().get(k + l * this.getRecipeWidth());

@@ -1,35 +1,35 @@
 package com.blakebr0.cucumber.client.screen.button;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import net.minecraft.client.gui.widget.button.AbstractButton;
+import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
-// TODO: 1.16: reevaluate
-public class IconButtonStatic extends AbstractButton {
+public class IconButtonStatic extends Button {
 	private final ResourceLocation texture;
 	private final int textureX, textureY;
 
-	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ITextComponent text, ResourceLocation texture) {
-		super(x, y, width, height, text);
+	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ITextComponent text, ResourceLocation texture, IPressable onPress) {
+		super(x, y, width, height, text, onPress);
 		this.textureX = textureX;
 		this.textureY = textureY;
 		this.texture = texture;
 	}
 	
-	@Override // TODO
-	public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
-//		if (this.visible) {
-//			Minecraft mc = Minecraft.getInstance();
-//			mc.getTextureManager().bindTexture(this.texture);
-//			RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//			RenderSystem.enableBlend();
-//			RenderSystem.blendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-//			RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-//			this.blit(stack, this.x, this.y, this.textureX, this.textureY, this.width, this.height);
-//		}
-	}
-
 	@Override
-	public void onPress() {	}
+	public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+		Minecraft minecraft = Minecraft.getInstance();
+		minecraft.getTextureManager().bindTexture(this.texture);
+		RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
+		RenderSystem.enableBlend();
+		RenderSystem.defaultBlendFunc();
+		RenderSystem.enableDepthTest();
+		this.blit(stack, this.x, this.y, this.textureX, this.textureY, this.getWidth() / 2, this.getHeight());
+
+		if (this.isHovered()) {
+			super.renderToolTip(stack, mouseX, mouseY);
+		}
+	}
 }

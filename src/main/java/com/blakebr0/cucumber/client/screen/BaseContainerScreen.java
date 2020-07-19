@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.client.screen;
 
+import com.blakebr0.cucumber.util.Localizable;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -39,5 +40,9 @@ public class BaseContainerScreen<T extends Container> extends ContainerScreen<T>
         int y = this.getGuiTop();
 
         blit(stack, x, y, 0, 0, this.xSize, this.ySize, this.bgWidth, this.bgHeight);
+    }
+
+    protected ITextComponent text(String key) {
+        return Localizable.of(key).build();
     }
 }
