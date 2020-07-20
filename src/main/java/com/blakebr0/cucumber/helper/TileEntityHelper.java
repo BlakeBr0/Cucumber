@@ -39,6 +39,6 @@ public final class TileEntityHelper {
     }
 
     private static boolean isPlayerNearby(double x1, double z1, double x2, double z2) {
-        return (float) (Math.hypot(x1 - x2, z1 - z2)) > 64;
+        return Math.hypot(x1 - x2, z1 - z2) < 64;
     }
 }
