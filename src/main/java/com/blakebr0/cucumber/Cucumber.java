@@ -16,7 +16,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 @Mod(Cucumber.MOD_ID)
@@ -37,6 +36,8 @@ public final class Cucumber {
 
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
+		MinecraftForge.EVENT_BUS.register(new ModCommands());
+
 		DeferredWorkQueue.runLater(() -> {
 			TagMapper.reloadTagMappings();
 		});
@@ -47,10 +48,5 @@ public final class Cucumber {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
 		MinecraftForge.EVENT_BUS.register(new BowFovHandler());
 		MinecraftForge.EVENT_BUS.register(new TagTooltipHandler());
-	}
-
-	@SubscribeEvent
-	public void onServerStarting(FMLServerStartingEvent event) {
-		ModCommands.onServerStarting(event.getCommandDispatcher());
 	}
 }

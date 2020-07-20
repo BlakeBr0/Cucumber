@@ -15,11 +15,16 @@ import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.RegisterCommandsEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public final class ModCommands {
     public static final LiteralArgumentBuilder<CommandSource> ROOT = Commands.literal(Cucumber.MOD_ID);
 
-    public static void onServerStarting(CommandDispatcher<CommandSource> dispatcher) {
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event) {
+        CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
+
         dispatcher.register(ROOT.then(Commands.literal("fillenergy").requires(source -> source.hasPermissionLevel(4)).executes(context -> {
             ServerWorld world = context.getSource().getWorld();
             ServerPlayerEntity player = context.getSource().asPlayer();
@@ -34,16 +39,16 @@ public final class ModCommands {
                         if (energy.canReceive()) {
                             energy.receiveEnergy(Integer.MAX_VALUE, false);
                             ITextComponent message = Localizable.of("message.cucumber.filled_energy").build();
-                            context.getSource().sendFeedback(message, true);
+                            context.getSource().sendFeedback(message, false);
                         }
                     });
                 } else {
                     ITextComponent message = Localizable.of("message.cucumber.filled_energy_error").build();
-                    context.getSource().sendFeedback(message, true);
+                    context.getSource().sendFeedback(message, false);
                 }
             } else {
                 ITextComponent message = Localizable.of("message.cucumber.filled_energy_error").build();
-                context.getSource().sendFeedback(message, true);
+                context.getSource().sendFeedback(message, false);
             }
 
             return 0;
