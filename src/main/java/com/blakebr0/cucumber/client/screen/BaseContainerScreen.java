@@ -42,7 +42,7 @@ public class BaseContainerScreen<T extends Container> extends ContainerScreen<T>
         blit(stack, x, y, 0, 0, this.xSize, this.ySize, this.bgWidth, this.bgHeight);
     }
 
-    protected ITextComponent text(String key) {
-        return Localizable.of(key).build();
+    protected String text(String key, Object... args) {
+        return Localizable.of(key).args(args).buildString();
     }
 }

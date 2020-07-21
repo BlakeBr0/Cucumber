@@ -6,10 +6,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.widget.button.Button;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 
 public class IconButton extends Button {
 	private final ResourceLocation texture;
 	private final int textureX, textureY;
+
+	public IconButton(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, IPressable onPress) {
+		this(x, y, width, height, textureX, textureY, new StringTextComponent(""), texture, onPress);
+	}
 
 	public IconButton(int x, int y, int width, int height, int textureX, int textureY, ITextComponent text, ResourceLocation texture, IPressable onPress) {
 		super(x, y, width, height, text, onPress);
