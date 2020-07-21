@@ -19,16 +19,12 @@ public class BaseTileEntity extends TileEntity {
 
 	@Override
 	public void onDataPacket(NetworkManager manager, SUpdateTileEntityPacket packet) {
-		this.read(packet.getNbtCompound());
+		this.read(this.getBlockState(), packet.getNbtCompound());
 	}
 
 	@Override
 	public final CompoundNBT getUpdateTag() {
 		return this.write(new CompoundNBT());
-	}
-
-	public void read(CompoundNBT tag) {
-		this.read(this.getBlockState(), tag);
 	}
 
 	public void markDirtyAndDispatch() {

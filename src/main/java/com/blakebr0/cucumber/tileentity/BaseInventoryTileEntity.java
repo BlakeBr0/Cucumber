@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber.tileentity;
 
 import com.blakebr0.cucumber.inventory.BaseItemStackHandler;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.TileEntityType;
@@ -18,8 +19,8 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     public abstract BaseItemStackHandler getInventory();
 
     @Override
-    public void read(CompoundNBT tag) {
-        super.read(tag);
+    public void read(BlockState state, CompoundNBT tag) {
+        super.read(state, tag);
         this.getInventory().deserializeNBT(tag);
     }
 
