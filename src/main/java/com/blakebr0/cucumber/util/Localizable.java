@@ -75,7 +75,7 @@ public class Localizable {
         public IFormattableTextComponent build() {
             IFormattableTextComponent component = new TranslationTextComponent(this.key, this.args);
             if (this.color != null)
-                component.func_240701_a_(this.color);
+                component.mergeStyle(this.color);
 
             return component;
         }
