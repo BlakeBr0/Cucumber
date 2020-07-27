@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.crafting;
+package com.blakebr0.cucumber.init;
 
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.crafting.conditions.EnableableCondition;
@@ -11,7 +11,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
-public class ModRecipeSerializers {
+public final class ModRecipeSerializers {
     public static final IRecipeSerializer<?> CRAFTING_SHAPED_NO_MIRROR = new ShapedNoMirrorRecipe.Serializer();
     public static final IRecipeSerializer<?> CRAFTING_SHAPED_TRANSFER_DAMAGE = new ShapedTransferDamageRecipe.Serializer();
 

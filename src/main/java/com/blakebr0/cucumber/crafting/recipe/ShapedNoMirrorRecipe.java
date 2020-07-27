@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.crafting.recipe;
 
-import com.blakebr0.cucumber.crafting.ModRecipeSerializers;
+import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonObject;
 import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.item.ItemStack;
