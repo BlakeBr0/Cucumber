@@ -6,6 +6,7 @@ import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.crafting.TagMapper;
 import com.blakebr0.cucumber.handler.BowFovHandler;
 import com.blakebr0.cucumber.handler.TagTooltipHandler;
+import com.blakebr0.cucumber.helper.RecipeHelper;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -37,6 +38,7 @@ public final class Cucumber {
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new ModCommands());
+		MinecraftForge.EVENT_BUS.register(new RecipeHelper());
 
 		DeferredWorkQueue.runLater(() -> {
 			TagMapper.reloadTagMappings();
