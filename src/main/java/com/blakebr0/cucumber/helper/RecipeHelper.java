@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.helper;
 
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
@@ -31,7 +32,7 @@ public final class RecipeHelper {
         return getRecipeManager().recipes;
     }
 
-    public static Map<ResourceLocation, ? extends IRecipe<?>> getRecipes(IRecipeType<?> type) {
+    public static <C extends IInventory, T extends IRecipe<C>> Map<ResourceLocation, IRecipe<C>> getRecipes(IRecipeType<T> type) {
         return getRecipeManager().getRecipes(type);
     }
 
