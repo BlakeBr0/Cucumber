@@ -28,7 +28,11 @@ public final class RecipeHelper {
     }
 
     public static Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> getRecipes() {
-        return recipeManager.recipes;
+        return getRecipeManager().recipes;
+    }
+
+    public static Map<ResourceLocation, ? extends IRecipe<?>> getRecipes(IRecipeType<?> type) {
+        return getRecipeManager().getRecipes(type);
     }
 
     public static void addRecipe(IRecipe<?> recipe) {
