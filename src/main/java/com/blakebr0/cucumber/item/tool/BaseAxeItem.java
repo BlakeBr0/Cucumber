@@ -35,7 +35,7 @@ public class BaseAxeItem extends AxeItem {
     }
 
     public float getAttackDamage() {
-        return this.attackDamage;
+        return this.attackDamage + this.getTier().getAttackDamage();
     }
 
     public float getAttackSpeed() {

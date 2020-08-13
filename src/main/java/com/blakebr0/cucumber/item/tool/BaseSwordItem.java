@@ -36,7 +36,7 @@ public class BaseSwordItem extends SwordItem {
 
     @Override
     public float getAttackDamage() {
-        return this.attackDamage;
+        return this.attackDamage + this.getTier().getAttackDamage();
     }
 
     public float getAttackSpeed() {
