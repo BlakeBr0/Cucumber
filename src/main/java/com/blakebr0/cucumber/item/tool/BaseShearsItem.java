@@ -16,6 +16,7 @@ import net.minecraft.stats.Stats;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.IForgeShearable;
@@ -52,7 +53,7 @@ public class BaseShearsItem extends ShearsItem {
             TileEntity tile = world.getTileEntity(pos);
             LootContext.Builder context = (new LootContext.Builder((ServerWorld) world))
                     .withRandom(world.getRandom())
-                    .withParameter(LootParameters.POSITION, pos)
+                    .withParameter(LootParameters.field_237457_g_, new Vector3d(pos.getX(), pos.getY(), pos.getZ()))
                     .withParameter(LootParameters.TOOL, new ItemStack(Items.SHEARS))
                     .withNullableParameter(LootParameters.THIS_ENTITY, player)
                     .withNullableParameter(LootParameters.BLOCK_ENTITY, tile);

@@ -13,7 +13,7 @@ apply plugin: 'idea'
 
 version = '4.0.2'
 group = 'com.blakebr0.cucumber'
-archivesBaseName = 'Cucumber-1.16.1'
+archivesBaseName = 'Cucumber-1.16.2'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 
@@ -30,7 +30,7 @@ minecraft {
             property 'forge.logging.console.level', 'info'
 
             ideaModule "${project.name}.main"
-            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath}${File.pathSeparator}${project.file("out/production/classes").canonicalPath}"
+            environment 'MOD_CLASSES', "${project.file('out/production/resources').canonicalPath}${File.pathSeparator}${project.file('out/production/classes').canonicalPath}"
         }
 
         server {
@@ -40,25 +40,25 @@ minecraft {
             property 'forge.logging.console.level', 'info'
 
             ideaModule "${project.name}.main"
-            environment 'MOD_CLASSES', "${project.file("out/production/resources").canonicalPath}${File.pathSeparator}${project.file("out/production/classes").canonicalPath}"
+            environment 'MOD_CLASSES', "${project.file('out/production/resources').canonicalPath}${File.pathSeparator}${project.file('out/production/classes').canonicalPath}"
         }
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.16.1-32.0.97'
+    minecraft 'net.minecraftforge:forge:1.16.2-33.0.5'
 }
 
 jar {
     manifest {
         attributes([
-            "Specification-Title": "Cucumber",
-            "Specification-Vendor": "BlakeBr0",
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": "${version}",
-            "Implementation-Vendor" : "BlakeBr0",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            'Specification-Title': 'Cucumber',
+            'Specification-Vendor': 'BlakeBr0',
+            'Specification-Version': '1',
+            'Implementation-Title': project.name,
+            'Implementation-Version': "${version}",
+            'Implementation-Vendor' : 'BlakeBr0',
+            'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }
 }

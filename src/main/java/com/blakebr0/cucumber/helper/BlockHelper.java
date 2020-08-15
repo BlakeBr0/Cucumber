@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
 
@@ -90,7 +91,7 @@ public final class BlockHelper {
                 if (block.removedByPlayer(state, world, pos, player, true, state.getFluidState())) {
                     block.onPlayerDestroy(world, pos, state);
                     block.harvestBlock(world, player, pos, state, tile, stack);
-                    block.dropXpOnBlockBreak(world, pos, xp);
+                    block.dropXpOnBlockBreak((ServerWorld) world, pos, xp);
                 }
 
                 mplayer.connection.sendPacket(new SChangeBlockPacket(world, pos));
