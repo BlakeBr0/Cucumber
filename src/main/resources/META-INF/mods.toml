@@ -19,7 +19,7 @@ license="MIT"
   [[dependencies.cucumber]]
       modId="forge"
       mandatory=true
-      versionRange="[33.0,)"
+      versionRange="[33.0.20,)"
       ordering="NONE"
       side="BOTH"
   [[dependencies.cucumber]]
