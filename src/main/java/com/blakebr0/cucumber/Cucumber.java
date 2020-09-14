@@ -30,8 +30,6 @@ public final class Cucumber {
 		bus.register(this);
 		bus.register(new ModRecipeSerializers());
 
-		MinecraftForge.EVENT_BUS.register(this);
-
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
 	}
 

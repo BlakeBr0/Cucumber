@@ -1,10 +1,12 @@
 package com.blakebr0.cucumber.helper;
 
+import com.google.common.collect.ImmutableMap;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.IRecipeType;
 import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -19,8 +21,13 @@ public final class RecipeHelper {
         recipeManager = event.getDataPackRegistries().getRecipeManager();
     }
 
+    @SubscribeEvent
+    public void onRecipesUpdated(RecipesUpdatedEvent event) {
+        recipeManager = event.getRecipeManager();
+    }
+
     public static RecipeManager getRecipeManager() {
-        if (!recipeManager.recipes.getClass().equals(HashMap.class)) {
+        if (recipeManager.recipes instanceof ImmutableMap) {
             recipeManager.recipes = new HashMap<>(recipeManager.recipes);
             recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
         }
