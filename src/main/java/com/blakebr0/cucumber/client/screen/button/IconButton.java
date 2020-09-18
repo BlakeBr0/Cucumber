@@ -32,7 +32,7 @@ public class IconButton extends Button {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();
-		this.blit(stack, this.x, this.y, this.textureX, this.textureY + i * this.getWidth_CLASH(), this.getWidth(), this.getWidth_CLASH());
+		this.blit(stack, this.x, this.y, this.textureX, this.textureY + i * this.height, this.width, this.height);
 
 		if (this.isHovered()) {
 			super.renderToolTip(stack, mouseX, mouseY);

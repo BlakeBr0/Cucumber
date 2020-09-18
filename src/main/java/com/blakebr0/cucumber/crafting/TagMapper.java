@@ -115,7 +115,7 @@ public class TagMapper {
     }
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
-        ITag<Item> tag = TagCollectionManager.func_242178_a().func_241836_b().get(new ResourceLocation(tagId));
+        ITag<Item> tag = TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(tagId));
         Item item = tag == null ? Items.AIR : tag.getAllElements().stream().findFirst().orElse(Items.AIR);
 
         String itemId = "null";

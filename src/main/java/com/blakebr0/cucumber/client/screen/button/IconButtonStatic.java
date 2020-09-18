@@ -31,7 +31,7 @@ public class IconButtonStatic extends Button {
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();
-		this.blit(stack, this.x, this.y, this.textureX, this.textureY, this.getWidth(), this.getWidth_CLASH());
+		this.blit(stack, this.x, this.y, this.textureX, this.textureY, this.width, this.height);
 
 		if (this.isHovered()) {
 			super.renderToolTip(stack, mouseX, mouseY);

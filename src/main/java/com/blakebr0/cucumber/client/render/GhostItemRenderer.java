@@ -103,7 +103,7 @@ public final class GhostItemRenderer {
         RenderSystem.scalef(16.0F, 16.0F, 16.0F);
         MatrixStack matrixstack = new MatrixStack();
         IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-        boolean flag = !bakedmodel.func_230044_c_();
+        boolean flag = !bakedmodel.isSideLit();
         if (flag) {
             net.minecraft.client.renderer.RenderHelper.setupGuiFlatDiffuseLighting();
         }

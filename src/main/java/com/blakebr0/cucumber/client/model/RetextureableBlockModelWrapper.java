@@ -20,7 +20,7 @@ public class RetextureableBlockModelWrapper extends BlockModel {
     private final BlockModel model;
 
     public RetextureableBlockModelWrapper(BlockModel model) {
-        super(model.getParentLocation(), model.getElements(), model.textures, model.ambientOcclusion, model.func_230176_c_(), model.getAllTransforms(), model.getOverrides());
+        super(model.getParentLocation(), model.getElements(), model.textures, model.ambientOcclusion, model.getGuiLight(), model.getAllTransforms(), model.getOverrides());
         this.model = model;
         this.name = model.name;
         this.parent = model.parent;
@@ -36,7 +36,7 @@ public class RetextureableBlockModelWrapper extends BlockModel {
         }
 
         BlockModel newModel = new BlockModel(this.model.getParentLocation(), elements,
-                Maps.newHashMap(this.model.textures), this.model.isAmbientOcclusion(), this.model.func_230176_c_(), //New Textures man VERY IMPORTANT
+                Maps.newHashMap(this.model.textures), this.model.isAmbientOcclusion(), this.model.getGuiLight(), //New Textures man VERY IMPORTANT
                 model.getAllTransforms(), Lists.newArrayList(model.getOverrides()));
         newModel.name = this.model.name;
         newModel.parent = this.model.parent;
