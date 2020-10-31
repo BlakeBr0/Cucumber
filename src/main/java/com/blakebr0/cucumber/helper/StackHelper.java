@@ -57,7 +57,7 @@ public final class StackHelper {
 	 */
 	public static ItemStack combineStacks(ItemStack stack1, ItemStack stack2) {
 		if (stack1.isEmpty())
-			return stack2;
+			return stack2.copy();
 
 		return grow(stack1, stack2.getCount());
 	}
