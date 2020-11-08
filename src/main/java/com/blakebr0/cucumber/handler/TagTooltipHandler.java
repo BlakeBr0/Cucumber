@@ -34,6 +34,7 @@ public final class TagTooltipHandler {
                         lines.add(Tooltips.BLOCK_TAGS.color(TextFormatting.DARK_GRAY).build());
                         blockTags.stream()
                                 .map(Object::toString)
+                                .map(s -> "  " + s)
                                 .map(t -> Localizable.of(t).color(TextFormatting.DARK_GRAY).build())
                                 .forEach(lines::add);
                     }
@@ -42,6 +43,7 @@ public final class TagTooltipHandler {
                         lines.add(Tooltips.ITEM_TAGS.color(TextFormatting.DARK_GRAY).build());
                         itemTags.stream()
                                 .map(Object::toString)
+                                .map(s -> "  " + s)
                                 .map(t -> Localizable.of(t).color(TextFormatting.DARK_GRAY).build())
                                 .forEach(lines::add);
                     }
