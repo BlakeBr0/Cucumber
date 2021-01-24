@@ -28,27 +28,27 @@ public final class TagTooltipHandler {
             Set<ResourceLocation> blockTags = Block.getBlockFromItem(item).getTags();
             Set<ResourceLocation> itemTags = item.getTags();
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
-                List<ITextComponent> lines = event.getToolTip();
+                List<ITextComponent> tooltip = event.getToolTip();
                 if (Screen.hasControlDown()) {
                     if (!blockTags.isEmpty()) {
-                        lines.add(Tooltips.BLOCK_TAGS.color(TextFormatting.DARK_GRAY).build());
+                        tooltip.add(Tooltips.BLOCK_TAGS.color(TextFormatting.DARK_GRAY).build());
                         blockTags.stream()
                                 .map(Object::toString)
                                 .map(s -> "  " + s)
                                 .map(t -> Localizable.of(t).color(TextFormatting.DARK_GRAY).build())
-                                .forEach(lines::add);
+                                .forEach(tooltip::add);
                     }
 
                     if (!itemTags.isEmpty()) {
-                        lines.add(Tooltips.ITEM_TAGS.color(TextFormatting.DARK_GRAY).build());
+                        tooltip.add(Tooltips.ITEM_TAGS.color(TextFormatting.DARK_GRAY).build());
                         itemTags.stream()
                                 .map(Object::toString)
                                 .map(s -> "  " + s)
                                 .map(t -> Localizable.of(t).color(TextFormatting.DARK_GRAY).build())
-                                .forEach(lines::add);
+                                .forEach(tooltip::add);
                     }
                 } else {
-                    lines.add(Tooltips.HOLD_CTRL_FOR_TAGS.color(TextFormatting.DARK_GRAY).build());
+                    tooltip.add(Tooltips.HOLD_CTRL_FOR_TAGS.color(TextFormatting.DARK_GRAY).build());
                 }
             }
         }

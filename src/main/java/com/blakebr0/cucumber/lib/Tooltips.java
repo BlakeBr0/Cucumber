@@ -10,5 +10,6 @@ public final class Tooltips {
 	public static final Tooltip BLOCK_TAGS = new Tooltip("tooltip.cucumber.block_tags");
 	public static final Tooltip ITEM_TAGS = new Tooltip("tooltip.cucumber.item_tags");
 	public static final Tooltip HOLD_CTRL_FOR_TAGS = new Tooltip("tooltip.cucumber.hold_ctrl_for_tags");
+	public static final Tooltip HOLD_ALT_FOR_NBT = new Tooltip("tooltip.cucumber.hold_alt_for_nbt");
 	public static final Tooltip NOT_YET_IMPLEMENTED = new Tooltip("tooltip.cucumber.not_yet_implemented");
 }

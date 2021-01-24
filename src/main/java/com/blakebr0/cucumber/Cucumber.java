@@ -5,6 +5,7 @@ import com.blakebr0.cucumber.command.ModCommands;
 import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.crafting.TagMapper;
 import com.blakebr0.cucumber.handler.BowFovHandler;
+import com.blakebr0.cucumber.handler.NBTTooltipHandler;
 import com.blakebr0.cucumber.handler.TagTooltipHandler;
 import com.blakebr0.cucumber.helper.RecipeHelper;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
@@ -47,5 +48,6 @@ public final class Cucumber {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
 		MinecraftForge.EVENT_BUS.register(new BowFovHandler());
 		MinecraftForge.EVENT_BUS.register(new TagTooltipHandler());
+		MinecraftForge.EVENT_BUS.register(new NBTTooltipHandler());
 	}
 }
