@@ -10,8 +10,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public abstract class BaseInventoryTileEntity extends BaseTileEntity {
+    private final LazyOptional<IItemHandler> capability = LazyOptional.of(this::getInventory);
+
     public BaseInventoryTileEntity(TileEntityType<?> type) {
         super(type);
     }
@@ -34,7 +37,7 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side) {
         if (!this.isRemoved() && cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(cap, LazyOptional.of(this::getInventory));
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.orEmpty(cap, this.capability);
         }
 
         return super.getCapability(cap, side);

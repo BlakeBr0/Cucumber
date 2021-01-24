@@ -11,7 +11,6 @@ import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -38,7 +37,7 @@ public final class Cucumber {
 		MinecraftForge.EVENT_BUS.register(new ModCommands());
 		MinecraftForge.EVENT_BUS.register(new RecipeHelper());
 
-		DeferredWorkQueue.runLater(() -> {
+		event.enqueueWork(() -> {
 			TagMapper.reloadTagMappings();
 		});
 	}
