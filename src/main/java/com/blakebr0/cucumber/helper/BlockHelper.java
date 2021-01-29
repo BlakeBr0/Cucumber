@@ -3,10 +3,12 @@ package com.blakebr0.cucumber.helper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.entity.monster.piglin.PiglinTasks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SChangeBlockPacket;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -50,35 +52,16 @@ public final class BlockHelper {
 		return rayTraceBlocks(world, player, reach, fluidMode);
 	}
 
-    public static boolean breakBlocksAOE(ItemStack stack, World world, PlayerEntity player, BlockPos pos) {
+	public static boolean breakBlocksAOE(ItemStack stack, World world, PlayerEntity player, BlockPos pos) {
+	    return breakBlocksAOE(stack, world, player, pos, true);
+    }
+
+    public static boolean breakBlocksAOE(ItemStack stack, World world, PlayerEntity player, BlockPos pos, boolean playEvent) {
         if (world.isAirBlock(pos))
             return false;
 
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
-
-        if (!world.isRemote()) {
-            world.playEvent(player, 2001, pos, Block.getStateId(state));
-        } else {
-            world.playEvent(2001, pos, Block.getStateId(state));
-        }
-
-        if (player.abilities.isCreativeMode) {
-            block.onBlockHarvested(world, pos, state, player);
-            if (block.removedByPlayer(state, world, pos, player, false, state.getFluidState())) {
-                block.onPlayerDestroy(world, pos, state);
-            }
-
-            if (!world.isRemote()) {
-                if (player instanceof ServerPlayerEntity) {
-                    ((ServerPlayerEntity) player).connection.sendPacket(new SChangeBlockPacket(world, pos));
-                }
-            }
-
-            return true;
-        }
-
-        stack.onBlockDestroyed(world, state, pos, player);
 
         if (!world.isRemote()) {
             if (player instanceof ServerPlayerEntity) {
@@ -87,23 +70,30 @@ public final class BlockHelper {
                 int xp = ForgeHooks.onBlockBreakEvent(world, mplayer.interactionManager.getGameType(), mplayer, pos);
                 if (xp == -1) return false;
 
+                if (playEvent) {
+                    world.playEvent(player, 2001, pos, Block.getStateId(state));
+                }
+
                 TileEntity tile = world.getTileEntity(pos);
-                if (block.removedByPlayer(state, world, pos, player, true, state.getFluidState())) {
-                    block.onPlayerDestroy(world, pos, state);
-                    block.harvestBlock(world, player, pos, state, tile, stack);
-                    block.dropXpOnBlockBreak((ServerWorld) world, pos, xp);
+                if (world.setBlockState(pos, state.getFluidState().getBlockState(), 3)) {
+                    if (block.isIn(BlockTags.GUARDED_BY_PIGLINS)) {
+                        PiglinTasks.func_234478_a_(player, false);
+                    }
+
+                    if (!player.abilities.isCreativeMode) {
+                        block.onPlayerDestroy(world, pos, state);
+                        block.harvestBlock(world, player, pos, state, tile, stack);
+                        block.dropXpOnBlockBreak((ServerWorld) world, pos, xp);
+                    }
+
+                    stack.onBlockDestroyed(world, state, pos, player);
                 }
 
                 mplayer.connection.sendPacket(new SChangeBlockPacket(world, pos));
                 return true;
             }
         } else {
-            if (block.removedByPlayer(state, world, pos, player, true, state.getFluidState())) {
-                block.onPlayerDestroy(world, pos, state);
-            }
-
-            // TODO Figure out how to get whatever direction this is looking for
-//			Minecraft.getInstance().getConnection().sendPacket(new CPlayerDiggingPacket(CPlayerDiggingPacket.Action.STOP_DESTROY_BLOCK, pos, Minecraft.getInstance().objectMouseOver));
+            stack.onBlockDestroyed(world, state, pos, player);
 
             return true;
         }
