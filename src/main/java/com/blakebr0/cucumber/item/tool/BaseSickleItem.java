@@ -2,7 +2,6 @@ package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.helper.BlockHelper;
 import com.blakebr0.cucumber.iface.IEnableable;
-import com.blakebr0.cucumber.util.Utils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,7 +15,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.function.Function;
 
 public class BaseSickleItem extends ToolItem {
@@ -70,41 +68,28 @@ public class BaseSickleItem extends ToolItem {
         BlockState state = world.getBlockState(pos);
         float hardness = state.getBlockHardness(world, pos);
 
-        if (!this.tryHarvest(world, pos, false, stack, player) || !isValidMaterial(state)) {
-            stack.damageItem(1, player, entity -> {
-                entity.sendBreakAnimation(player.getActiveHand());
-            });
-
+        if (!this.tryHarvest(world, pos, false, stack, player) || !isValidMaterial(state))
             return false;
-        }
 
         int radius = this.range;
         if (radius > 0) {
-            Iterator<BlockPos> blocks = BlockPos.getAllInBox(pos.add(-radius, -radius, -radius), pos.add(radius, radius, radius)).iterator();
-
-            while (blocks.hasNext()) {
-                BlockPos aoePos = blocks.next();
+            BlockPos.getAllInBox(pos.add(-radius, -radius, -radius), pos.add(radius, radius, radius)).forEach(aoePos -> {
                 if (aoePos != pos) {
                     BlockState aoeState = world.getBlockState(aoePos);
-                    if (aoeState.getBlockHardness(world, aoePos) <= hardness + 5.0F) {
-                        if (isValidMaterial(aoeState)) {
-                            if (this.tryHarvest(world, aoePos, true, stack, player)) {
-                                if (aoeState.getBlockHardness(world, aoePos) <= 0.0F) {
-                                    if (Utils.randInt(1, 3) == 1) {
-                                        if (!player.abilities.isCreativeMode) {
-                                            stack.damageItem(1, player, entity -> {
-                                                entity.sendBreakAnimation(player.getActiveHand());
-                                            });
-                                        }
-                                    }
+                    float aoeHardness = aoeState.getBlockHardness(world, aoePos);
+                    if (aoeHardness <= hardness + 5.0F && isValidMaterial(aoeState)) {
+                        if (this.tryHarvest(world, aoePos, true, stack, player)) {
+                            if (aoeHardness <= 0.0F && Math.random() < 0.33) {
+                                if (!player.abilities.isCreativeMode) {
+                                    stack.damageItem(1, player, entity -> {
+                                        entity.sendBreakAnimation(player.getActiveHand());
+                                    });
                                 }
                             }
                         }
-                    } else {
-                        return false;
                     }
                 }
-            }
+            });
         }
 
         return true;
