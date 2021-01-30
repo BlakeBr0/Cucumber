@@ -71,7 +71,7 @@ public final class BlockHelper {
                 if (xp == -1) return false;
 
                 if (playEvent) {
-                    world.playEvent(player, 2001, pos, Block.getStateId(state));
+                    world.playEvent(2001, pos, Block.getStateId(state));
                 }
 
                 TileEntity tile = world.getTileEntity(pos);
@@ -92,10 +92,6 @@ public final class BlockHelper {
                 mplayer.connection.sendPacket(new SChangeBlockPacket(world, pos));
                 return true;
             }
-        } else {
-            stack.onBlockDestroyed(world, state, pos, player);
-
-            return true;
         }
 
         return false;

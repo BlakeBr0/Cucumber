@@ -80,7 +80,6 @@ public class BaseSickleItem extends ToolItem {
 
         int radius = this.range;
         if (radius > 0) {
-            int used = 0;
             Iterator<BlockPos> blocks = BlockPos.getAllInBox(pos.add(-radius, -radius, -radius), pos.add(radius, radius, radius)).iterator();
 
             while (blocks.hasNext()) {
@@ -89,15 +88,14 @@ public class BaseSickleItem extends ToolItem {
                     BlockState aoeState = world.getBlockState(aoePos);
                     if (aoeState.getBlockHardness(world, aoePos) <= hardness + 5.0F) {
                         if (isValidMaterial(aoeState)) {
-                            int remaining = stack.getMaxDamage() - stack.getDamage() + 1;
-                            if (used < remaining || stack.getMaxDamage() == -1) {
-                                if (this.tryHarvest(world, aoePos, true, stack, player)) {
-                                    if (aoeState.getBlockHardness(world, aoePos) <= 0.0F) {
-                                        if (Utils.randInt(1, 3) == 1) {
-                                            used++;
+                            if (this.tryHarvest(world, aoePos, true, stack, player)) {
+                                if (aoeState.getBlockHardness(world, aoePos) <= 0.0F) {
+                                    if (Utils.randInt(1, 3) == 1) {
+                                        if (!player.abilities.isCreativeMode) {
+                                            stack.damageItem(1, player, entity -> {
+                                                entity.sendBreakAnimation(player.getActiveHand());
+                                            });
                                         }
-                                    } else {
-                                        used++;
                                     }
                                 }
                             }
@@ -106,12 +104,6 @@ public class BaseSickleItem extends ToolItem {
                         return false;
                     }
                 }
-            }
-
-            if (used > 0 && !player.abilities.isCreativeMode) {
-                stack.damageItem(used, player, entity -> {
-                    entity.sendBreakAnimation(player.getActiveHand());
-                });
             }
         }
 
