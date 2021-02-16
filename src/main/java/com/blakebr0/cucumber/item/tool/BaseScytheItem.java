@@ -89,7 +89,7 @@ public class BaseScytheItem extends SwordItem {
 
             BlockState state = world.getBlockState(aoePos);
 
-            ScytheHarvestCropEvent event = new ScytheHarvestCropEvent(world, aoePos, state, stack);
+            ScytheHarvestCropEvent event = new ScytheHarvestCropEvent(world, aoePos, state, stack, player);
             if (MinecraftForge.EVENT_BUS.post(event))
                 return;
 
