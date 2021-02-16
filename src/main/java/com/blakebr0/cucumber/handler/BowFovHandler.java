@@ -21,7 +21,7 @@ public final class BowFovHandler {
 			if (item instanceof ICustomBow) {
 				ICustomBow bow = (ICustomBow) item;
 				float f = MathHelper.clamp((stack.getUseDuration() - entity.getItemInUseCount()) * bow.getDrawSpeedMulti(stack) / 20.0F, 0, 1.0F);
-				event.setNewfov(event.getFov() - (f * f * 0.15F));
+				event.setNewfov(event.getNewfov() - (f * f * 0.15F));
 			}
 		}
 	}
