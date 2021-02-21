@@ -17,8 +17,9 @@ import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.ForgeMod;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.BlockEvent;
 
 /*
  * Parts of the code used in this class is derived from Actually Additions,
@@ -60,38 +61,38 @@ public final class BlockHelper {
         if (world.isAirBlock(pos))
             return false;
 
-        BlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
+        if (!world.isRemote() && player instanceof ServerPlayerEntity) {
+            ServerPlayerEntity mplayer = (ServerPlayerEntity) player;
+            BlockState state = world.getBlockState(pos);
+            Block block = state.getBlock();
 
-        if (!world.isRemote()) {
-            if (player instanceof ServerPlayerEntity) {
-                ServerPlayerEntity mplayer = (ServerPlayerEntity) player;
+            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, mplayer);
+            if (MinecraftForge.EVENT_BUS.post(event))
+                return false;
 
-                int xp = ForgeHooks.onBlockBreakEvent(world, mplayer.interactionManager.getGameType(), mplayer, pos);
-                if (xp == -1) return false;
-
-                if (playEvent) {
-                    world.playEvent(2001, pos, Block.getStateId(state));
-                }
-
-                TileEntity tile = world.getTileEntity(pos);
-                if (world.setBlockState(pos, state.getFluidState().getBlockState(), 3)) {
-                    if (block.isIn(BlockTags.GUARDED_BY_PIGLINS)) {
-                        PiglinTasks.func_234478_a_(player, false);
-                    }
-
-                    if (!player.abilities.isCreativeMode) {
-                        block.onPlayerDestroy(world, pos, state);
-                        block.harvestBlock(world, player, pos, state, tile, stack);
-                        block.dropXpOnBlockBreak((ServerWorld) world, pos, xp);
-                    }
-
-                    stack.onBlockDestroyed(world, state, pos, player);
-                }
-
-                mplayer.connection.sendPacket(new SChangeBlockPacket(world, pos));
-                return true;
+            if (playEvent) {
+                world.playEvent(2001, pos, Block.getStateId(state));
             }
+
+            boolean changed = world.setBlockState(pos, state.getFluidState().getBlockState());
+            if (changed) {
+                if (block.isIn(BlockTags.GUARDED_BY_PIGLINS)) {
+                    PiglinTasks.func_234478_a_(player, false);
+                }
+
+                if (!player.abilities.isCreativeMode) {
+                    TileEntity tile = world.getTileEntity(pos);
+
+                    block.onPlayerDestroy(world, pos, state);
+                    block.harvestBlock(world, player, pos, state, tile, stack);
+                    block.dropXpOnBlockBreak((ServerWorld) world, pos, event.getExpToDrop());
+                }
+
+                stack.onBlockDestroyed(world, state, pos, player);
+            }
+
+            mplayer.connection.sendPacket(new SChangeBlockPacket(world, pos));
+            return true;
         }
 
         return false;
