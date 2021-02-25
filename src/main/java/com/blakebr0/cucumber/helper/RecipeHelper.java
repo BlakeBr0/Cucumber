@@ -8,6 +8,7 @@ import net.minecraft.item.crafting.RecipeManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.HashMap;
@@ -16,12 +17,12 @@ import java.util.Map;
 public final class RecipeHelper {
     private static RecipeManager recipeManager;
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onAddReloadListeners(AddReloadListenerEvent event) {
         recipeManager = event.getDataPackRegistries().getRecipeManager();
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRecipesUpdated(RecipesUpdatedEvent event) {
         recipeManager = event.getRecipeManager();
     }
