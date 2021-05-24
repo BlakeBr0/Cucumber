@@ -8,6 +8,8 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 
+import java.text.NumberFormat;
+
 public class BaseContainerScreen<T extends Container> extends ContainerScreen<T> {
     protected ResourceLocation bgTexture;
     protected int bgWidth;
@@ -42,7 +44,11 @@ public class BaseContainerScreen<T extends Container> extends ContainerScreen<T>
         blit(stack, x, y, 0, 0, this.xSize, this.ySize, this.bgWidth, this.bgHeight);
     }
 
-    protected String text(String key, Object... args) {
+    protected static String text(String key, Object... args) {
         return Localizable.of(key).args(args).buildString();
+    }
+
+    protected static String number(Object number) {
+        return NumberFormat.getInstance().format(number);
     }
 }
