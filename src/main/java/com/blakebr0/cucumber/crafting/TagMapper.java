@@ -79,14 +79,7 @@ public class TagMapper implements IResourceManagerReloadListener {
                     IOUtils.closeQuietly(reader);
                 }
             } else {
-                try (Writer writer = new FileWriter(file)) {
-                    JsonObject object = new JsonObject();
-                    object.addProperty("__comment", "Instructions: https://mods.blakebr0.com/docs/cucumber/tags-config");
-
-                    GSON.toJson(object, writer);
-                } catch (IOException e) {
-                    LOGGER.error("An error occurred while creating cucumber-tags.json", e);
-                }
+                generateNewConfig(file);
             }
         }
 
@@ -102,7 +95,11 @@ public class TagMapper implements IResourceManagerReloadListener {
         } else {
             File file = FMLPaths.CONFIGDIR.get().resolve("cucumber-tags.json").toFile();
 
-            if (file.exists() && file.isFile()) {
+            if (!file.exists()) {
+                generateNewConfig(file);
+            }
+
+            if (file.isFile()) {
                 JsonObject json = null;
                 FileReader reader = null;
                 try {
@@ -152,5 +149,16 @@ public class TagMapper implements IResourceManagerReloadListener {
         }
 
         return item;
+    }
+
+    private static void generateNewConfig(File file) {
+        try (Writer writer = new FileWriter(file)) {
+            JsonObject object = new JsonObject();
+            object.addProperty("__comment", "Instructions: https://mods.blakebr0.com/docs/cucumber/tags-config");
+
+            GSON.toJson(object, writer);
+        } catch (IOException e) {
+            LOGGER.error("An error occurred while creating cucumber-tags.json", e);
+        }
     }
 }
