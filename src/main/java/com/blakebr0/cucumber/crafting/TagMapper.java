@@ -8,9 +8,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.resources.IResourceManagerReloadListener;
 import net.minecraft.tags.ITag;
 import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
@@ -26,20 +30,33 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class TagMapper {
+public class TagMapper implements IResourceManagerReloadListener {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private static final Logger LOGGER = LogManager.getLogger(Cucumber.NAME);
     private static final Map<String, String> TAG_TO_ITEM_MAP = new HashMap<>();
 
+    @Override
+    public void onResourceManagerReload(IResourceManager manager) {
+        reloadTagMappings();
+    }
+
+    @SubscribeEvent
+    public void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(this);
+    }
+
     public static void reloadTagMappings() {
         Stopwatch stopwatch = Stopwatch.createStarted();
         File dir = FMLPaths.CONFIGDIR.get().toFile();
+
+        TAG_TO_ITEM_MAP.clear();
 
         if (dir.exists() && dir.isDirectory()) {
             File file = FMLPaths.CONFIGDIR.get().resolve("cucumber-tags.json").toFile();
             if (file.exists() && file.isFile()) {
                 JsonObject json;
                 FileReader reader = null;
+
                 try {
                     JsonParser parser = new JsonParser();
                     reader = new FileReader(file);
@@ -65,6 +82,7 @@ public class TagMapper {
                 try (Writer writer = new FileWriter(file)) {
                     JsonObject object = new JsonObject();
                     object.addProperty("__comment", "Instructions: https://mods.blakebr0.com/docs/cucumber/tags-config");
+
                     GSON.toJson(object, writer);
                 } catch (IOException e) {
                     LOGGER.error("An error occurred while creating cucumber-tags.json", e);
@@ -73,6 +91,7 @@ public class TagMapper {
         }
 
         stopwatch.stop();
+
         LOGGER.info("Loaded cucumber-tags.json in {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 

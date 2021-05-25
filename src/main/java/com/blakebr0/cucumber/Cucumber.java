@@ -37,10 +37,7 @@ public final class Cucumber {
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new ModCommands());
 		MinecraftForge.EVENT_BUS.register(new RecipeHelper());
-
-		event.enqueueWork(() -> {
-			TagMapper.reloadTagMappings();
-		});
+		MinecraftForge.EVENT_BUS.register(new TagMapper());
 	}
 
  	@SubscribeEvent
