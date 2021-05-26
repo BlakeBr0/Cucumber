@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber.crafting;
 
 import com.blakebr0.cucumber.Cucumber;
+import com.blakebr0.cucumber.config.ModConfigs;
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,6 +28,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -102,6 +104,7 @@ public class TagMapper implements IResourceManagerReloadListener {
             if (file.isFile()) {
                 JsonObject json = null;
                 FileReader reader = null;
+
                 try {
                     JsonParser parser = new JsonParser();
                     reader = new FileReader(file);
@@ -119,6 +122,7 @@ public class TagMapper implements IResourceManagerReloadListener {
                             return addTagToFile(tagId, json, file);
 
                         TAG_TO_ITEM_MAP.put(tagId, itemId);
+
                         return ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
                     } else {
                         return addTagToFile(tagId, json, file);
@@ -131,8 +135,14 @@ public class TagMapper implements IResourceManagerReloadListener {
     }
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
+        List<String> mods = ModConfigs.MOD_TAG_PRIORITIES.get();
         ITag<Item> tag = TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(tagId));
-        Item item = tag == null ? Items.AIR : tag.getAllElements().stream().findFirst().orElse(Items.AIR);
+        Item item = tag == null ? Items.AIR : tag.getAllElements().stream().min((item1, item2) -> {
+            int index1 = item1.getRegistryName() != null ? mods.indexOf(item1.getRegistryName().getNamespace()) : -1;
+            int index2 = item2.getRegistryName() != null ? mods.indexOf(item2.getRegistryName().getNamespace()) : -1;
+
+            return index1 > index2 ? 1 : index1 == -1 ? 0 : -1;
+        }).orElse(Items.AIR);
 
         String itemId = "null";
         if (item.getRegistryName() != null && item != Items.AIR) {
