@@ -16,12 +16,12 @@ public class BaseItemStackHandlerSlot extends SlotItemHandler {
     }
 
     @Override
-    public boolean canTakeStack(PlayerEntity player) {
+    public boolean mayPickup(PlayerEntity player) {
         return !this.inventory.extractItemSuper(this.index, 1, true).isEmpty();
     }
 
     @Override
-    public ItemStack decrStackSize(int amount) {
+    public ItemStack remove(int amount) {
         return this.inventory.extractItemSuper(this.index, amount, false);
     }
 }

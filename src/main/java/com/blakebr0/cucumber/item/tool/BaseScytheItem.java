@@ -54,36 +54,36 @@ public class BaseScytheItem extends SwordItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (this instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this;
             if (enableable.isEnabled())
-                super.fillItemGroup(group, items);
+                super.fillItemCategory(group, items);
         } else {
-            super.fillItemGroup(group, items);
+            super.fillItemCategory(group, items);
         }
     }
 
     @Override
-    public ActionResultType onItemUse(ItemUseContext context) {
+    public ActionResultType useOn(ItemUseContext context) {
         PlayerEntity player = context.getPlayer();
         if (player == null)
             return ActionResultType.FAIL;
 
-        BlockPos pos = context.getPos();
+        BlockPos pos = context.getClickedPos();
         Hand hand = context.getHand();
-        Direction face = context.getFace();
-        ItemStack stack = player.getHeldItem(hand);
+        Direction face = context.getClickedFace();
+        ItemStack stack = player.getItemInHand(hand);
 
-        if (!player.canPlayerEdit(pos.offset(face), face, stack))
+        if (!player.mayUseItemAt(pos.relative(face), face, stack))
             return ActionResultType.FAIL;
 
-        World world = context.getWorld();
-        if (world.isRemote())
+        World world = context.getLevel();
+        if (world.isClientSide())
             return ActionResultType.SUCCESS;
 
         int range = this.range;
-        BlockPos.getAllInBox(pos.add(-range, 0, -range), pos.add(range, 0, range)).forEach(aoePos -> {
+        BlockPos.betweenClosed(pos.offset(-range, 0, -range), pos.offset(range, 0, range)).forEach(aoePos -> {
             if (stack.isEmpty())
                 return;
 
@@ -99,7 +99,7 @@ public class BaseScytheItem extends SwordItem {
                 CropsBlock crop = (CropsBlock) block;
                 Item seed = getSeed(crop);
                 if (crop.isMaxAge(state) && seed != null) {
-                    List<ItemStack> drops = Block.getDrops(state, (ServerWorld) world, aoePos, world.getTileEntity(aoePos));
+                    List<ItemStack> drops = Block.getDrops(state, (ServerWorld) world, aoePos, world.getBlockEntity(aoePos));
                     for (ItemStack drop : drops) {
                         Item item = drop.getItem();
                         if (!drop.isEmpty() && item == seed) {
@@ -110,15 +110,15 @@ public class BaseScytheItem extends SwordItem {
 
                     for (ItemStack drop : drops) {
                         if (!drop.isEmpty()) {
-                            Block.spawnAsEntity(world, aoePos, drop);
+                            Block.popResource(world, aoePos, drop);
                         }
                     }
 
-                    stack.damageItem(1, player, entity -> {
-                        entity.sendBreakAnimation(player.getActiveHand());
+                    stack.hurtAndBreak(1, player, entity -> {
+                        entity.broadcastBreakEvent(player.getUsedItemHand());
                     });
 
-                    world.setBlockState(aoePos, crop.withAge(0));
+                    world.setBlockAndUpdate(aoePos, crop.getStateForAge(0));
                 }
             }
         });
@@ -128,34 +128,34 @@ public class BaseScytheItem extends SwordItem {
 
     @Override
     public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) {
-        if (player.getCooledAttackStrength(0.5F) >= 0.95F) {
-            World world = player.getEntityWorld();
+        if (player.getAttackStrengthScale(0.5F) >= 0.95F) {
+            World world = player.level;
             double range = (this.range >= 2 ? 1.0D + (this.range - 1) * 0.25D : 1.0D);
-            List<LivingEntity> entities = world.getEntitiesWithinAABB(LivingEntity.class, entity.getBoundingBox().grow(range, 0.25D, range));
+            List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(range, 0.25D, range));
 
             for (LivingEntity aoeEntity : entities) {
-                if (aoeEntity != player && aoeEntity != entity && !player.isOnSameTeam(entity)) {
-                    DamageSource source = DamageSource.causePlayerDamage(player);
+                if (aoeEntity != player && aoeEntity != entity && !player.isAlliedTo(entity)) {
+                    DamageSource source = DamageSource.playerAttack(player);
                     float attackDamage = this.getAttackDamage() * 0.67F;
                     boolean success = ForgeHooks.onLivingAttack(aoeEntity, source, attackDamage);
 
                     if (success) {
-                        aoeEntity.applyKnockback(0.4F, MathHelper.sin(player.rotationYaw * 0.017453292F), -MathHelper.cos(player.rotationYaw * 0.017453292F));
-                        aoeEntity.attackEntityFrom(source, attackDamage);
+                        aoeEntity.knockback(0.4F, MathHelper.sin(player.yRot * 0.017453292F), -MathHelper.cos(player.yRot * 0.017453292F));
+                        aoeEntity.hurt(source, attackDamage);
                     }
                 }
             }
 
-            world.playSound(null, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, player.getSoundCategory(), 1.0F, 1.0F);
+            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
 
-            player.spawnSweepParticles();
+            player.sweepAttack();
         }
 
         return super.onLeftClickEntity(stack, player, entity);
     }
 
     public float getAttackDamage() {
-        return this.attackDamage + this.getTier().getAttackDamage();
+        return this.attackDamage + this.getTier().getAttackDamageBonus();
     }
 
     public float getAttackSpeed() {

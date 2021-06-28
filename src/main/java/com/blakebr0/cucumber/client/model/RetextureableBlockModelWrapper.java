@@ -20,7 +20,7 @@ public class RetextureableBlockModelWrapper extends BlockModel {
     private final BlockModel model;
 
     public RetextureableBlockModelWrapper(BlockModel model) {
-        super(model.getParentLocation(), model.getElements(), model.textures, model.ambientOcclusion, model.getGuiLight(), model.getAllTransforms(), model.getOverrides());
+        super(model.getParentLocation(), model.getElements(), model.textureMap, model.hasAmbientOcclusion, model.getGuiLight(), model.getTransforms(), model.getOverrides());
         this.model = model;
         this.name = model.name;
         this.parent = model.parent;
@@ -32,12 +32,12 @@ public class RetextureableBlockModelWrapper extends BlockModel {
 
         List<BlockPart> elements = Lists.newArrayList(); //We have to duplicate this so we can edit it below.
         for (BlockPart part : this.model.getElements()) {
-            elements.add(new BlockPart(part.positionFrom, part.positionTo, Maps.newHashMap(part.mapFaces), part.partRotation, part.shade));
+            elements.add(new BlockPart(part.from, part.to, Maps.newHashMap(part.faces), part.rotation, part.shade));
         }
 
         BlockModel newModel = new BlockModel(this.model.getParentLocation(), elements,
-                Maps.newHashMap(this.model.textures), this.model.isAmbientOcclusion(), this.model.getGuiLight(), //New Textures man VERY IMPORTANT
-                model.getAllTransforms(), Lists.newArrayList(model.getOverrides()));
+                Maps.newHashMap(this.model.textureMap), this.model.hasAmbientOcclusion(), this.model.getGuiLight(), //New Textures man VERY IMPORTANT
+                model.getTransforms(), Lists.newArrayList(model.getOverrides()));
         newModel.name = this.model.name;
         newModel.parent = this.model.parent;
 
@@ -45,28 +45,28 @@ public class RetextureableBlockModelWrapper extends BlockModel {
         for (Map.Entry<String, String> e : textures.entrySet()) {
             if ("".equals(e.getValue())) {
                 removed.add(e.getKey());
-                newModel.textures.remove(e.getKey());
+                newModel.textureMap.remove(e.getKey());
             } else {
-                newModel.textures.put(e.getKey(), Either.left(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS_TEXTURE, new ResourceLocation(e.getValue()))));
+                newModel.textureMap.put(e.getKey(), Either.left(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(e.getValue()))));
             }
         }
 
         // Map the model's texture references as if it was the parent of a model with the retexture map as its textures.
         Map<String, Either<RenderMaterial, String>> remapped = Maps.newHashMap();
-        for (Map.Entry<String, Either<RenderMaterial, String>> e : newModel.textures.entrySet()) {
+        for (Map.Entry<String, Either<RenderMaterial, String>> e : newModel.textureMap.entrySet()) {
             Optional<String> right = e.getValue().right();
             if (right.isPresent() && right.get().startsWith("#")) {
                 String key = right.get().substring(1);
-                if (newModel.textures.containsKey(key))
-                    remapped.put(e.getKey(), newModel.textures.get(key));
+                if (newModel.textureMap.containsKey(key))
+                    remapped.put(e.getKey(), newModel.textureMap.get(key));
             }
         }
 
-        newModel.textures.putAll(remapped);
+        newModel.textureMap.putAll(remapped);
 
         //Remove any faces that use a null texture, this is for performance reasons, also allows some cool layering stuff.
         for (BlockPart part : newModel.getElements()) {
-            part.mapFaces.entrySet().removeIf(entry -> removed.contains(entry.getValue().texture));
+            part.faces.entrySet().removeIf(entry -> removed.contains(entry.getValue().texture));
         }
 
         return new RetextureableBlockModelWrapper(newModel);

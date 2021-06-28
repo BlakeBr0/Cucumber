@@ -14,21 +14,21 @@ public class BaseTileEntity extends TileEntity {
 
 	@Override
 	public SUpdateTileEntityPacket getUpdatePacket() {
-		return new SUpdateTileEntityPacket(this.getPos(), -1, this.getUpdateTag());
+		return new SUpdateTileEntityPacket(this.getBlockPos(), -1, this.getUpdateTag());
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager manager, SUpdateTileEntityPacket packet) {
-		this.read(this.getBlockState(), packet.getNbtCompound());
+		this.load(this.getBlockState(), packet.getTag());
 	}
 
 	@Override
 	public final CompoundNBT getUpdateTag() {
-		return this.write(new CompoundNBT());
+		return this.save(new CompoundNBT());
 	}
 
 	public void markDirtyAndDispatch() {
-		super.markDirty();
+		super.setChanged();
 		TileEntityHelper.dispatchToNearbyPlayers(this);
 	}
 }

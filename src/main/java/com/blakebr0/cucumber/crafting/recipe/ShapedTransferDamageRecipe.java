@@ -20,61 +20,66 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
     }
 
     @Override
-    public ItemStack getCraftingResult(CraftingInventory inv) {
+    public ItemStack assemble(CraftingInventory inv) {
         ItemStack damageable = ItemStack.EMPTY;
-        for (int i = 0; i < inv.getSizeInventory(); i++) {
-            ItemStack slotStack = inv.getStackInSlot(i);
-            if (slotStack.isDamageable()) {
+        for (int i = 0; i < inv.getContainerSize(); i++) {
+            ItemStack slotStack = inv.getItem(i);
+            if (slotStack.isDamageableItem()) {
                 damageable = slotStack;
                 break;
             }
         }
 
         if (damageable.isEmpty())
-            return super.getCraftingResult(inv);
+            return super.assemble(inv);
 
-        ItemStack result = this.getRecipeOutput().copy();
-        result.setDamage(damageable.getDamage());
+        ItemStack result = this.getResultItem().copy();
+
+        result.setDamageValue(damageable.getDamageValue());
 
         return result;
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ShapedTransferDamageRecipe> {
-        public ShapedTransferDamageRecipe read(ResourceLocation recipeId, JsonObject json) {
-            String s = JSONUtils.getString(json, "group", "");
-            Map<String, Ingredient> map = ShapedRecipe.deserializeKey(JSONUtils.getJsonObject(json, "key"));
-            String[] astring = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(JSONUtils.getJsonArray(json, "pattern")));
+        @Override
+        public ShapedTransferDamageRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            String s = JSONUtils.getAsString(json, "group", "");
+            Map<String, Ingredient> map = ShapedRecipe.keyFromJson(JSONUtils.getAsJsonObject(json, "key"));
+            String[] astring = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(JSONUtils.getAsJsonArray(json, "pattern")));
             int i = astring[0].length();
             int j = astring.length;
-            NonNullList<Ingredient> nonnulllist = ShapedRecipe.deserializeIngredients(astring, map, i, j);
-            ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+            NonNullList<Ingredient> nonnulllist = ShapedRecipe.dissolvePattern(astring, map, i, j);
+            ItemStack itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "result"));
             return new ShapedTransferDamageRecipe(recipeId, s, i, j, nonnulllist, itemstack);
         }
 
-        public ShapedTransferDamageRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        @Override
+        public ShapedTransferDamageRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             int i = buffer.readVarInt();
             int j = buffer.readVarInt();
-            String s = buffer.readString(32767);
+            String s = buffer.readUtf(32767);
             NonNullList<Ingredient> inputs = NonNullList.withSize(i * j, Ingredient.EMPTY);
 
             for (int k = 0; k < inputs.size(); ++k) {
-                inputs.set(k, Ingredient.read(buffer));
+                inputs.set(k, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack output = buffer.readItemStack();
+            ItemStack output = buffer.readItem();
+
             return new ShapedTransferDamageRecipe(recipeId, s, i, j, inputs, output);
         }
 
-        public void write(PacketBuffer buffer, ShapedTransferDamageRecipe recipe) {
+        @Override
+        public void toNetwork(PacketBuffer buffer, ShapedTransferDamageRecipe recipe) {
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());
-            buffer.writeString(recipe.getGroup());
+            buffer.writeUtf(recipe.getGroup());
 
             for (Ingredient ingredient : recipe.getIngredients()) {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItemStack(recipe.getRecipeOutput());
+            buffer.writeItem(recipe.getResultItem());
         }
     }
 }

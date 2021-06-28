@@ -50,7 +50,7 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
                     ingredient = this.getIngredients().get(k + l * this.getRecipeWidth());
                 }
 
-                if (!ingredient.test(inventory.getStackInSlot(i + j * inventory.getWidth()))) {
+                if (!ingredient.test(inventory.getItem(i + j * inventory.getWidth()))) {
                     return false;
                 }
             }
@@ -60,41 +60,45 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
     }
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ShapedNoMirrorRecipe> {
-        public ShapedNoMirrorRecipe read(ResourceLocation recipeId, JsonObject json) {
-            String s = JSONUtils.getString(json, "group", "");
-            Map<String, Ingredient> map = ShapedRecipe.deserializeKey(JSONUtils.getJsonObject(json, "key"));
-            String[] astring = ShapedRecipe.patternFromJson(JSONUtils.getJsonArray(json, "pattern"));
+        @Override
+        public ShapedNoMirrorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            String s = JSONUtils.getAsString(json, "group", "");
+            Map<String, Ingredient> map = ShapedRecipe.keyFromJson(JSONUtils.getAsJsonObject(json, "key"));
+            String[] astring = ShapedRecipe.patternFromJson(JSONUtils.getAsJsonArray(json, "pattern"));
             int i = astring[0].length();
             int j = astring.length;
-            NonNullList<Ingredient> nonnulllist = ShapedRecipe.deserializeIngredients(astring, map, i, j);
-            ItemStack itemstack = ShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
+            NonNullList<Ingredient> nonnulllist = ShapedRecipe.dissolvePattern(astring, map, i, j);
+            ItemStack itemstack = ShapedRecipe.itemFromJson(JSONUtils.getAsJsonObject(json, "result"));
             return new ShapedNoMirrorRecipe(recipeId, s, i, j, nonnulllist, itemstack);
         }
 
-        public ShapedNoMirrorRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
+        @Override
+        public ShapedNoMirrorRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
             int i = buffer.readVarInt();
             int j = buffer.readVarInt();
-            String s = buffer.readString(32767);
+            String s = buffer.readUtf(32767);
             NonNullList<Ingredient> inputs = NonNullList.withSize(i * j, Ingredient.EMPTY);
 
             for (int k = 0; k < inputs.size(); ++k) {
-                inputs.set(k, Ingredient.read(buffer));
+                inputs.set(k, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack output = buffer.readItemStack();
+            ItemStack output = buffer.readItem();
+
             return new ShapedNoMirrorRecipe(recipeId, s, i, j, inputs, output);
         }
 
-        public void write(PacketBuffer buffer, ShapedNoMirrorRecipe recipe) {
+        @Override
+        public void toNetwork(PacketBuffer buffer, ShapedNoMirrorRecipe recipe) {
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());
-            buffer.writeString(recipe.getGroup());
+            buffer.writeUtf(recipe.getGroup());
 
             for (Ingredient ingredient : recipe.getIngredients()) {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItemStack(recipe.getRecipeOutput());
+            buffer.writeItem(recipe.getResultItem());
         }
     }
 }

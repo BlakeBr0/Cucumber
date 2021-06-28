@@ -23,9 +23,9 @@ public final class TagTooltipHandler {
         if (!ModConfigs.ENABLE_TAG_TOOLTIPS.get())
             return;
 
-        if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
+        if (Minecraft.getInstance().options.advancedItemTooltips) {
             Item item = event.getItemStack().getItem();
-            Set<ResourceLocation> blockTags = Block.getBlockFromItem(item).getTags();
+            Set<ResourceLocation> blockTags = Block.byItem(item).getTags();
             Set<ResourceLocation> itemTags = item.getTags();
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
                 List<ITextComponent> tooltip = event.getToolTip();

@@ -11,13 +11,13 @@ public interface ICustomBow {
 	}
 
 	static ItemStack findAmmo(PlayerEntity player) {
-		if (isArrow(player.getHeldItem(Hand.OFF_HAND))) {
-			return player.getHeldItem(Hand.OFF_HAND);
-		} else if (isArrow(player.getHeldItem(Hand.MAIN_HAND))) {
-			return player.getHeldItem(Hand.MAIN_HAND);
+		if (isArrow(player.getItemInHand(Hand.OFF_HAND))) {
+			return player.getItemInHand(Hand.OFF_HAND);
+		} else if (isArrow(player.getItemInHand(Hand.MAIN_HAND))) {
+			return player.getItemInHand(Hand.MAIN_HAND);
 		} else {
-			for (int i = 0; i < player.inventory.getSizeInventory(); i++) {
-				ItemStack stack = player.inventory.getStackInSlot(i);
+			for (int i = 0; i < player.inventory.getContainerSize(); i++) {
+				ItemStack stack = player.inventory.getItem(i);
 				if (isArrow(stack)) {
 					return stack;
 				}

@@ -31,32 +31,32 @@ public class BaseShearsItem extends ShearsItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (this instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this;
             if (enableable.isEnabled())
-                super.fillItemGroup(group, items);
+                super.fillItemCategory(group, items);
         } else {
-            super.fillItemGroup(group, items);
+            super.fillItemCategory(group, items);
         }
     }
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, PlayerEntity player) {
-        World world = player.world;
-        if (world.isRemote())
+        World world = player.level;
+        if (world.isClientSide())
             return false;
 
         BlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
         if (block instanceof IForgeShearable) {
-            TileEntity tile = world.getTileEntity(pos);
+            TileEntity tile = world.getBlockEntity(pos);
             LootContext.Builder context = (new LootContext.Builder((ServerWorld) world))
                     .withRandom(world.getRandom())
-                    .withParameter(LootParameters.field_237457_g_, new Vector3d(pos.getX(), pos.getY(), pos.getZ()))
+                    .withParameter(LootParameters.ORIGIN, new Vector3d(pos.getX(), pos.getY(), pos.getZ()))
                     .withParameter(LootParameters.TOOL, new ItemStack(Items.SHEARS))
-                    .withNullableParameter(LootParameters.THIS_ENTITY, player)
-                    .withNullableParameter(LootParameters.BLOCK_ENTITY, tile);
+                    .withOptionalParameter(LootParameters.THIS_ENTITY, player)
+                    .withOptionalParameter(LootParameters.BLOCK_ENTITY, tile);
             List<ItemStack> drops = state.getDrops(context);
             Random rand = new Random();
 
@@ -67,16 +67,18 @@ public class BaseShearsItem extends ShearsItem {
                 double d2 = rand.nextFloat() * f + (1D - f) * 0.5;
 
                 ItemEntity item = new ItemEntity(world, pos.getX() + d, pos.getY() + d1, pos.getZ() + d2, drop);
-                item.setPickupDelay(10);
-                world.addEntity(item);
+                item.setPickUpDelay(10);
+
+                world.addFreshEntity(item);
             }
 
-            stack.damageItem(1, player, entity -> {
-                entity.sendBreakAnimation(player.getActiveHand());
+            stack.hurtAndBreak(1, player, entity -> {
+                entity.broadcastBreakEvent(player.getUsedItemHand());
             });
 
-            player.addStat(Stats.BLOCK_MINED.get(block), 1);
-            world.setBlockState(pos, Blocks.AIR.getDefaultState(), 11);
+            player.awardStat(Stats.BLOCK_MINED.get(block), 1);
+
+            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
 
             return true;
         }

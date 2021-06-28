@@ -15,14 +15,14 @@ public class BaseContainerScreen<T extends Container> extends ContainerScreen<T>
     protected int bgWidth;
     protected int bgHeight;
 
-    public BaseContainerScreen(T container, PlayerInventory inventory, ITextComponent title, ResourceLocation bgTexture, int xSize, int ySize) {
-        this(container, inventory, title, bgTexture, xSize, ySize, 256, 256);
+    public BaseContainerScreen(T container, PlayerInventory inventory, ITextComponent title, ResourceLocation bgTexture, int width, int height) {
+        this(container, inventory, title, bgTexture, width, height, 256, 256);
     }
 
-    public BaseContainerScreen(T container, PlayerInventory inventory, ITextComponent title, ResourceLocation bgTexture, int xSize, int ySize, int bgWidth, int bgHeight) {
+    public BaseContainerScreen(T container, PlayerInventory inventory, ITextComponent title, ResourceLocation bgTexture, int width, int height, int bgWidth, int bgHeight) {
         super(container, inventory, title);
-        this.xSize = xSize;
-        this.ySize = ySize;
+        this.width = width;
+        this.height = height;
         this.bgTexture = bgTexture;
         this.bgWidth = bgWidth;
         this.bgHeight = bgHeight;
@@ -32,16 +32,16 @@ public class BaseContainerScreen<T extends Container> extends ContainerScreen<T>
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(stack);
         super.render(stack, mouseX, mouseY, partialTicks);
-        this.renderHoveredTooltip(stack, mouseX, mouseY);
+        this.renderLabels(stack, mouseX, mouseY);
     }
 
     @Override
-    protected void drawGuiContainerBackgroundLayer(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
-        this.getMinecraft().getTextureManager().bindTexture(this.bgTexture);
+    protected void renderBg(MatrixStack stack, float partialTicks, int mouseX, int mouseY) {
+        this.getMinecraft().getTextureManager().bind(this.bgTexture);
         int x = this.getGuiLeft();
         int y = this.getGuiTop();
 
-        blit(stack, x, y, 0, 0, this.xSize, this.ySize, this.bgWidth, this.bgHeight);
+        blit(stack, x, y, 0, 0, this.width, this.height, this.bgWidth, this.bgHeight);
     }
 
     protected static String text(String key, Object... args) {

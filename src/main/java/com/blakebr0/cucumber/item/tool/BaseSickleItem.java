@@ -30,19 +30,19 @@ public class BaseSickleItem extends ToolItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (this instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this;
             if (enableable.isEnabled())
-                super.fillItemGroup(group, items);
+                super.fillItemCategory(group, items);
         } else {
-            super.fillItemGroup(group, items);
+            super.fillItemCategory(group, items);
         }
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return isValidMaterial(state) ? this.getTier().getEfficiency() / 2 : super.getDestroySpeed(stack, state);
+        return isValidMaterial(state) ? this.getTier().getSpeed() / 2 : super.getDestroySpeed(stack, state);
     }
 
     @Override
@@ -52,12 +52,12 @@ public class BaseSickleItem extends ToolItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, PlayerEntity player) {
-        World world = player.getEntityWorld();
+        World world = player.level;
         return !this.harvest(stack, world, pos, player);
     }
 
     public float getAttackDamage() {
-        return this.attackDamage + this.getTier().getAttackDamage();
+        return this.attackDamage + this.getTier().getAttackDamageBonus();
     }
 
     public float getAttackSpeed() {
@@ -66,23 +66,23 @@ public class BaseSickleItem extends ToolItem {
 
     private boolean harvest(ItemStack stack, World world, BlockPos pos, PlayerEntity player) {
         BlockState state = world.getBlockState(pos);
-        float hardness = state.getBlockHardness(world, pos);
+        float hardness = state.getDestroySpeed(world, pos);
 
         if (!this.tryHarvest(world, pos, false, stack, player) || !isValidMaterial(state))
             return false;
 
         int radius = this.range;
         if (radius > 0) {
-            BlockPos.getAllInBox(pos.add(-radius, -radius, -radius), pos.add(radius, radius, radius)).forEach(aoePos -> {
+            BlockPos.betweenClosed(pos.offset(-radius, -radius, -radius), pos.offset(radius, radius, radius)).forEach(aoePos -> {
                 if (aoePos != pos) {
                     BlockState aoeState = world.getBlockState(aoePos);
-                    float aoeHardness = aoeState.getBlockHardness(world, aoePos);
+                    float aoeHardness = aoeState.getDestroySpeed(world, aoePos);
                     if (aoeHardness <= hardness + 5.0F && isValidMaterial(aoeState)) {
                         if (this.tryHarvest(world, aoePos, true, stack, player)) {
                             if (aoeHardness <= 0.0F && Math.random() < 0.33) {
-                                if (!player.abilities.isCreativeMode) {
-                                    stack.damageItem(1, player, entity -> {
-                                        entity.sendBreakAnimation(player.getActiveHand());
+                                if (!player.abilities.instabuild) {
+                                    stack.hurtAndBreak(1, player, entity -> {
+                                        entity.broadcastBreakEvent(player.getUsedItemHand());
                                     });
                                 }
                             }
@@ -97,7 +97,7 @@ public class BaseSickleItem extends ToolItem {
 
     private boolean tryHarvest(World world, BlockPos pos, boolean extra, ItemStack stack, PlayerEntity player) {
         BlockState state = world.getBlockState(pos);
-        float hardness = state.getBlockHardness(world, pos);
+        float hardness = state.getDestroySpeed(world, pos);
         boolean harvest = !extra || (ForgeHooks.canHarvestBlock(state, player, world, pos) || this.canHarvestBlock(stack, state));
 
         if (hardness >= 0.0F && harvest)
@@ -108,6 +108,6 @@ public class BaseSickleItem extends ToolItem {
 
     private static boolean isValidMaterial(BlockState state) {
         Material material = state.getMaterial();
-        return material == Material.LEAVES || material == Material.PLANTS || material == Material.TALL_PLANTS;
+        return material == Material.LEAVES || material == Material.PLANT || material == Material.REPLACEABLE_PLANT;
     }
 }

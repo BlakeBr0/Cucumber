@@ -11,7 +11,7 @@ import java.util.List;
 
 public final class TileEntityHelper {
     public static void dispatchToNearbyPlayers(TileEntity tile) {
-        World world = tile.getWorld();
+        World world = tile.getLevel();
         if (world == null)
             return;
 
@@ -19,20 +19,20 @@ public final class TileEntityHelper {
         if (packet == null)
             return;
 
-        List<? extends PlayerEntity> players = world.getPlayers();
-        BlockPos pos = tile.getPos();
+        List<? extends PlayerEntity> players = world.players();
+        BlockPos pos = tile.getBlockPos();
         for (Object player : players) {
             if (player instanceof ServerPlayerEntity) {
                 ServerPlayerEntity mPlayer = (ServerPlayerEntity) player;
-                if (isPlayerNearby(mPlayer.getPosX(), mPlayer.getPosZ(), pos.getX() + 0.5, pos.getZ() + 0.5)) {
-                    mPlayer.connection.sendPacket(packet);
+                if (isPlayerNearby(mPlayer.getX(), mPlayer.getZ(), pos.getX() + 0.5, pos.getZ() + 0.5)) {
+                    mPlayer.connection.send(packet);
                 }
             }
         }
     }
 
     public static void dispatchToNearbyPlayers(World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+        TileEntity tile = world.getBlockEntity(new BlockPos(x, y, z));
         if (tile != null) {
             dispatchToNearbyPlayers(tile);
         }

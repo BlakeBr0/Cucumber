@@ -25,13 +25,13 @@ public class BaseOreBlock extends BaseBlock {
     }
 
     public BaseOreBlock(Material material, Function<Properties, Properties> properties, int harvestLevel, int minExp, int maxExp) {
-        super(material, properties.compose(p -> p.harvestLevel(harvestLevel).harvestTool(ToolType.PICKAXE).setRequiresTool()));
+        super(material, properties.compose(p -> p.harvestLevel(harvestLevel).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()));
         this.minExp = minExp;
         this.maxExp = maxExp;
     }
 
     public BaseOreBlock(Material material, SoundType sound, float hardness, float resistance, int harvestLevel, int minExp, int maxExp) {
-        this(material, p -> p.sound(sound).hardnessAndResistance(hardness, resistance), harvestLevel, minExp, maxExp);
+        this(material, p -> p.sound(sound).strength(hardness, resistance), harvestLevel, minExp, maxExp);
     }
 
     @Override

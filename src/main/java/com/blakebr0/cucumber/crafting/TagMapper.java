@@ -136,8 +136,8 @@ public class TagMapper implements IResourceManagerReloadListener {
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
         List<String> mods = ModConfigs.MOD_TAG_PRIORITIES.get();
-        ITag<Item> tag = TagCollectionManager.getManager().getItemTags().get(new ResourceLocation(tagId));
-        Item item = tag == null ? Items.AIR : tag.getAllElements().stream().min((item1, item2) -> {
+        ITag<Item> tag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(tagId));
+        Item item = tag == null ? Items.AIR : tag.getValues().stream().min((item1, item2) -> {
             int index1 = item1.getRegistryName() != null ? mods.indexOf(item1.getRegistryName().getNamespace()) : -1;
             int index2 = item2.getRegistryName() != null ? mods.indexOf(item2.getRegistryName().getNamespace()) : -1;
 

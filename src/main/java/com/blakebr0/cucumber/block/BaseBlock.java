@@ -9,14 +9,14 @@ import java.util.function.Function;
 
 public class BaseBlock extends Block {
 	public BaseBlock(Material material, Function<Properties, Properties> properties) {
-		super(properties.apply(Properties.create(material)));
+		super(properties.apply(Properties.of(material)));
 	}
 
 	public BaseBlock(Material material, SoundType sound, float hardness, float resistance) {
-		super(Properties.create(material).sound(sound).hardnessAndResistance(hardness, resistance));
+		super(Properties.of(material).sound(sound).strength(hardness, resistance));
 	}
 
 	public BaseBlock(Material material, SoundType sound, float hardness, float resistance, ToolType tool) {
-		super(Properties.create(material).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(tool).setRequiresTool());
+		super(Properties.of(material).sound(sound).strength(hardness, resistance).harvestTool(tool).requiresCorrectToolForDrops());
 	}
 }

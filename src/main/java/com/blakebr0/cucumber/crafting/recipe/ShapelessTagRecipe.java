@@ -29,9 +29,9 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
 
     public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ShapelessTagRecipe> {
         @Override
-        public ShapelessTagRecipe read(ResourceLocation recipeId, JsonObject json) {
-            String group = JSONUtils.getString(json, "group", "");
-            NonNullList<Ingredient> inputs = readIngredients(JSONUtils.getJsonArray(json, "ingredients"));
+        public ShapelessTagRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
+            String group = JSONUtils.getAsString(json, "group", "");
+            NonNullList<Ingredient> inputs = readIngredients(JSONUtils.getAsJsonArray(json, "ingredients"));
 
             if (inputs.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
@@ -39,9 +39,9 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is 9");
             }
 
-            JsonObject result = JSONUtils.getJsonObject(json, "result");
-            String tag = JSONUtils.getString(result, "tag");
-            int count = JSONUtils.getInt(result, "count", 1);
+            JsonObject result = JSONUtils.getAsJsonObject(json, "result");
+            String tag = JSONUtils.getAsString(result, "tag");
+            int count = JSONUtils.getAsInt(result, "count", 1);
             Item item = TagMapper.getItemForTag(tag);
             if (item == Items.AIR)
                 return null;
@@ -52,38 +52,38 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
         }
 
         @Override
-        public ShapelessTagRecipe read(ResourceLocation recipeId, PacketBuffer buffer) {
-            String group = buffer.readString(32767);
+        public ShapelessTagRecipe fromNetwork(ResourceLocation recipeId, PacketBuffer buffer) {
+            String group = buffer.readUtf(32767);
             int size = buffer.readVarInt();
             NonNullList<Ingredient> inputs = NonNullList.withSize(size, Ingredient.EMPTY);
 
             for (int j = 0; j < inputs.size(); j++) {
-                inputs.set(j, Ingredient.read(buffer));
+                inputs.set(j, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack output = buffer.readItemStack();
+            ItemStack output = buffer.readItem();
 
             return new ShapelessTagRecipe(recipeId, group, output, inputs);
         }
 
         @Override
-        public void write(PacketBuffer buffer, ShapelessTagRecipe recipe) {
-            buffer.writeString(recipe.getGroup());
+        public void toNetwork(PacketBuffer buffer, ShapelessTagRecipe recipe) {
+            buffer.writeUtf(recipe.getGroup());
             buffer.writeVarInt(recipe.getIngredients().size());
 
             for (Ingredient ingredient : recipe.getIngredients()) {
-                ingredient.write(buffer);
+                ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItemStack(recipe.getRecipeOutput());
+            buffer.writeItem(recipe.getResultItem());
         }
 
         private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray) {
             NonNullList<Ingredient> ingredients = NonNullList.create();
 
             for (int i = 0; i < ingredientArray.size(); ++i) {
-                Ingredient ingredient = Ingredient.deserialize(ingredientArray.get(i));
-                if (!ingredient.hasNoMatchingItems()) {
+                Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
+                if (!ingredient.isEmpty()) {
                     ingredients.add(ingredient);
                 }
             }

@@ -8,7 +8,7 @@ import net.minecraftforge.common.ToolType;
 
 public class BaseSlabBlock extends SlabBlock {
     public BaseSlabBlock(Block block) {
-        this(Properties.from(block));
+        this(Properties.copy(block));
     }
 
     public BaseSlabBlock(Properties properties) {
@@ -16,10 +16,10 @@ public class BaseSlabBlock extends SlabBlock {
     }
 
     public BaseSlabBlock(Material material, SoundType sound, float hardness, float resistance) {
-        this(Properties.create(material).sound(sound).hardnessAndResistance(hardness, resistance));
+        this(Properties.of(material).sound(sound).strength(hardness, resistance));
     }
 
     public BaseSlabBlock(Material material, SoundType sound, float hardness, float resistance, ToolType tool) {
-        this(Properties.create(material).sound(sound).hardnessAndResistance(hardness, resistance).harvestTool(tool).setRequiresTool());
+        this(Properties.of(material).sound(sound).strength(hardness, resistance).harvestTool(tool).requiresCorrectToolForDrops());
     }
 }

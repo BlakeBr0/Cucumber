@@ -22,7 +22,7 @@ public final class NBTTooltipHandler {
         if (!ModConfigs.ENABLE_NBT_TOOLTIPS.get())
             return;
 
-        if (Minecraft.getInstance().gameSettings.advancedItemTooltips) {
+        if (Minecraft.getInstance().options.advancedItemTooltips) {
             ItemStack stack = event.getItemStack();
             CompoundNBT tag = stack.getTag();
 
@@ -30,7 +30,7 @@ public final class NBTTooltipHandler {
                 List<ITextComponent> tooltip = event.getToolTip();
 
                 if (Screen.hasAltDown()) {
-                    String text = tag.toFormattedComponent(" ", 1).getString();
+                    String text = tag.getPrettyDisplay(" ", 1).getString();
 
                     tooltip.add(new StringTextComponent(Colors.DARK_GRAY + text));
                 } else {

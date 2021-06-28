@@ -34,7 +34,7 @@ public interface IColored {
 	class ItemBlockColors implements IItemColor {
 		@Override
 		public int getColor(ItemStack stack, int index) {
-			return ((IColored) Block.getBlockFromItem(stack.getItem())).getColor(index, stack);
+			return ((IColored) Block.byItem(stack.getItem())).getColor(index, stack);
 		}
 	}
 }

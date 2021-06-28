@@ -29,7 +29,7 @@ public class Pos3d extends Vector3d {
 	}
 
 	public Pos3d(RayTraceResult mop) {
-		this(mop.getHitVec());
+		this(mop.getLocation());
 	}
 
 	public Pos3d(double x, double y, double z) {
@@ -42,7 +42,7 @@ public class Pos3d extends Vector3d {
 	 * @param entity - entity to create the Pos3D from
 	 */
 	public Pos3d(Entity entity) {
-		this(entity.getPosX(), entity.getPosY(), entity.getPosZ());
+		this(entity.getX(), entity.getY(), entity.getZ());
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class Pos3d extends Vector3d {
 	 * @return Pos3D representing the motion of the given entity
 	 */
 	public static Pos3d fromMotion(Entity entity) {
-		return new Pos3d(entity.getMotion().getX(), entity.getMotion().getY(), entity.getMotion().getZ());
+		return new Pos3d(entity.getDeltaMovement().x, entity.getDeltaMovement().y, entity.getDeltaMovement().z);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class Pos3d extends Vector3d {
 	 * Performs the same operation as translate(x, y, z), but by a set amount in a EnumFacing
 	 */
 	public Pos3d translate(Direction direction, double amount) {
-		return translate(direction.getDirectionVec().getX() * amount, direction.getDirectionVec().getY() * amount, direction.getDirectionVec().getZ() * amount);
+		return translate(direction.getNormal().getX() * amount, direction.getNormal().getY() * amount, direction.getNormal().getZ() * amount);
 	}
 
 	/**
@@ -180,7 +180,7 @@ public class Pos3d extends Vector3d {
 	}
 
 	@Override
-	public Pos3d rotatePitch(float pitch) {
+	public Pos3d xRot(float pitch) {
 		double pitchRadians = Math.toRadians(pitch);
 
 		double yPos = y;
@@ -276,11 +276,11 @@ public class Pos3d extends Vector3d {
 	}
 
 	public double anglePreNorm(Pos3d pos2) {
-		return Math.acos(dotProduct(pos2));
+		return Math.acos(dot(pos2));
 	}
 
 	public static double anglePreNorm(Pos3d pos1, Pos3d pos2) {
-		return Math.acos(pos1.clone().dotProduct(pos2));
+		return Math.acos(pos1.clone().dot(pos2));
 	}
 
 	@Override

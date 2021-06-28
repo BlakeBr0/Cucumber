@@ -36,10 +36,10 @@ public final class GlowingTextRenderer {
 	@SubscribeEvent
 	public void onTooltipRender(RenderTooltipEvent.PostText event) {
 		if (event.getStack().isEmpty()) { return; }
-		List<ItemStack> listOfStacks = stacks.keySet().stream().filter(s -> s.isItemEqual(event.getStack())).collect(Collectors.toList());
+		List<ItemStack> listOfStacks = stacks.keySet().stream().filter(s -> s.sameItem(event.getStack())).collect(Collectors.toList());
 		if (!listOfStacks.isEmpty()) {
 			ITextProperties s = event.getLines().get(0);
-			drawGlowingText(event.getFontRenderer(), event.getStack().getDisplayName().getString(), event.getX(), event.getY() - 1 + (event.getFontRenderer().FONT_HEIGHT) * (event.getLines().indexOf(s)) - 1 + 2, stacks.get(listOfStacks.get(0)));
+			drawGlowingText(event.getFontRenderer(), event.getStack().getDisplayName().getString(), event.getX(), event.getY() - 1 + (event.getFontRenderer().lineHeight) * (event.getLines().indexOf(s)) - 1 + 2, stacks.get(listOfStacks.get(0)));
 		}
 	}
 

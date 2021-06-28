@@ -24,19 +24,19 @@ public class BaseSwordItem extends SwordItem {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (this instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this;
             if (enableable.isEnabled())
-                super.fillItemGroup(group, items);
+                super.fillItemCategory(group, items);
         } else {
-            super.fillItemGroup(group, items);
+            super.fillItemCategory(group, items);
         }
     }
 
     @Override
-    public float getAttackDamage() {
-        return this.attackDamage + this.getTier().getAttackDamage();
+    public float getDamage() {
+        return this.attackDamage + this.getTier().getAttackDamageBonus();
     }
 
     public float getAttackSpeed() {

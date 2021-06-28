@@ -14,7 +14,7 @@ public final class MultiblockPositions {
     }
 
     public List<BlockPos> get(BlockPos pos) {
-        return this.positions.stream().map(pos::add).collect(Collectors.toList());
+        return this.positions.stream().map(pos::offset).collect(Collectors.toList());
     }
 
     public static class Builder {

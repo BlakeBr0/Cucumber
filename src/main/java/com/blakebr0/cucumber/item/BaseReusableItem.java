@@ -31,7 +31,7 @@ public class BaseReusableItem extends BaseItem {
 	}
 
 	public BaseReusableItem(int uses, boolean tooltip, Function<Properties, Properties> properties) {
-		super(properties.compose(p -> p.defaultMaxDamage(Math.max(uses - 1, 0)).setNoRepair()));
+		super(properties.compose(p -> p.defaultDurability(Math.max(uses - 1, 0)).setNoRepair()));
 		this.damage = uses > 0;
 		this.tooltip = tooltip;
 	}
@@ -49,14 +49,15 @@ public class BaseReusableItem extends BaseItem {
 		if (!this.damage)
 			return copy;
 
-		int unbreaking = EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
+		int unbreaking = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
 		for (int i = 0; i < unbreaking; i++) {
-			if (UnbreakingEnchantment.negateDamage(stack, unbreaking, random))
+			if (UnbreakingEnchantment.shouldIgnoreDurabilityDrop(stack, unbreaking, random))
 				return copy;
 		}
 
-		copy.setDamage(stack.getDamage() + 1);
-		if (copy.getDamage() > stack.getMaxDamage())
+		copy.setDamageValue(stack.getDamageValue() + 1);
+
+		if (copy.getDamageValue() > stack.getMaxDamage())
 			return ItemStack.EMPTY;
 
 		return copy;
@@ -64,10 +65,10 @@ public class BaseReusableItem extends BaseItem {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
 		if (this.tooltip) {
 			if (this.damage) {
-				int damage = stack.getMaxDamage() - stack.getDamage() + 1;
+				int damage = stack.getMaxDamage() - stack.getDamageValue() + 1;
 				if (damage == 1) {
 					tooltip.add(Tooltips.ONE_USE_LEFT.build());
 				} else {

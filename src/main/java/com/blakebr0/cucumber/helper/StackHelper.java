@@ -31,11 +31,11 @@ public final class StackHelper {
 	}
 
 	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2) {
-		return !stack1.isEmpty() && !stack2.isEmpty() && stack1.isItemEqual(stack2);
+		return !stack1.isEmpty() && !stack2.isEmpty() && stack1.sameItem(stack2);
 	}
 	
 	public static boolean areStacksEqual(ItemStack stack1, ItemStack stack2) {
-		return areItemsEqual(stack1, stack2) && ItemStack.areItemStackTagsEqual(stack1, stack2);
+		return areItemsEqual(stack1, stack2) && ItemStack.tagMatches(stack1, stack2);
 	}
 
 	/**
@@ -72,12 +72,12 @@ public final class StackHelper {
 		if (!stack1.hasTag()) return true;
 		if (stack1.hasTag() && !stack2.hasTag()) return false;
 		
-		Set<String> stack1Keys = NBTHelper.getTagCompound(stack1).keySet();
-		Set<String> stack2Keys = NBTHelper.getTagCompound(stack2).keySet();
+		Set<String> stack1Keys = NBTHelper.getTagCompound(stack1).getAllKeys();
+		Set<String> stack2Keys = NBTHelper.getTagCompound(stack2).getAllKeys();
 		
 		for (String key : stack1Keys) {
 			if (stack2Keys.contains(key)) {
-				if (!NBTUtil.areNBTEquals(NBTHelper.getTag(stack1, key), NBTHelper.getTag(stack2, key), true)) {
+				if (!NBTUtil.compareNbt(NBTHelper.getTag(stack1, key), NBTHelper.getTag(stack2, key), true)) {
 					return false;
 				}
 			} else {

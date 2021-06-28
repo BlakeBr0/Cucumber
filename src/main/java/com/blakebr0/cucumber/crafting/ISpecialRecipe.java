@@ -11,7 +11,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 public interface ISpecialRecipe extends IRecipe<IInventory> {
     @Override
-    default ItemStack getCraftingResult(IInventory inv) {
+    default ItemStack assemble(IInventory inv) {
         return this.getCraftingResult(new InvWrapper(inv));
     }
 

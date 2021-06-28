@@ -15,13 +15,13 @@ public class BaseBlockItem extends BlockItem implements IEnableable {
     }
 
     @Override
-    public void fillItemGroup(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
         if (this.getBlock() instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this.getBlock();
             if (enableable.isEnabled())
-                super.fillItemGroup(group, items);
+                super.fillItemCategory(group, items);
         } else {
-            super.fillItemGroup(group, items);
+            super.fillItemCategory(group, items);
         }
     }
 

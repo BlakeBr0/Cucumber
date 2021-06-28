@@ -26,7 +26,7 @@ public class IconButton extends Button {
 	@Override
 	public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
 		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.getTextureManager().bindTexture(this.texture);
+		minecraft.getTextureManager().bind(this.texture);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
 		int i = this.getYImage(this.isHovered());
 		RenderSystem.enableBlend();

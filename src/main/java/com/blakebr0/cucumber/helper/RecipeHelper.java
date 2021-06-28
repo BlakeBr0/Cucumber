@@ -41,7 +41,7 @@ public final class RecipeHelper {
     }
 
     public static <C extends IInventory, T extends IRecipe<C>> Map<ResourceLocation, IRecipe<C>> getRecipes(IRecipeType<T> type) {
-        return getRecipeManager().getRecipes(type);
+        return getRecipeManager().byType(type);
     }
 
     public static void addRecipe(IRecipe<?> recipe) {

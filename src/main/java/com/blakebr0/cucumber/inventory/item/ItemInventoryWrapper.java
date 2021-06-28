@@ -21,7 +21,7 @@ public class ItemInventoryWrapper implements IInventory {
 		this.slots = NonNullList.withSize(size, ItemStack.EMPTY);
 		
 		load();
-		markDirty();
+		setChanged();
 	}
 	
 	public void load() {
@@ -33,7 +33,7 @@ public class ItemInventoryWrapper implements IInventory {
 				this.tag = new CompoundNBT();
 				saveItems();
 			} else {
-				this.inventory.setTagInfo("Inventory", new CompoundNBT());
+				this.inventory.addTagElement("Inventory", new CompoundNBT());
 			}
 		}
 
@@ -44,7 +44,7 @@ public class ItemInventoryWrapper implements IInventory {
 	protected void loadItems() {
 		for (int i = 0; i < this.size; i++) {
 			if (this.tag.contains("Slot")) {
-				this.slots.set(i, ItemStack.read(tag.getCompound("Slot" + i)));
+				this.slots.set(i, ItemStack.of(tag.getCompound("Slot" + i)));
 			} else {
 				this.slots.set(i, ItemStack.EMPTY);
 			}
@@ -56,11 +56,11 @@ public class ItemInventoryWrapper implements IInventory {
 			if (this.slots.get(i).isEmpty()) {
 				this.tag.remove("Slot" + i);
 			} else{ 
-				this.tag.put("Slot" + i, this.slots.get(i).write(new CompoundNBT()));
+				this.tag.put("Slot" + i, this.slots.get(i).save(new CompoundNBT()));
 			}
 		}
 
-		this.inventory.setTagInfo("Items", this.tag);
+		this.inventory.addTagElement("Items", this.tag);
 	}
 
 	public ItemStack getInventory() {
@@ -78,7 +78,7 @@ public class ItemInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public int getSizeInventory() {
+	public int getContainerSize() {
 		return this.size;
 	}
 
@@ -88,58 +88,54 @@ public class ItemInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int index) {
+	public ItemStack getItem(int index) {
 		return this.slots.get(index);
 	}
 
 	@Override
-	public ItemStack decrStackSize(int index, int count) {
-		return ItemStackHelper.getAndSplit(this.slots, index, count);
+	public ItemStack removeItem(int index, int count) {
+		return ItemStackHelper.removeItem(this.slots, index, count);
 	}
 
 	@Override
-	public ItemStack removeStackFromSlot(int index) {
-		return ItemStackHelper.getAndRemove(this.slots, index);
+	public ItemStack removeItemNoUpdate(int index) {
+		return ItemStackHelper.takeItem(this.slots, index);
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setItem(int index, ItemStack stack) {
 		this.slots.set(index, stack);
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
+	public int getMaxStackSize() {
 		return 64;
 	}
 
 	@Override
-	public void markDirty() {
+	public void setChanged() {
 		saveItems();
 		this.dirty = true;
 	}
 
 	@Override
-	public boolean isUsableByPlayer(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		return true;
 	}
 
 	@Override
-	public void openInventory(PlayerEntity player) {
-		
+	public void startOpen(PlayerEntity player) { }
+
+	@Override
+	public void stopOpen(PlayerEntity player) {
+		setChanged();
 	}
 
 	@Override
-	public void closeInventory(PlayerEntity player) {
-		markDirty();
-	}
-
-	@Override
-	public boolean isItemValidForSlot(int index, ItemStack stack) {
+	public boolean canPlaceItem(int index, ItemStack stack) {
 		return true;
 	}
 
 	@Override
-	public void clear() {
-		
-	}
+	public void clearContent() { }
 }

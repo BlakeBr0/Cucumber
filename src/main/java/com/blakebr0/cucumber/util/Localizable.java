@@ -91,7 +91,7 @@ public class Localizable {
             }
 
             if (this.color != null) {
-                component.mergeStyle(this.color);
+                component.withStyle(this.color);
             }
 
             return component;

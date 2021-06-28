@@ -25,30 +25,30 @@ public final class ModCommands {
     public void onRegisterCommands(RegisterCommandsEvent event) {
         CommandDispatcher<CommandSource> dispatcher = event.getDispatcher();
 
-        dispatcher.register(ROOT.then(Commands.literal("fillenergy").requires(source -> source.hasPermissionLevel(4)).executes(context -> {
-            ServerWorld world = context.getSource().getWorld();
-            ServerPlayerEntity player = context.getSource().asPlayer();
+        dispatcher.register(ROOT.then(Commands.literal("fillenergy").requires(source -> source.hasPermission(4)).executes(context -> {
+            ServerWorld world = context.getSource().getLevel();
+            ServerPlayerEntity player = context.getSource().getPlayerOrException();
 
             BlockRayTraceResult trace = BlockHelper.rayTraceBlocks(world, player);
 
-            TileEntity tile = world.getTileEntity(trace.getPos());
+            TileEntity tile = world.getBlockEntity(trace.getBlockPos());
             if (tile != null) {
-                LazyOptional<IEnergyStorage> capability = tile.getCapability(CapabilityEnergy.ENERGY, trace.getFace());
+                LazyOptional<IEnergyStorage> capability = tile.getCapability(CapabilityEnergy.ENERGY, trace.getDirection());
                 if (capability.isPresent()) {
                     capability.ifPresent(energy -> {
                         if (energy.canReceive()) {
                             energy.receiveEnergy(Integer.MAX_VALUE, false);
                             ITextComponent message = Localizable.of("message.cucumber.filled_energy").build();
-                            context.getSource().sendFeedback(message, false);
+                            context.getSource().sendSuccess(message, false);
                         }
                     });
                 } else {
                     ITextComponent message = Localizable.of("message.cucumber.filled_energy_error").build();
-                    context.getSource().sendFeedback(message, false);
+                    context.getSource().sendFailure(message);
                 }
             } else {
                 ITextComponent message = Localizable.of("message.cucumber.filled_energy_error").build();
-                context.getSource().sendFeedback(message, false);
+                context.getSource().sendFailure(message);
             }
 
             return 0;

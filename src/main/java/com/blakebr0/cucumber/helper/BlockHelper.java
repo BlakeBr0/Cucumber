@@ -29,8 +29,8 @@ import net.minecraftforge.event.world.BlockEvent;
  */
 public final class BlockHelper {
 	private static BlockRayTraceResult rayTraceBlocks(World world, PlayerEntity player, double reach, RayTraceContext.FluidMode fluidMode) {
-        float pitch = player.rotationPitch;
-        float yaw = player.rotationYaw;
+        float pitch = player.xRot;
+        float yaw = player.yRot;
         Vector3d eyePos = player.getEyePosition(1.0F);
         float f2 = MathHelper.cos(-yaw * ((float) Math.PI / 180F) - (float) Math.PI);
         float f3 = MathHelper.sin(-yaw * ((float) Math.PI / 180F) - (float) Math.PI);
@@ -40,7 +40,7 @@ public final class BlockHelper {
         float f7 = f2 * f4;
 
         Vector3d vec3d1 = eyePos.add((double) f6 * reach, (double) f5 * reach, (double) f7 * reach);
-        return world.rayTraceBlocks(new RayTraceContext(eyePos, vec3d1, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
+        return world.clip(new RayTraceContext(eyePos, vec3d1, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
 	}
 
 	public static BlockRayTraceResult rayTraceBlocks(World world, PlayerEntity player) {
@@ -58,10 +58,10 @@ public final class BlockHelper {
     }
 
     public static boolean breakBlocksAOE(ItemStack stack, World world, PlayerEntity player, BlockPos pos, boolean playEvent) {
-        if (world.isAirBlock(pos))
+        if (world.isEmptyBlock(pos))
             return false;
 
-        if (!world.isRemote() && player instanceof ServerPlayerEntity) {
+        if (!world.isClientSide() && player instanceof ServerPlayerEntity) {
             ServerPlayerEntity mplayer = (ServerPlayerEntity) player;
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
@@ -71,27 +71,28 @@ public final class BlockHelper {
                 return false;
 
             if (playEvent) {
-                world.playEvent(2001, pos, Block.getStateId(state));
+                world.levelEvent(2001, pos, Block.getId(state));
             }
 
-            boolean changed = world.setBlockState(pos, state.getFluidState().getBlockState());
+            boolean changed = world.setBlockAndUpdate(pos, state.getFluidState().createLegacyBlock());
             if (changed) {
-                if (block.isIn(BlockTags.GUARDED_BY_PIGLINS)) {
-                    PiglinTasks.func_234478_a_(player, false);
+                if (block.is(BlockTags.GUARDED_BY_PIGLINS)) {
+                    PiglinTasks.angerNearbyPiglins(player, false);
                 }
 
-                if (!player.abilities.isCreativeMode) {
-                    TileEntity tile = world.getTileEntity(pos);
+                if (!player.abilities.instabuild) {
+                    TileEntity tile = world.getBlockEntity(pos);
 
-                    block.onPlayerDestroy(world, pos, state);
-                    block.harvestBlock(world, player, pos, state, tile, stack);
-                    block.dropXpOnBlockBreak((ServerWorld) world, pos, event.getExpToDrop());
+                    block.destroy(world, pos, state);
+                    block.playerDestroy(world, player, pos, state, tile, stack);
+                    block.popExperience((ServerWorld) world, pos, event.getExpToDrop());
                 }
 
-                stack.onBlockDestroyed(world, state, pos, player);
+                stack.mineBlock(world, state, pos, player);
             }
 
-            mplayer.connection.sendPacket(new SChangeBlockPacket(world, pos));
+            mplayer.connection.send(new SChangeBlockPacket(world, pos));
+
             return true;
         }
 

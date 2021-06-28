@@ -20,35 +20,35 @@ public class ItemInventoryContainer extends Container {
 	public ItemInventoryContainer(ContainerType<?> type, ItemStack inv, int size, PlayerInventory inventory) {
 		super(type, 0);
 		this.inventory = inventory;
-		this.index = inventory.currentItem;
+		this.index = inventory.selected;
 		this.wrapper = new ItemInventoryWrapper(inv, size);
 	}
 	
 	@Override
-	public void detectAndSendChanges() {
-		ItemStack stack = this.inventory.mainInventory.get(this.index);
+	public void broadcastChanges() {
+		ItemStack stack = this.inventory.items.get(this.index);
 		if (stack.isEmpty() || stack.getItem() != this.wrapper.getInventory().getItem()) {
 			this.valid = false;
 			return;
 		}
 
-		super.detectAndSendChanges();
+		super.broadcastChanges();
 	}
 
 	@Override
-	public boolean canInteractWith(PlayerEntity player) {
+	public boolean stillValid(PlayerEntity player) {
 		this.onSlotChanged();
 		if (this.wrapper.getDirty() && !this.valid) {
-			player.inventory.setItemStack(ItemStack.EMPTY);
+			player.inventory.setCarried(ItemStack.EMPTY);
 		}
 
 		return this.valid;
 	}
 
 	public void onSlotChanged() {
-		ItemStack stack = this.inventory.mainInventory.get(this.index);
+		ItemStack stack = this.inventory.items.get(this.index);
 		if (this.valid && !stack.isEmpty() && stack.getItem() == this.wrapper.getInventory().getItem()) {
-			this.inventory.mainInventory.set(this.index, this.wrapper.getInventory());
+			this.inventory.items.set(this.index, this.wrapper.getInventory());
 		}
 	}
 }
