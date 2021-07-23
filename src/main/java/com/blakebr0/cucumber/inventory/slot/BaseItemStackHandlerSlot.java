@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.inventory.slot;
 
 import com.blakebr0.cucumber.inventory.BaseItemStackHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class BaseItemStackHandlerSlot extends SlotItemHandler {
@@ -16,7 +16,7 @@ public class BaseItemStackHandlerSlot extends SlotItemHandler {
     }
 
     @Override
-    public boolean mayPickup(PlayerEntity player) {
+    public boolean mayPickup(Player player) {
         return !this.inventory.extractItemSuper(this.index, 1, true).isEmpty();
     }
 

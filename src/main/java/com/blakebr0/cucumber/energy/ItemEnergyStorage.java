@@ -1,7 +1,7 @@
 package com.blakebr0.cucumber.energy;
 
 import com.blakebr0.cucumber.helper.NBTHelper;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.energy.EnergyStorage;
 
 /*

@@ -1,19 +1,19 @@
 package com.blakebr0.cucumber.util;
 
-import net.minecraft.util.text.IFormattableTextComponent;
-import net.minecraft.util.text.StringTextComponent;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.TextComponent;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.TranslatableComponent;
 
 public class Localizable {
     private final String key;
-    private final TextFormatting defaultColor;
+    private final ChatFormatting defaultColor;
 
     protected Localizable(String key) {
         this(key, null);
     }
 
-    protected Localizable(String key, TextFormatting defaultColor) {
+    protected Localizable(String key, ChatFormatting defaultColor) {
         this.key = key;
         this.defaultColor = defaultColor;
     }
@@ -22,7 +22,7 @@ public class Localizable {
         return new Localizable(key);
     }
 
-    public static Localizable of(String key, TextFormatting defaultColor) {
+    public static Localizable of(String key, ChatFormatting defaultColor) {
         return new Localizable(key, defaultColor);
     }
 
@@ -30,7 +30,7 @@ public class Localizable {
         return this.key;
     }
 
-    public TextFormatting getDefaultColor() {
+    public ChatFormatting getDefaultColor() {
         return this.defaultColor;
     }
 
@@ -38,7 +38,7 @@ public class Localizable {
         return this.builder().args(args);
     }
 
-    public LocalizableBuilder color(TextFormatting color) {
+    public LocalizableBuilder color(ChatFormatting color) {
         return this.builder().color(color);
     }
 
@@ -46,7 +46,7 @@ public class Localizable {
         return this.builder().prepend(text);
     }
 
-    public IFormattableTextComponent build() {
+    public MutableComponent build() {
         return this.builder().build();
     }
 
@@ -61,7 +61,7 @@ public class Localizable {
     public static class LocalizableBuilder {
         private final String key;
         private Object[] args = new Object[0];
-        private TextFormatting color;
+        private ChatFormatting color;
         private String prependText = "";
 
         public LocalizableBuilder(String key) {
@@ -73,7 +73,7 @@ public class Localizable {
             return this;
         }
 
-        public LocalizableBuilder color(TextFormatting color) {
+        public LocalizableBuilder color(ChatFormatting color) {
             this.color = color;
             return this;
         }
@@ -83,11 +83,11 @@ public class Localizable {
             return this;
         }
 
-        public IFormattableTextComponent build() {
-            IFormattableTextComponent component = new TranslationTextComponent(this.key, this.args);
+        public MutableComponent build() {
+            MutableComponent component = new TranslatableComponent(this.key, this.args);
 
             if (!prependText.equals("")) {
-                component = new StringTextComponent(prependText).append(component);
+                component = new TextComponent(prependText).append(component);
             }
 
             if (this.color != null) {

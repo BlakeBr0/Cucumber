@@ -7,13 +7,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.resources.IResourceManager;
-import net.minecraft.resources.IResourceManagerReloadListener;
-import net.minecraft.tags.ITag;
-import net.minecraft.tags.TagCollectionManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
+import net.minecraft.tags.Tag;
+import net.minecraft.tags.SerializationTags;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -32,13 +32,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class TagMapper implements IResourceManagerReloadListener {
+public class TagMapper implements ResourceManagerReloadListener {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private static final Logger LOGGER = LogManager.getLogger(Cucumber.NAME);
     private static final Map<String, String> TAG_TO_ITEM_MAP = new HashMap<>();
 
     @Override
-    public void onResourceManagerReload(IResourceManager manager) {
+    public void onResourceManagerReload(ResourceManager manager) {
         reloadTagMappings();
     }
 
@@ -136,7 +136,7 @@ public class TagMapper implements IResourceManagerReloadListener {
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
         List<String> mods = ModConfigs.MOD_TAG_PRIORITIES.get();
-        ITag<Item> tag = TagCollectionManager.getInstance().getItems().getTag(new ResourceLocation(tagId));
+        Tag<Item> tag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(tagId));
         Item item = tag == null ? Items.AIR : tag.getValues().stream().min((item1, item2) -> {
             int index1 = item1.getRegistryName() != null ? mods.indexOf(item1.getRegistryName().getNamespace()) : -1;
             int index2 = item2.getRegistryName() != null ? mods.indexOf(item2.getRegistryName().getNamespace()) : -1;

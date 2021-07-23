@@ -1,22 +1,22 @@
 package com.blakebr0.cucumber.helper;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import net.minecraft.entity.monster.piglin.PiglinTasks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SChangeBlockPacket;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.monster.piglin.PiglinAi;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceContext;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.world.World;
-import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.level.Level;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.ForgeMod;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.BlockEvent;
@@ -28,41 +28,41 @@ import net.minecraftforge.event.world.BlockEvent;
  * (https://github.com/brandon3055/Draconic-Evolution)
  */
 public final class BlockHelper {
-	private static BlockRayTraceResult rayTraceBlocks(World world, PlayerEntity player, double reach, RayTraceContext.FluidMode fluidMode) {
+	private static BlockHitResult rayTraceBlocks(Level world, Player player, double reach, ClipContext.Fluid fluidMode) {
         float pitch = player.xRot;
         float yaw = player.yRot;
-        Vector3d eyePos = player.getEyePosition(1.0F);
-        float f2 = MathHelper.cos(-yaw * ((float) Math.PI / 180F) - (float) Math.PI);
-        float f3 = MathHelper.sin(-yaw * ((float) Math.PI / 180F) - (float) Math.PI);
-        float f4 = -MathHelper.cos(-pitch * ((float) Math.PI / 180F));
-        float f5 = MathHelper.sin(-pitch * ((float) Math.PI / 180F));
+        Vec3 eyePos = player.getEyePosition(1.0F);
+        float f2 = Mth.cos(-yaw * ((float) Math.PI / 180F) - (float) Math.PI);
+        float f3 = Mth.sin(-yaw * ((float) Math.PI / 180F) - (float) Math.PI);
+        float f4 = -Mth.cos(-pitch * ((float) Math.PI / 180F));
+        float f5 = Mth.sin(-pitch * ((float) Math.PI / 180F));
         float f6 = f3 * f4;
         float f7 = f2 * f4;
 
-        Vector3d vec3d1 = eyePos.add((double) f6 * reach, (double) f5 * reach, (double) f7 * reach);
-        return world.clip(new RayTraceContext(eyePos, vec3d1, RayTraceContext.BlockMode.OUTLINE, fluidMode, player));
+        Vec3 vec3d1 = eyePos.add((double) f6 * reach, (double) f5 * reach, (double) f7 * reach);
+        return world.clip(new ClipContext(eyePos, vec3d1, ClipContext.Block.OUTLINE, fluidMode, player));
 	}
 
-	public static BlockRayTraceResult rayTraceBlocks(World world, PlayerEntity player) {
-		return rayTraceBlocks(world, player, RayTraceContext.FluidMode.NONE);
+	public static BlockHitResult rayTraceBlocks(Level world, Player player) {
+		return rayTraceBlocks(world, player, ClipContext.Fluid.NONE);
 	}
 
-	public static BlockRayTraceResult rayTraceBlocks(World world, PlayerEntity player, RayTraceContext.FluidMode fluidMode) {
-        ModifiableAttributeInstance attribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
+	public static BlockHitResult rayTraceBlocks(Level world, Player player, ClipContext.Fluid fluidMode) {
+        AttributeInstance attribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
         double reach = attribute != null ? attribute.getValue() : 5.0D;
 		return rayTraceBlocks(world, player, reach, fluidMode);
 	}
 
-	public static boolean breakBlocksAOE(ItemStack stack, World world, PlayerEntity player, BlockPos pos) {
+	public static boolean breakBlocksAOE(ItemStack stack, Level world, Player player, BlockPos pos) {
 	    return breakBlocksAOE(stack, world, player, pos, true);
     }
 
-    public static boolean breakBlocksAOE(ItemStack stack, World world, PlayerEntity player, BlockPos pos, boolean playEvent) {
+    public static boolean breakBlocksAOE(ItemStack stack, Level world, Player player, BlockPos pos, boolean playEvent) {
         if (world.isEmptyBlock(pos))
             return false;
 
-        if (!world.isClientSide() && player instanceof ServerPlayerEntity) {
-            ServerPlayerEntity mplayer = (ServerPlayerEntity) player;
+        if (!world.isClientSide() && player instanceof ServerPlayer) {
+            ServerPlayer mplayer = (ServerPlayer) player;
             BlockState state = world.getBlockState(pos);
             Block block = state.getBlock();
 
@@ -77,21 +77,21 @@ public final class BlockHelper {
             boolean changed = world.setBlockAndUpdate(pos, state.getFluidState().createLegacyBlock());
             if (changed) {
                 if (block.is(BlockTags.GUARDED_BY_PIGLINS)) {
-                    PiglinTasks.angerNearbyPiglins(player, false);
+                    PiglinAi.angerNearbyPiglins(player, false);
                 }
 
                 if (!player.abilities.instabuild) {
-                    TileEntity tile = world.getBlockEntity(pos);
+                    BlockEntity tile = world.getBlockEntity(pos);
 
                     block.destroy(world, pos, state);
                     block.playerDestroy(world, player, pos, state, tile, stack);
-                    block.popExperience((ServerWorld) world, pos, event.getExpToDrop());
+                    block.popExperience((ServerLevel) world, pos, event.getExpToDrop());
                 }
 
                 stack.mineBlock(world, state, pos, player);
             }
 
-            mplayer.connection.send(new SChangeBlockPacket(world, pos));
+            mplayer.connection.send(new ClientboundBlockUpdatePacket(world, pos));
 
             return true;
         }

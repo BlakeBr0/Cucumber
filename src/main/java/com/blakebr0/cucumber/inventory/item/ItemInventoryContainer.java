@@ -1,23 +1,23 @@
 package com.blakebr0.cucumber.inventory.item;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.ItemStack;
 
 /*
  * Based on CoFHCore's inventory item container 
  * https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/gui/container/ContainerInventoryItem.java
  */
 // TODO: 1.16: reevaluate
-public class ItemInventoryContainer extends Container {
+public class ItemInventoryContainer extends AbstractContainerMenu {
 	protected final ItemInventoryWrapper wrapper;
-	protected final PlayerInventory inventory;
+	protected final Inventory inventory;
 	protected final int index;
 	protected boolean valid = true;
 
-	public ItemInventoryContainer(ContainerType<?> type, ItemStack inv, int size, PlayerInventory inventory) {
+	public ItemInventoryContainer(MenuType<?> type, ItemStack inv, int size, Inventory inventory) {
 		super(type, 0);
 		this.inventory = inventory;
 		this.index = inventory.selected;
@@ -36,7 +36,7 @@ public class ItemInventoryContainer extends Container {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		this.onSlotChanged();
 		if (this.wrapper.getDirty() && !this.valid) {
 			player.inventory.setCarried(ItemStack.EMPTY);

@@ -3,10 +3,10 @@ package com.blakebr0.cucumber.crafting.conditions;
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.iface.IEnableable;
 import com.google.gson.JsonObject;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.util.JSONUtils;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -41,7 +41,7 @@ public class EnableableCondition implements ICondition {
 
         @Override
         public EnableableCondition read(JsonObject json) {
-            return new EnableableCondition(new ResourceLocation(JSONUtils.getAsString(json, "item")));
+            return new EnableableCondition(new ResourceLocation(GsonHelper.getAsString(json, "item")));
         }
 
         @Override

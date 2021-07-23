@@ -2,14 +2,14 @@ package com.blakebr0.cucumber.network;
 
 import com.blakebr0.cucumber.network.message.LoginMessage;
 import com.blakebr0.cucumber.network.message.Message;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.network.FMLHandshakeHandler;
-import net.minecraftforge.fml.network.NetworkDirection;
-import net.minecraftforge.fml.network.NetworkEvent;
-import net.minecraftforge.fml.network.NetworkRegistry;
-import net.minecraftforge.fml.network.PacketDistributor;
-import net.minecraftforge.fml.network.simple.SimpleChannel;
+import net.minecraft.network.Connection;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.fmllegacy.network.FMLHandshakeHandler;
+import net.minecraftforge.fmllegacy.network.NetworkDirection;
+import net.minecraftforge.fmllegacy.network.NetworkEvent;
+import net.minecraftforge.fmllegacy.network.NetworkRegistry;
+import net.minecraftforge.fmllegacy.network.PacketDistributor;
+import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -58,7 +58,7 @@ public class BaseNetworkHandler {
         this.channel.sendToServer(message);
     }
 
-    public <M> void sendTo(M message, NetworkManager manager, NetworkDirection direction) {
+    public <M> void sendTo(M message, Connection manager, NetworkDirection direction) {
         this.channel.sendTo(message, manager, direction);
     }
 

@@ -1,14 +1,16 @@
 package com.blakebr0.cucumber.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.IWorldReader;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.LevelReader;
 import net.minecraftforge.common.ToolType;
 
 import java.util.function.Function;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BaseOreBlock extends BaseBlock {
     private final int minExp;
@@ -35,7 +37,7 @@ public class BaseOreBlock extends BaseBlock {
     }
 
     @Override
-    public int getExpDrop(BlockState state, IWorldReader world, BlockPos pos, int fortune, int silktouch) {
-        return silktouch == 0 ? MathHelper.nextInt(RANDOM, this.minExp, this.maxExp) : 0;
+    public int getExpDrop(BlockState state, LevelReader world, BlockPos pos, int fortune, int silktouch) {
+        return silktouch == 0 ? Mth.nextInt(RANDOM, this.minExp, this.maxExp) : 0;
     }
 }

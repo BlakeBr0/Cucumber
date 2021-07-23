@@ -1,11 +1,13 @@
 package com.blakebr0.cucumber.block;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolType;
 
 import java.util.function.Function;
+
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BaseTileEntityBlock extends BaseBlock {
     public BaseTileEntityBlock(Material material, Function<Properties, Properties> properties) {

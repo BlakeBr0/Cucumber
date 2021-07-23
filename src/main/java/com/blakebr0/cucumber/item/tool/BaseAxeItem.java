@@ -1,30 +1,32 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.item.AxeItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 import java.util.function.Function;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class BaseAxeItem extends AxeItem {
     private final float attackDamage;
     private final float attackSpeed;
 
-    public BaseAxeItem(IItemTier tier, Function<Properties, Properties> properties) {
+    public BaseAxeItem(Tier tier, Function<Properties, Properties> properties) {
         this(tier, 6.0F, -3.0F, properties);
     }
 
-    public BaseAxeItem(IItemTier tier, float attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
+    public BaseAxeItem(Tier tier, float attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this;
             if (enableable.isEnabled())

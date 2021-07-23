@@ -1,22 +1,24 @@
 package com.blakebr0.cucumber.client.screen.button;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.widget.button.Button;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TextComponent;
+
+import net.minecraft.client.gui.components.Button.OnPress;
 
 public class IconButtonStatic extends Button {
 	private final ResourceLocation texture;
 	private final int textureX, textureY;
 
-	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, IPressable onPress) {
-		this(x, y, width, height, textureX, textureY, new StringTextComponent(""), texture, onPress);
+	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, OnPress onPress) {
+		this(x, y, width, height, textureX, textureY, new TextComponent(""), texture, onPress);
 	}
 
-	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ITextComponent text, ResourceLocation texture, IPressable onPress) {
+	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress) {
 		super(x, y, width, height, text, onPress);
 		this.textureX = textureX;
 		this.textureY = textureY;
@@ -24,7 +26,7 @@ public class IconButtonStatic extends Button {
 	}
 	
 	@Override
-	public void renderButton(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		Minecraft minecraft = Minecraft.getInstance();
 		minecraft.getTextureManager().bind(this.texture);
 		RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);

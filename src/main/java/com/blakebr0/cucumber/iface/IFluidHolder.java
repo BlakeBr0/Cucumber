@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.iface;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 public interface IFluidHolder {

@@ -1,9 +1,9 @@
 package com.blakebr0.cucumber.helper;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Rarity;
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -26,7 +26,7 @@ public final class FluidHelper {
 			ItemStack filledBucket = new ItemStack(bucket);
 			FluidStack fluidContents = new FluidStack(fluid, capacity);
 
-			CompoundNBT tag = new CompoundNBT();
+			CompoundTag tag = new CompoundTag();
 			fluidContents.writeToNBT(tag);
 			filledBucket.setTag(tag);
 

@@ -1,7 +1,7 @@
 package com.blakebr0.cucumber.helper;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.NbtUtils;
 
 import java.util.Set;
 
@@ -77,7 +77,7 @@ public final class StackHelper {
 		
 		for (String key : stack1Keys) {
 			if (stack2Keys.contains(key)) {
-				if (!NBTUtil.compareNbt(NBTHelper.getTag(stack1, key), NBTHelper.getTag(stack2, key), true)) {
+				if (!NbtUtils.compareNbt(NBTHelper.getTag(stack1, key), NBTHelper.getTag(stack2, key), true)) {
 					return false;
 				}
 			} else {

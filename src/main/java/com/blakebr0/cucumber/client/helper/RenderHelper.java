@@ -1,15 +1,15 @@
 package com.blakebr0.cucumber.client.helper;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.ItemRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.FormattedText;
 
 // TODO: 1.16: reevaluate
 public final class RenderHelper {
-	public static void drawCenteredText(FontRenderer font, MatrixStack stack, String text, int x, int y, int color) {
+	public static void drawCenteredText(Font font, PoseStack stack, String text, int x, int y, int color) {
 		font.draw(stack, text, (x - font.width(text) / 2F), y, color);
 	}
 
@@ -17,7 +17,7 @@ public final class RenderHelper {
 	 * Credit to ellpeck for actually additions:
 	 * https://github.com/Ellpeck/ActuallyAdditions/blob/6ded1cc7b37e240642847a3addf90f5273844666/src/main/java/de/ellpeck/actuallyadditions/mod/util/StringUtil.java
 	 */
-	public static void drawScaledWrappedText(FontRenderer font, MatrixStack stack, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
+	public static void drawScaledWrappedText(Font font, PoseStack stack, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
 //		stack.push();
 //		stack.scale(scale, scale, scale);
 //		List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
@@ -32,11 +32,11 @@ public final class RenderHelper {
 //		stack.pop();
 	}
 
-	public static void drawScaledWrappedText(FontRenderer font, MatrixStack stack, String s, int x, int y, float scale, float width, int color, boolean shadow) {
+	public static void drawScaledWrappedText(Font font, PoseStack stack, String s, int x, int y, float scale, float width, int color, boolean shadow) {
 		drawScaledWrappedText(font, stack, s, x, y, scale, width, -1, color, shadow);
 	}
 
-	public static void drawScaledCenteredWrappedTextX(FontRenderer font, MatrixStack stack, ITextProperties text, int x, int y, float scale, float width, float height, int color, boolean shadow) {
+	public static void drawScaledCenteredWrappedTextX(Font font, PoseStack stack, FormattedText text, int x, int y, float scale, float width, float height, int color, boolean shadow) {
 //		stack.push();
 //		stack.scale(scale, scale, scale);
 //		List<ITextProperties> lines = font.func_238425_b_(text, (int) (width / scale));
@@ -51,13 +51,13 @@ public final class RenderHelper {
 //		stack.pop();
 	}
 
-	public static void drawScaledCenteredWrappedTextY(FontRenderer font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
+	public static void drawScaledCenteredWrappedTextY(Font font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
 //		List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
 //		y -= (font.FONT_HEIGHT / 2 / scale) * (lines.size() - 1);
 //		drawScaledWrappedText(font, s, x, y, scale, width, height, color, shadow);
 	}
 
-	public static void drawScaledCenteredWrappedTextXY(FontRenderer font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
+	public static void drawScaledCenteredWrappedTextXY(Font font, String s, int x, int y, float scale, float width, float height, int color, boolean shadow) {
 //		List<String> lines = font.listFormattedStringToWidth(s, (int) (width / scale));
 //		y -= (font.FONT_HEIGHT / 2 / scale) * (lines.size() - 1);
 //		drawScaledCenteredWrappedTextX(font, s, x, y, scale, width, height, color, shadow);
@@ -91,9 +91,9 @@ public final class RenderHelper {
 	public static void drawScaledItemIntoGui(ItemRenderer render, ItemStack stack, int x, int y, float scale) {
 		RenderSystem.pushMatrix();
 		RenderSystem.scalef(scale, scale, scale);
-		net.minecraft.client.renderer.RenderHelper.setupForFlatItems();
+		com.mojang.blaze3d.platform.Lighting.setupForFlatItems();
 		render.renderAndDecorateItem(stack, (int) (x / scale), (int) (y / scale));
-		net.minecraft.client.renderer.RenderHelper.turnOff();
+		com.mojang.blaze3d.platform.Lighting.turnOff();
 		RenderSystem.popMatrix();
 	}
 }

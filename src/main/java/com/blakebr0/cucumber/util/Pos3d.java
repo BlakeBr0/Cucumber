@@ -1,13 +1,13 @@
 package com.blakebr0.cucumber.util;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.vector.Vector3d;
-import net.minecraft.util.math.vector.Vector3f;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.Direction;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
+import com.mojang.math.Vector3f;
 
 /**
  * Pos3D - a way of performing operations on objects in a three dimensional environment.
@@ -15,12 +15,12 @@ import net.minecraft.util.math.vector.Vector3f;
  * @author aidancbrady
  */
 // TODO: 1.16: reevaluate
-public class Pos3d extends Vector3d {
+public class Pos3d extends Vec3 {
 	public Pos3d() {
 		this(0, 0, 0);
 	}
 
-	public Pos3d(Vector3d vec) {
+	public Pos3d(Vec3 vec) {
 		super(vec.x, vec.y, vec.z);
 	}
 
@@ -28,7 +28,7 @@ public class Pos3d extends Vector3d {
 		super(vec);
 	}
 
-	public Pos3d(RayTraceResult mop) {
+	public Pos3d(HitResult mop) {
 		this(mop.getLocation());
 	}
 
@@ -60,7 +60,7 @@ public class Pos3d extends Vector3d {
 	 * @param tag - tag compound to read from
 	 * @return the Pos3D from the tag compound
 	 */
-	public static Pos3d read(CompoundNBT tag) {
+	public static Pos3d read(CompoundTag tag) {
 		return new Pos3d(tag.getDouble("x"), tag.getDouble("y"), tag.getDouble("z"));
 	}
 
@@ -70,7 +70,7 @@ public class Pos3d extends Vector3d {
 	 * @param tag - tag compound to write to
 	 * @return the tag compound with this Pos3D's data
 	 */
-	public CompoundNBT write(CompoundNBT tag) {
+	public CompoundTag write(CompoundTag tag) {
 		tag.putDouble("x", x);
 		tag.putDouble("y", y);
 		tag.putDouble("z", z);
@@ -84,7 +84,7 @@ public class Pos3d extends Vector3d {
 	 * @param vec - Vec3 to subtract
 	 * @return difference of the two Pos3Ds
 	 */
-	public Pos3d diff(Vector3d vec) {
+	public Pos3d diff(Vec3 vec) {
 		return new Pos3d(x - vec.x, y - vec.y, z - vec.z);
 	}
 
@@ -123,7 +123,7 @@ public class Pos3d extends Vector3d {
 	 * @param pos - Pos3D value to translate by
 	 * @return translated Pos3D
 	 */
-	public Pos3d translate(Vector3d pos) {
+	public Pos3d translate(Vec3 pos) {
 		return translate(pos.x, pos.y, pos.z);
 	}
 
@@ -152,11 +152,11 @@ public class Pos3d extends Vector3d {
 	 * @param pos - the Pos3D to find the distance to
 	 * @return the distance between this and the defined Pos3D
 	 */
-	public double distance(Vector3d pos) {
+	public double distance(Vec3 pos) {
 		double subX = x - pos.x;
 		double subY = y - pos.y;
 		double subZ = z - pos.z;
-		return MathHelper.sqrt(subX * subX + subY * subY + subZ * subZ);
+		return Mth.sqrt(subX * subX + subY * subY + subZ * subZ);
 	}
 
 	/**
@@ -210,7 +210,7 @@ public class Pos3d extends Vector3d {
 		return new Pos3d(xPos, yPos, zPos);
 	}
 
-	public Pos3d multiply(Vector3d pos) {
+	public Pos3d multiply(Vec3 pos) {
 		return scale(pos.x, pos.y, pos.z);
 	}
 
@@ -308,8 +308,8 @@ public class Pos3d extends Vector3d {
 		return new Pos3d(Math.floor(x), Math.floor(y), Math.floor(z));
 	}
 
-	public static AxisAlignedBB getAABB(Pos3d pos1, Pos3d pos2) {
-		return new AxisAlignedBB(
+	public static AABB getAABB(Pos3d pos1, Pos3d pos2) {
+		return new AABB(
 				pos1.x,
 				pos1.y,
 				pos1.z,
@@ -331,10 +331,10 @@ public class Pos3d extends Vector3d {
 
 	@Override
 	public boolean equals(Object obj) {
-		return obj instanceof Vector3d &&
-				((Vector3d) obj).x == x &&
-				((Vector3d) obj).x == y &&
-				((Vector3d) obj).x == z;
+		return obj instanceof Vec3 &&
+				((Vec3) obj).x == x &&
+				((Vec3) obj).x == y &&
+				((Vec3) obj).x == z;
 	}
 
 	@Override

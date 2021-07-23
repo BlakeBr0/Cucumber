@@ -1,13 +1,15 @@
 package com.blakebr0.cucumber.item;
 
 import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.block.Block;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 import java.util.function.Function;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class BaseBlockItem extends BlockItem implements IEnableable {
     public BaseBlockItem(Block block, Function<Properties, Properties> properties) {
@@ -15,7 +17,7 @@ public class BaseBlockItem extends BlockItem implements IEnableable {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this.getBlock() instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this.getBlock();
             if (enableable.isEnabled())

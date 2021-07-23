@@ -1,29 +1,29 @@
 package com.blakebr0.cucumber.helper;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.network.play.server.SUpdateTileEntityPacket;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 
 import java.util.List;
 
 public final class TileEntityHelper {
-    public static void dispatchToNearbyPlayers(TileEntity tile) {
-        World world = tile.getLevel();
+    public static void dispatchToNearbyPlayers(BlockEntity tile) {
+        Level world = tile.getLevel();
         if (world == null)
             return;
 
-        SUpdateTileEntityPacket packet = tile.getUpdatePacket();
+        ClientboundBlockEntityDataPacket packet = tile.getUpdatePacket();
         if (packet == null)
             return;
 
-        List<? extends PlayerEntity> players = world.players();
+        List<? extends Player> players = world.players();
         BlockPos pos = tile.getBlockPos();
         for (Object player : players) {
-            if (player instanceof ServerPlayerEntity) {
-                ServerPlayerEntity mPlayer = (ServerPlayerEntity) player;
+            if (player instanceof ServerPlayer) {
+                ServerPlayer mPlayer = (ServerPlayer) player;
                 if (isPlayerNearby(mPlayer.getX(), mPlayer.getZ(), pos.getX() + 0.5, pos.getZ() + 0.5)) {
                     mPlayer.connection.send(packet);
                 }
@@ -31,8 +31,8 @@ public final class TileEntityHelper {
         }
     }
 
-    public static void dispatchToNearbyPlayers(World world, int x, int y, int z) {
-        TileEntity tile = world.getBlockEntity(new BlockPos(x, y, z));
+    public static void dispatchToNearbyPlayers(Level world, int x, int y, int z) {
+        BlockEntity tile = world.getBlockEntity(new BlockPos(x, y, z));
         if (tile != null) {
             dispatchToNearbyPlayers(tile);
         }

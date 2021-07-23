@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.util;
 
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;

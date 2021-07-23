@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.client.render;
 
-import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextProperties;
+import net.minecraft.client.gui.Font;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.FormattedText;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderTooltipEvent;
@@ -38,7 +38,7 @@ public final class GlowingTextRenderer {
 		if (event.getStack().isEmpty()) { return; }
 		List<ItemStack> listOfStacks = stacks.keySet().stream().filter(s -> s.sameItem(event.getStack())).collect(Collectors.toList());
 		if (!listOfStacks.isEmpty()) {
-			ITextProperties s = event.getLines().get(0);
+			FormattedText s = event.getLines().get(0);
 			drawGlowingText(event.getFontRenderer(), event.getStack().getDisplayName().getString(), event.getX(), event.getY() - 1 + (event.getFontRenderer().lineHeight) * (event.getLines().indexOf(s)) - 1 + 2, stacks.get(listOfStacks.get(0)));
 		}
 	}
@@ -51,7 +51,7 @@ public final class GlowingTextRenderer {
 		stacks.put(stack, info);
 	}
 
-	public static void drawGlowingText(FontRenderer font, String s, int x, int y, ColorInfo info) {
+	public static void drawGlowingText(Font font, String s, int x, int y, ColorInfo info) {
 //		float sine = 0.5F * ((float) Math.sin(Math.toRadians(4.0F * ((float) GlowingTextRenderer.getTicks() + Minecraft.getInstance().getRenderPartialTicks()))) + 1.0F);
 //		return font.drawStringWithShadow(s, x, y, Utils.intColor(info.r + (int) (info.rl * sine), info.g + (int) (info.gl * sine), info.b + (int) (info.bl * sine)));
 	}

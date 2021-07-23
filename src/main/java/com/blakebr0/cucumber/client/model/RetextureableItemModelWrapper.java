@@ -4,10 +4,10 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.mojang.datafixers.util.Either;
-import net.minecraft.client.renderer.model.BlockModel;
-import net.minecraft.client.renderer.model.RenderMaterial;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.ArrayList;
 
@@ -35,7 +35,7 @@ public class RetextureableItemModelWrapper extends BlockModel {
         newModel.parent = this.model.parent;
 
         textures.forEach((key, value) -> {
-            newModel.textureMap.put(key, Either.left(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(value))));
+            newModel.textureMap.put(key, Either.left(new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(value))));
         });
 
         return new RetextureableItemModelWrapper(newModel);

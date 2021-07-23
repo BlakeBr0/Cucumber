@@ -5,11 +5,11 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Either;
-import net.minecraft.client.renderer.model.BlockModel;
-import net.minecraft.client.renderer.model.BlockPart;
-import net.minecraft.client.renderer.model.RenderMaterial;
-import net.minecraft.client.renderer.texture.AtlasTexture;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.client.renderer.block.model.BlockModel;
+import net.minecraft.client.renderer.block.model.BlockElement;
+import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Map;
@@ -30,9 +30,9 @@ public class RetextureableBlockModelWrapper extends BlockModel {
         if (textures.isEmpty())
             return this;
 
-        List<BlockPart> elements = Lists.newArrayList(); //We have to duplicate this so we can edit it below.
-        for (BlockPart part : this.model.getElements()) {
-            elements.add(new BlockPart(part.from, part.to, Maps.newHashMap(part.faces), part.rotation, part.shade));
+        List<BlockElement> elements = Lists.newArrayList(); //We have to duplicate this so we can edit it below.
+        for (BlockElement part : this.model.getElements()) {
+            elements.add(new BlockElement(part.from, part.to, Maps.newHashMap(part.faces), part.rotation, part.shade));
         }
 
         BlockModel newModel = new BlockModel(this.model.getParentLocation(), elements,
@@ -47,13 +47,13 @@ public class RetextureableBlockModelWrapper extends BlockModel {
                 removed.add(e.getKey());
                 newModel.textureMap.remove(e.getKey());
             } else {
-                newModel.textureMap.put(e.getKey(), Either.left(new RenderMaterial(AtlasTexture.LOCATION_BLOCKS, new ResourceLocation(e.getValue()))));
+                newModel.textureMap.put(e.getKey(), Either.left(new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(e.getValue()))));
             }
         }
 
         // Map the model's texture references as if it was the parent of a model with the retexture map as its textures.
-        Map<String, Either<RenderMaterial, String>> remapped = Maps.newHashMap();
-        for (Map.Entry<String, Either<RenderMaterial, String>> e : newModel.textureMap.entrySet()) {
+        Map<String, Either<Material, String>> remapped = Maps.newHashMap();
+        for (Map.Entry<String, Either<Material, String>> e : newModel.textureMap.entrySet()) {
             Optional<String> right = e.getValue().right();
             if (right.isPresent() && right.get().startsWith("#")) {
                 String key = right.get().substring(1);
@@ -65,7 +65,7 @@ public class RetextureableBlockModelWrapper extends BlockModel {
         newModel.textureMap.putAll(remapped);
 
         //Remove any faces that use a null texture, this is for performance reasons, also allows some cool layering stuff.
-        for (BlockPart part : newModel.getElements()) {
+        for (BlockElement part : newModel.getElements()) {
             part.faces.entrySet().removeIf(entry -> removed.contains(entry.getValue().texture));
         }
 

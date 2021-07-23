@@ -1,22 +1,22 @@
 package com.blakebr0.cucumber.event;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.eventbus.api.Cancelable;
 import net.minecraftforge.eventbus.api.Event;
 
 @Cancelable
 public class ScytheHarvestCropEvent extends Event {
-    private final IWorld world;
+    private final LevelAccessor world;
     private final BlockPos pos;
     private final BlockState state;
     private final ItemStack stack;
-    private final PlayerEntity player;
+    private final Player player;
 
-    public ScytheHarvestCropEvent(IWorld world, BlockPos pos, BlockState state, ItemStack stack, PlayerEntity player) {
+    public ScytheHarvestCropEvent(LevelAccessor world, BlockPos pos, BlockState state, ItemStack stack, Player player) {
         this.pos = pos;
         this.world = world;
         this.state = state;
@@ -24,7 +24,7 @@ public class ScytheHarvestCropEvent extends Event {
         this.player = player;
     }
 
-    public IWorld getWorld()
+    public LevelAccessor getWorld()
     {
         return this.world;
     }
@@ -43,7 +43,7 @@ public class ScytheHarvestCropEvent extends Event {
         return this.stack;
     }
 
-    public PlayerEntity getPlayer() {
+    public Player getPlayer() {
         return this.player;
     }
 }

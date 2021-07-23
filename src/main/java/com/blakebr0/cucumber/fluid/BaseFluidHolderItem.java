@@ -1,10 +1,12 @@
 package com.blakebr0.cucumber.fluid;
 
 import com.blakebr0.cucumber.iface.IFluidHolder;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+
+import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class BaseFluidHolderItem extends FluidTank implements IFluidHandlerItem {
     private final IFluidHolder holder;

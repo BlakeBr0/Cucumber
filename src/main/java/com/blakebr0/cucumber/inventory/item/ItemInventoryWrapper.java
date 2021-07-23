@@ -1,18 +1,18 @@
 package com.blakebr0.cucumber.inventory.item;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ItemStackHelper;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
 
 // TODO: 1.16: reevaluate
-public class ItemInventoryWrapper implements IInventory {
+public class ItemInventoryWrapper implements Container {
 	private final ItemStack inventory;
 	private final int size;
 	private final NonNullList<ItemStack> slots;
-	private CompoundNBT tag;
+	private CompoundTag tag;
 	private boolean dirty = false;
 	
 	public ItemInventoryWrapper(ItemStack inventory, int size) {
@@ -25,15 +25,15 @@ public class ItemInventoryWrapper implements IInventory {
 	}
 	
 	public void load() {
-		CompoundNBT nbt = this.inventory.getTag();
+		CompoundTag nbt = this.inventory.getTag();
 		if (!this.inventory.hasTag() || !nbt.contains("Items")) {
 			if (this.inventory.hasTag()) {
 				this.tag = nbt;
 				loadItems();
-				this.tag = new CompoundNBT();
+				this.tag = new CompoundTag();
 				saveItems();
 			} else {
-				this.inventory.addTagElement("Inventory", new CompoundNBT());
+				this.inventory.addTagElement("Inventory", new CompoundTag());
 			}
 		}
 
@@ -56,7 +56,7 @@ public class ItemInventoryWrapper implements IInventory {
 			if (this.slots.get(i).isEmpty()) {
 				this.tag.remove("Slot" + i);
 			} else{ 
-				this.tag.put("Slot" + i, this.slots.get(i).save(new CompoundNBT()));
+				this.tag.put("Slot" + i, this.slots.get(i).save(new CompoundTag()));
 			}
 		}
 
@@ -94,12 +94,12 @@ public class ItemInventoryWrapper implements IInventory {
 
 	@Override
 	public ItemStack removeItem(int index, int count) {
-		return ItemStackHelper.removeItem(this.slots, index, count);
+		return ContainerHelper.removeItem(this.slots, index, count);
 	}
 
 	@Override
 	public ItemStack removeItemNoUpdate(int index) {
-		return ItemStackHelper.takeItem(this.slots, index);
+		return ContainerHelper.takeItem(this.slots, index);
 	}
 
 	@Override
@@ -119,15 +119,15 @@ public class ItemInventoryWrapper implements IInventory {
 	}
 
 	@Override
-	public boolean stillValid(PlayerEntity player) {
+	public boolean stillValid(Player player) {
 		return true;
 	}
 
 	@Override
-	public void startOpen(PlayerEntity player) { }
+	public void startOpen(Player player) { }
 
 	@Override
-	public void stopOpen(PlayerEntity player) {
+	public void stopOpen(Player player) {
 		setChanged();
 	}
 

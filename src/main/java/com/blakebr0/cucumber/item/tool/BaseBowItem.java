@@ -1,12 +1,14 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.item.BowItem;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.BowItem;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 import java.util.function.Function;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class BaseBowItem extends BowItem {
     public BaseBowItem(Function<Properties, Properties> properties) {
@@ -14,7 +16,7 @@ public class BaseBowItem extends BowItem {
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this;
             if (enableable.isEnabled())

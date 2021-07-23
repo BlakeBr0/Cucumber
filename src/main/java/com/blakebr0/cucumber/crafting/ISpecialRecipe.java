@@ -1,27 +1,27 @@
 package com.blakebr0.cucumber.crafting;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.world.World;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public interface ISpecialRecipe extends IRecipe<IInventory> {
+public interface ISpecialRecipe extends Recipe<Container> {
     @Override
-    default ItemStack assemble(IInventory inv) {
+    default ItemStack assemble(Container inv) {
         return this.getCraftingResult(new InvWrapper(inv));
     }
 
     @Override
-    default boolean matches(IInventory inv, World world) {
+    default boolean matches(Container inv, Level world) {
         return this.matches(new InvWrapper(inv));
     }
 
     @Override
-    default NonNullList<ItemStack> getRemainingItems(IInventory inv) {
+    default NonNullList<ItemStack> getRemainingItems(Container inv) {
         return this.getRemainingItems(new InvWrapper(inv));
     }
 

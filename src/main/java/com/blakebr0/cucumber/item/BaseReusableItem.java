@@ -1,18 +1,20 @@
 package com.blakebr0.cucumber.item;
 
 import com.blakebr0.cucumber.lib.Tooltips;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.enchantment.UnbreakingEnchantment;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.World;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.item.enchantment.DigDurabilityEnchantment;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.List;
 import java.util.function.Function;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class BaseReusableItem extends BaseItem {
 	private final boolean damage;
@@ -51,7 +53,7 @@ public class BaseReusableItem extends BaseItem {
 
 		int unbreaking = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
 		for (int i = 0; i < unbreaking; i++) {
-			if (UnbreakingEnchantment.shouldIgnoreDurabilityDrop(stack, unbreaking, random))
+			if (DigDurabilityEnchantment.shouldIgnoreDurabilityDrop(stack, unbreaking, random))
 				return copy;
 		}
 
@@ -65,7 +67,7 @@ public class BaseReusableItem extends BaseItem {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, World world, List<ITextComponent> tooltip, ITooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag advanced) {
 		if (this.tooltip) {
 			if (this.damage) {
 				int damage = stack.getMaxDamage() - stack.getDamageValue() + 1;

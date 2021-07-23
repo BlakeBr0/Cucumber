@@ -1,12 +1,12 @@
 package com.blakebr0.cucumber.iface;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockDisplayReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.color.block.BlockColor;
+import net.minecraft.client.color.item.ItemColor;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
 
 public interface IColored {
 	default int getColor(int index) {
@@ -17,21 +17,21 @@ public interface IColored {
 		return this.getColor(index);
 	}
 
-	class BlockColors implements IBlockColor {
+	class BlockColors implements BlockColor {
 		@Override
-		public int getColor(BlockState state, IBlockDisplayReader world, BlockPos pos, int index) {
+		public int getColor(BlockState state, BlockAndTintGetter world, BlockPos pos, int index) {
 			return ((IColored) state.getBlock()).getColor(index);
 		}
 	}
 
-	class ItemColors implements IItemColor {
+	class ItemColors implements ItemColor {
 		@Override
 		public int getColor(ItemStack stack, int index) {
 			return ((IColored) stack.getItem()).getColor(index, stack);
 		}
 	}
 
-	class ItemBlockColors implements IItemColor {
+	class ItemBlockColors implements ItemColor {
 		@Override
 		public int getColor(ItemStack stack, int index) {
 			return ((IColored) Block.byItem(stack.getItem())).getColor(index, stack);

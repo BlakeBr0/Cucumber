@@ -1,11 +1,11 @@
 package com.blakebr0.cucumber.helper;
 
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.IRecipeType;
-import net.minecraft.item.crafting.RecipeManager;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.event.RecipesUpdatedEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -36,15 +36,15 @@ public final class RecipeHelper {
         return recipeManager;
     }
 
-    public static Map<IRecipeType<?>, Map<ResourceLocation, IRecipe<?>>> getRecipes() {
+    public static Map<RecipeType<?>, Map<ResourceLocation, Recipe<?>>> getRecipes() {
         return getRecipeManager().recipes;
     }
 
-    public static <C extends IInventory, T extends IRecipe<C>> Map<ResourceLocation, IRecipe<C>> getRecipes(IRecipeType<T> type) {
+    public static <C extends Container, T extends Recipe<C>> Map<ResourceLocation, Recipe<C>> getRecipes(RecipeType<T> type) {
         return getRecipeManager().byType(type);
     }
 
-    public static void addRecipe(IRecipe<?> recipe) {
+    public static void addRecipe(Recipe<?> recipe) {
         getRecipeManager().recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
     }
 }

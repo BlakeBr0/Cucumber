@@ -1,9 +1,9 @@
 package com.blakebr0.cucumber.inventory;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -90,8 +90,8 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.outputSlots = slots;
     }
 
-    public IInventory toIInventory() {
-        return new Inventory(this.stacks.toArray(new ItemStack[0]));
+    public Container toIInventory() {
+        return new SimpleContainer(this.stacks.toArray(new ItemStack[0]));
     }
 
     /**

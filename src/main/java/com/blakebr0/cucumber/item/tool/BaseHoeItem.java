@@ -1,30 +1,32 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 
 import java.util.function.Function;
+
+import net.minecraft.world.item.Item.Properties;
 
 public class BaseHoeItem extends HoeItem {
     private final float attackDamage;
     private final float attackSpeed;
 
-    public BaseHoeItem(IItemTier tier, Function<Properties, Properties> properties) {
+    public BaseHoeItem(Tier tier, Function<Properties, Properties> properties) {
         this(tier, -1, -2.0F, properties);
     }
 
-    public BaseHoeItem(IItemTier tier, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
+    public BaseHoeItem(Tier tier, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
     }
 
     @Override
-    public void fillItemCategory(ItemGroup group, NonNullList<ItemStack> items) {
+    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
         if (this instanceof IEnableable) {
             IEnableable enableable = (IEnableable) this;
             if (enableable.isEnabled())
