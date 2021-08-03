@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://maven.minecraftforge.net/' }
         mavenCentral()
     }
     dependencies {
@@ -8,7 +8,6 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
 version = '4.1.10'
@@ -28,27 +27,37 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'info'
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
 
-            ideaModule "${project.name}.main"
             environment 'MOD_CLASSES', "${project.file('out/production/resources').canonicalPath}${File.pathSeparator}${project.file('out/production/classes').canonicalPath}"
+
+            mods {
+                cucumber {
+                    source sourceSets.main
+                }
+            }
         }
 
         server {
             workingDirectory project.file('run')
 
-            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'info'
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
 
-            ideaModule "${project.name}.main"
             environment 'MOD_CLASSES', "${project.file('out/production/resources').canonicalPath}${File.pathSeparator}${project.file('out/production/classes').canonicalPath}"
+
+            mods {
+                cucumber {
+                    source sourceSets.main
+                }
+            }
         }
     }
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.17.1-37.0.1'
+    minecraft 'net.minecraftforge:forge:1.17.1-37.0.19'
 }
 
 jar {
@@ -58,7 +67,7 @@ jar {
             'Specification-Vendor': 'BlakeBr0',
             'Specification-Version': '1',
             'Implementation-Title': project.name,
-            'Implementation-Version': project.jar.archiveVersion,
+            'Implementation-Version': "${archiveVersion}",
             'Implementation-Vendor' : 'BlakeBr0',
             'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
