@@ -6,12 +6,11 @@ import com.blakebr0.cucumber.crafting.recipe.ShapedNoMirrorRecipe;
 import com.blakebr0.cucumber.crafting.recipe.ShapedTagRecipe;
 import com.blakebr0.cucumber.crafting.recipe.ShapedTransferDamageRecipe;
 import com.blakebr0.cucumber.crafting.recipe.ShapelessTagRecipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.registries.IForgeRegistry;
 
 public final class ModRecipeSerializers {
     public static final RecipeSerializer<?> CRAFTING_SHAPED_NO_MIRROR = new ShapedNoMirrorRecipe.Serializer();
@@ -21,7 +20,7 @@ public final class ModRecipeSerializers {
 
     @SubscribeEvent
     public void onRegisterSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
-        IForgeRegistry<RecipeSerializer<?>> registry = event.getRegistry();
+        var registry = event.getRegistry();
 
         registry.register(CRAFTING_SHAPED_NO_MIRROR.setRegistryName(new ResourceLocation(Cucumber.MOD_ID, "shaped_no_mirror")));
         registry.register(CRAFTING_SHAPED_TRANSFER_DAMAGE.setRegistryName(new ResourceLocation(Cucumber.MOD_ID, "shaped_transfer_damage")));

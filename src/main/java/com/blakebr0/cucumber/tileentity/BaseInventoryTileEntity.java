@@ -1,10 +1,12 @@
 package com.blakebr0.cucumber.tileentity;
 
 import com.blakebr0.cucumber.inventory.BaseItemStackHandler;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -13,8 +15,8 @@ import net.minecraftforge.items.IItemHandler;
 public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     private final LazyOptional<IItemHandler> capability = LazyOptional.of(this::getInventory);
 
-    public BaseInventoryTileEntity(BlockEntityType<?> type) {
-        super(type);
+    public BaseInventoryTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
     }
 
     public abstract BaseItemStackHandler getInventory();
@@ -29,6 +31,7 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     public CompoundTag save(CompoundTag tag) {
         super.save(tag);
         tag.merge(this.getInventory().serializeNBT());
+
         return tag;
     }
 

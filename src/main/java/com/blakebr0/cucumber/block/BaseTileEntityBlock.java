@@ -9,6 +9,7 @@ import java.util.function.Function;
 
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
+// TODO: 1.17 delete?
 public class BaseTileEntityBlock extends BaseBlock {
     public BaseTileEntityBlock(Material material, Function<Properties, Properties> properties) {
         super(material, properties);
@@ -20,10 +21,5 @@ public class BaseTileEntityBlock extends BaseBlock {
 
     public BaseTileEntityBlock(Material material, SoundType sound, float hardness, float resistance, ToolType tool) {
         super(material, sound, hardness, resistance, tool);
-    }
-
-    @Override
-    public boolean hasTileEntity(BlockState state) {
-        return true;
     }
 }

@@ -4,17 +4,10 @@ import net.minecraft.core.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-public final class MultiblockPositions {
-    private final List<BlockPos> positions;
-
-    public MultiblockPositions(List<BlockPos> positions) {
-        this.positions = positions;
-    }
-
+public record MultiblockPositions(List<BlockPos> positions) {
     public List<BlockPos> get(BlockPos pos) {
-        return this.positions.stream().map(pos::offset).collect(Collectors.toList());
+        return this.positions.stream().map(pos::offset).toList();
     }
 
     public static class Builder {

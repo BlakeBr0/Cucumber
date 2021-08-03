@@ -18,8 +18,8 @@ public class ItemEnergyStorage extends EnergyStorage {
 
 	@Override
 	public int receiveEnergy(int maxReceive, boolean simulate) {
-		int energy = NBTHelper.getInt(this.container, "Energy");
-		int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
+		var energy = NBTHelper.getInt(this.container, "Energy");
+		var energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
 
 		if (!simulate) {
 			energy += energyReceived;
@@ -31,8 +31,8 @@ public class ItemEnergyStorage extends EnergyStorage {
 
 	@Override
 	public int extractEnergy(int maxExtract, boolean simulate) {
-		int energy = NBTHelper.getInt(this.container, "Energy");
-		int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
+		var energy = NBTHelper.getInt(this.container, "Energy");
+		var energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
 
 		if (!simulate) {
 			energy -= energyExtracted;

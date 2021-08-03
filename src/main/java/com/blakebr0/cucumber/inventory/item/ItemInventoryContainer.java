@@ -26,7 +26,8 @@ public class ItemInventoryContainer extends AbstractContainerMenu {
 	
 	@Override
 	public void broadcastChanges() {
-		ItemStack stack = this.inventory.items.get(this.index);
+		var stack = this.inventory.items.get(this.index);
+
 		if (stack.isEmpty() || stack.getItem() != this.wrapper.getInventory().getItem()) {
 			this.valid = false;
 			return;
@@ -38,15 +39,17 @@ public class ItemInventoryContainer extends AbstractContainerMenu {
 	@Override
 	public boolean stillValid(Player player) {
 		this.onSlotChanged();
+
 		if (this.wrapper.getDirty() && !this.valid) {
-			player.inventory.setCarried(ItemStack.EMPTY);
+			player.getInventory().setPickedItem(ItemStack.EMPTY);
 		}
 
 		return this.valid;
 	}
 
 	public void onSlotChanged() {
-		ItemStack stack = this.inventory.items.get(this.index);
+		var stack = this.inventory.items.get(this.index);
+
 		if (this.valid && !stack.isEmpty() && stack.getItem() == this.wrapper.getInventory().getItem()) {
 			this.inventory.items.set(this.index, this.wrapper.getInventory());
 		}

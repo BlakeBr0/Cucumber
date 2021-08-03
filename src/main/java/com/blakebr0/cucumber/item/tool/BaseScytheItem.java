@@ -3,12 +3,10 @@ package com.blakebr0.cucumber.item.tool;
 import com.blakebr0.cucumber.event.ScytheHarvestCropEvent;
 import com.blakebr0.cucumber.iface.IEnableable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -20,10 +18,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
@@ -31,7 +27,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.function.Function;
 
 public class BaseScytheItem extends SwordItem {
@@ -43,7 +38,7 @@ public class BaseScytheItem extends SwordItem {
     private final int range;
 
     static {
-        GET_SEED = ObfuscationReflectionHelper.findMethod(CropBlock.class, "func_199772_f");
+        GET_SEED = ObfuscationReflectionHelper.findMethod(CropBlock.class, "m_6404_");
     }
 
     public BaseScytheItem(Tier tier, int attackDamage, float attackSpeed,  int range, Function<Properties, Properties> properties) {
@@ -55,8 +50,7 @@ public class BaseScytheItem extends SwordItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable) {
-            IEnableable enableable = (IEnableable) this;
+        if (this instanceof IEnableable enableable) {
             if (enableable.isEnabled())
                 super.fillItemCategory(group, items);
         } else {
@@ -66,51 +60,54 @@ public class BaseScytheItem extends SwordItem {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        Player player = context.getPlayer();
+        var player = context.getPlayer();
+
         if (player == null)
             return InteractionResult.FAIL;
 
-        BlockPos pos = context.getClickedPos();
-        InteractionHand hand = context.getHand();
-        Direction face = context.getClickedFace();
-        ItemStack stack = player.getItemInHand(hand);
+        var pos = context.getClickedPos();
+        var hand = context.getHand();
+        var face = context.getClickedFace();
+        var stack = player.getItemInHand(hand);
 
         if (!player.mayUseItemAt(pos.relative(face), face, stack))
             return InteractionResult.FAIL;
 
-        Level world = context.getLevel();
-        if (world.isClientSide())
+        var level = context.getLevel();
+
+        if (level.isClientSide())
             return InteractionResult.SUCCESS;
 
-        int range = this.range;
-        BlockPos.betweenClosed(pos.offset(-range, 0, -range), pos.offset(range, 0, range)).forEach(aoePos -> {
+        BlockPos.betweenClosed(pos.offset(-this.range, 0, -this.range), pos.offset(this.range, 0, this.range)).forEach(aoePos -> {
             if (stack.isEmpty())
                 return;
 
-            BlockState state = world.getBlockState(aoePos);
+            var state = level.getBlockState(aoePos);
+            var event = new ScytheHarvestCropEvent(level, aoePos, state, stack, player);
 
-            ScytheHarvestCropEvent event = new ScytheHarvestCropEvent(world, aoePos, state, stack, player);
             if (MinecraftForge.EVENT_BUS.post(event))
                 return;
 
-            Block block = state.getBlock();
+            var block = state.getBlock();
 
-            if (block instanceof CropBlock) {
-                CropBlock crop = (CropBlock) block;
+            if (block instanceof CropBlock crop) {
                 Item seed = getSeed(crop);
+
                 if (crop.isMaxAge(state) && seed != null) {
-                    List<ItemStack> drops = Block.getDrops(state, (ServerLevel) world, aoePos, world.getBlockEntity(aoePos));
-                    for (ItemStack drop : drops) {
-                        Item item = drop.getItem();
+                    var drops = Block.getDrops(state, (ServerLevel) level, aoePos, level.getBlockEntity(aoePos));
+
+                    for (var drop : drops) {
+                        var item = drop.getItem();
+
                         if (!drop.isEmpty() && item == seed) {
                             drop.shrink(1);
                             break;
                         }
                     }
 
-                    for (ItemStack drop : drops) {
+                    for (var drop : drops) {
                         if (!drop.isEmpty()) {
-                            Block.popResource(world, aoePos, drop);
+                            Block.popResource(level, aoePos, drop);
                         }
                     }
 
@@ -118,7 +115,7 @@ public class BaseScytheItem extends SwordItem {
                         entity.broadcastBreakEvent(player.getUsedItemHand());
                     });
 
-                    world.setBlockAndUpdate(aoePos, crop.getStateForAge(0));
+                    level.setBlockAndUpdate(aoePos, crop.getStateForAge(0));
                 }
             }
         });
@@ -129,24 +126,24 @@ public class BaseScytheItem extends SwordItem {
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
         if (player.getAttackStrengthScale(0.5F) >= 0.95F) {
-            Level world = player.level;
-            double range = (this.range >= 2 ? 1.0D + (this.range - 1) * 0.25D : 1.0D);
-            List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(range, 0.25D, range));
+            var level = player.level;
+            var range = (this.range >= 2 ? 1.0D + (this.range - 1) * 0.25D : 1.0D);
+            var entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(range, 0.25D, range));
 
-            for (LivingEntity aoeEntity : entities) {
+            for (var aoeEntity : entities) {
                 if (aoeEntity != player && aoeEntity != entity && !player.isAlliedTo(entity)) {
-                    DamageSource source = DamageSource.playerAttack(player);
-                    float attackDamage = this.getAttackDamage() * 0.67F;
-                    boolean success = ForgeHooks.onLivingAttack(aoeEntity, source, attackDamage);
+                    var source = DamageSource.playerAttack(player);
+                    var attackDamage = this.getAttackDamage() * 0.67F;
+                    var success = ForgeHooks.onLivingAttack(aoeEntity, source, attackDamage);
 
                     if (success) {
-                        aoeEntity.knockback(0.4F, Mth.sin(player.yRot * 0.017453292F), -Mth.cos(player.yRot * 0.017453292F));
+                        aoeEntity.knockback(0.4F, Mth.sin(player.getYRot() * 0.017453292F), -Mth.cos(player.getYRot() * 0.017453292F));
                         aoeEntity.hurt(source, attackDamage);
                     }
                 }
             }
 
-            world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
 
             player.sweepAttack();
         }

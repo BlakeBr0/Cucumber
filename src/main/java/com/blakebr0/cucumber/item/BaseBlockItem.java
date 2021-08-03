@@ -1,15 +1,13 @@
 package com.blakebr0.cucumber.item;
 
 import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.NonNullList;
+import net.minecraft.world.level.block.Block;
 
 import java.util.function.Function;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class BaseBlockItem extends BlockItem implements IEnableable {
     public BaseBlockItem(Block block, Function<Properties, Properties> properties) {
@@ -18,8 +16,7 @@ public class BaseBlockItem extends BlockItem implements IEnableable {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this.getBlock() instanceof IEnableable) {
-            IEnableable enableable = (IEnableable) this.getBlock();
+        if (this.getBlock() instanceof IEnableable enableable) {
             if (enableable.isEnabled())
                 super.fillItemCategory(group, items);
         } else {
@@ -29,8 +26,8 @@ public class BaseBlockItem extends BlockItem implements IEnableable {
 
     @Override
     public boolean isEnabled() {
-        if (this.getBlock() instanceof IEnableable)
-            return ((IEnableable) this.getBlock()).isEnabled();
+        if (this.getBlock() instanceof IEnableable enableable)
+            return enableable.isEnabled();
 
         return true;
     }

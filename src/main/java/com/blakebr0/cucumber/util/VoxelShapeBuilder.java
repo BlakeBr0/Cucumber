@@ -1,16 +1,17 @@
 package com.blakebr0.cucumber.util;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public final class VoxelShapeBuilder {
     private VoxelShape leftShape;
     private VoxelShape lastOrShape;
 
     public static VoxelShapeBuilder fromShapes(VoxelShape... shapes) {
-        VoxelShapeBuilder builder = new VoxelShapeBuilder();
-        for (VoxelShape shape : shapes) {
+        var builder = new VoxelShapeBuilder();
+
+        for (var shape : shapes) {
             builder.shape(shape);
         }
 
@@ -21,7 +22,8 @@ public final class VoxelShapeBuilder {
         if (this.leftShape == null) {
             this.leftShape = shape;
         } else {
-            VoxelShape newShape = Shapes.or(this.leftShape, shape);
+            var newShape = Shapes.or(this.leftShape, shape);
+
             if (this.lastOrShape != null) {
                 this.lastOrShape = Shapes.or(this.lastOrShape, newShape);
             } else {
@@ -35,7 +37,7 @@ public final class VoxelShapeBuilder {
     }
 
     public VoxelShapeBuilder cuboid(double x1, double y1, double z1, double x2, double y2, double z2) {
-        VoxelShape shape = Block.box(x1, y1, z1, x2, y2, z2);
+        var shape = Block.box(x1, y1, z1, x2, y2, z2);
         return this.shape(shape);
     }
 

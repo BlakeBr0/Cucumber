@@ -6,8 +6,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
-
 public class BaseFluidHolderItem extends FluidTank implements IFluidHandlerItem {
     private final IFluidHolder holder;
     private final ItemStack stack;

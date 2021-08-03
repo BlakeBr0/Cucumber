@@ -4,7 +4,7 @@ import com.blakebr0.cucumber.client.render.GlowingTextRenderer;
 import com.blakebr0.cucumber.command.ModCommands;
 import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.crafting.TagMapper;
-import com.blakebr0.cucumber.handler.BowFovHandler;
+import com.blakebr0.cucumber.handler.BowFOVHandler;
 import com.blakebr0.cucumber.handler.NBTTooltipHandler;
 import com.blakebr0.cucumber.handler.TagTooltipHandler;
 import com.blakebr0.cucumber.helper.RecipeHelper;
@@ -43,7 +43,7 @@ public final class Cucumber {
  	@SubscribeEvent
 	public void onClientSetup(FMLClientSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new GlowingTextRenderer());
-		MinecraftForge.EVENT_BUS.register(new BowFovHandler());
+		MinecraftForge.EVENT_BUS.register(new BowFOVHandler());
 		MinecraftForge.EVENT_BUS.register(new TagTooltipHandler());
 		MinecraftForge.EVENT_BUS.register(new NBTTooltipHandler());
 	}

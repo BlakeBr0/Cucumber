@@ -1,16 +1,14 @@
 package com.blakebr0.cucumber.block;
 
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.material.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolType;
 
 import java.util.function.Function;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BaseOreBlock extends BaseBlock {
     private final int minExp;

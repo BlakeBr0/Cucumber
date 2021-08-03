@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 
+// TODO: 1.17 reevalute
 public class GlowingTextFontRenderer extends Font {
     private final GlowingTextRenderer.ColorInfo info;
 

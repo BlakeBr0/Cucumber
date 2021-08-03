@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.helper;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
 
 public final class NBTHelper {
 	public static void setTag(ItemStack stack, String key, Tag value) {
@@ -109,7 +109,8 @@ public final class NBTHelper {
 	
 	public static void validateCompound(ItemStack stack) {
 		if (!stack.hasTag()) {
-			CompoundTag tag = new CompoundTag();
+			var tag = new CompoundTag();
+
 			stack.setTag(tag);
 		}
 	}

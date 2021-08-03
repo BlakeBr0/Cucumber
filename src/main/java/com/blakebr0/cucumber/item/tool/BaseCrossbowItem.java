@@ -1,14 +1,12 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.world.item.CrossbowItem;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.CrossbowItem;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class BaseCrossbowItem extends CrossbowItem {
     public BaseCrossbowItem(Function<Properties, Properties> properties) {
@@ -17,8 +15,7 @@ public class BaseCrossbowItem extends CrossbowItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable) {
-            IEnableable enableable = (IEnableable) this;
+        if (this instanceof IEnableable enableable) {
             if (enableable.isEnabled())
                 super.fillItemCategory(group, items);
         } else {

@@ -3,21 +3,15 @@ package com.blakebr0.cucumber.crafting.conditions;
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.iface.IEnableable;
 import com.google.gson.JsonObject;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class EnableableCondition implements ICondition {
+public record EnableableCondition(ResourceLocation item) implements ICondition {
     private static final ResourceLocation ID = new ResourceLocation(Cucumber.MOD_ID, "enabled");
-    private final ResourceLocation item;
-
-    public EnableableCondition(ResourceLocation item) {
-        this.item = item;
-    }
 
     @Override
     public ResourceLocation getID() {
@@ -26,9 +20,11 @@ public class EnableableCondition implements ICondition {
 
     @Override
     public boolean test() {
-        Item item = ForgeRegistries.ITEMS.getValue(this.item);
-        if (item == Items.AIR) return false;
-        return !(item instanceof IEnableable) || ((IEnableable) item).isEnabled();
+        var item = ForgeRegistries.ITEMS.getValue(this.item);
+        if (item == Items.AIR)
+            return false;
+
+        return !(item instanceof IEnableable enableable) || enableable.isEnabled();
     }
 
     public static class Serializer implements IConditionSerializer<EnableableCondition> {

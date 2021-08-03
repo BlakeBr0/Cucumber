@@ -1,15 +1,13 @@
 package com.blakebr0.cucumber.block;
 
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolType;
 
 import java.util.function.Supplier;
-
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 public class BaseStairsBlock extends StairBlock {
     public BaseStairsBlock(Block block) {

@@ -1,15 +1,17 @@
 package com.blakebr0.cucumber.tileentity;
 
 import com.blakebr0.cucumber.helper.TileEntityHelper;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class BaseTileEntity extends BlockEntity {
-	public BaseTileEntity(BlockEntityType<?> type) {
-		super(type);
+	public BaseTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
 	}
 
 	@Override
@@ -19,7 +21,7 @@ public class BaseTileEntity extends BlockEntity {
 
 	@Override
 	public void onDataPacket(Connection manager, ClientboundBlockEntityDataPacket packet) {
-		this.load(this.getBlockState(), packet.getTag());
+		this.load(packet.getTag());
 	}
 
 	@Override

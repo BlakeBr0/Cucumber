@@ -1,18 +1,16 @@
 package com.blakebr0.cucumber.crafting.recipe;
 
 import com.google.gson.JsonObject;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-
-import java.util.Map;
 
 public class ShapedTransferDamageRecipe extends ShapedRecipe {
     public ShapedTransferDamageRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, ItemStack output) {
@@ -21,9 +19,11 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
 
     @Override
     public ItemStack assemble(CraftingContainer inv) {
-        ItemStack damageable = ItemStack.EMPTY;
-        for (int i = 0; i < inv.getContainerSize(); i++) {
-            ItemStack slotStack = inv.getItem(i);
+        var damageable = ItemStack.EMPTY;
+
+        for (var i = 0; i < inv.getContainerSize(); i++) {
+            var slotStack = inv.getItem(i);
+
             if (slotStack.isDamageableItem()) {
                 damageable = slotStack;
                 break;
@@ -33,7 +33,7 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
         if (damageable.isEmpty())
             return super.assemble(inv);
 
-        ItemStack result = this.getResultItem().copy();
+        var result = this.getResultItem().copy();
 
         result.setDamageValue(damageable.getDamageValue());
 
@@ -43,39 +43,40 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedTransferDamageRecipe> {
         @Override
         public ShapedTransferDamageRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            String s = GsonHelper.getAsString(json, "group", "");
-            Map<String, Ingredient> map = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
-            String[] astring = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
-            int i = astring[0].length();
-            int j = astring.length;
-            NonNullList<Ingredient> nonnulllist = ShapedRecipe.dissolvePattern(astring, map, i, j);
-            ItemStack itemstack = ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "result"));
-            return new ShapedTransferDamageRecipe(recipeId, s, i, j, nonnulllist, itemstack);
+            var group = GsonHelper.getAsString(json, "group", "");
+            var key = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
+            var pattern = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
+            var width = pattern[0].length();
+            var height = pattern.length;
+            var ingredients = ShapedRecipe.dissolvePattern(pattern, key, width, height);
+            var output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
+
+            return new ShapedTransferDamageRecipe(recipeId, group, width, height, ingredients, output);
         }
 
         @Override
         public ShapedTransferDamageRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            int i = buffer.readVarInt();
-            int j = buffer.readVarInt();
-            String s = buffer.readUtf(32767);
-            NonNullList<Ingredient> inputs = NonNullList.withSize(i * j, Ingredient.EMPTY);
+            var group = buffer.readUtf(32767);
+            var width = buffer.readVarInt();
+            var height = buffer.readVarInt();
+            var ingredients = NonNullList.withSize(width * height, Ingredient.EMPTY);
 
-            for (int k = 0; k < inputs.size(); ++k) {
-                inputs.set(k, Ingredient.fromNetwork(buffer));
+            for (var k = 0; k < ingredients.size(); ++k) {
+                ingredients.set(k, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack output = buffer.readItem();
+            var output = buffer.readItem();
 
-            return new ShapedTransferDamageRecipe(recipeId, s, i, j, inputs, output);
+            return new ShapedTransferDamageRecipe(recipeId, group, width, height, ingredients, output);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, ShapedTransferDamageRecipe recipe) {
+            buffer.writeUtf(recipe.getGroup());
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());
-            buffer.writeUtf(recipe.getGroup());
 
-            for (Ingredient ingredient : recipe.getIngredients()) {
+            for (var ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buffer);
             }
 

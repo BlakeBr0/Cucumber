@@ -1,25 +1,17 @@
 package com.blakebr0.cucumber.inventory;
 
 import com.blakebr0.cucumber.util.TriFunction;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.core.Direction;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandlerModifiable;
 
 import java.util.function.BiFunction;
 
-public class SidedItemStackHandlerWrapper implements IItemHandlerModifiable {
-    private final BaseItemStackHandler inventory;
-    private final Direction direction;
-    private final TriFunction<Integer, ItemStack, Direction, Boolean> canInsert;
-    private final BiFunction<Integer, Direction, Boolean> canExtract;
-
-    public SidedItemStackHandlerWrapper(BaseItemStackHandler inventory, Direction direction, TriFunction<Integer, ItemStack, Direction, Boolean> canInsert, BiFunction<Integer, Direction, Boolean> canExtract) {
-        this.inventory = inventory;
-        this.direction = direction;
-        this.canInsert = canInsert;
-        this.canExtract = canExtract;
-    }
+public record SidedItemStackHandlerWrapper(BaseItemStackHandler inventory,
+                                           Direction direction,
+                                           TriFunction<Integer, ItemStack, Direction, Boolean> canInsert,
+                                           BiFunction<Integer, Direction, Boolean> canExtract) implements IItemHandlerModifiable {
 
     @Override
     public void setStackInSlot(int slot, ItemStack stack) {
@@ -69,7 +61,7 @@ public class SidedItemStackHandlerWrapper implements IItemHandlerModifiable {
     public static LazyOptional<IItemHandlerModifiable>[] create(BaseItemStackHandler inv, Direction[] sides, TriFunction<Integer, ItemStack, Direction, Boolean> canInsert, BiFunction<Integer, Direction, Boolean> canExtract) {
         LazyOptional<IItemHandlerModifiable>[] ret = new LazyOptional[sides.length];
         for (int x = 0; x < sides.length; x++) {
-            final Direction side = sides[x];
+            final var side = sides[x];
             ret[x] = LazyOptional.of(() -> new SidedItemStackHandlerWrapper(inv, side, canInsert, canExtract));
         }
 

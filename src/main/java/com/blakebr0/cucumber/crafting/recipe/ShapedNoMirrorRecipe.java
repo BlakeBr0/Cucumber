@@ -2,19 +2,17 @@ package com.blakebr0.cucumber.crafting.recipe;
 
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonObject;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
-
-import java.util.Map;
 
 // Shaped recipe but no mirroring >:(
 public class ShapedNoMirrorRecipe extends ShapedRecipe {
@@ -41,11 +39,12 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
     }
 
     private boolean checkMatch(CraftingContainer inventory, int x, int y) {
-        for (int i = 0; i < inventory.getWidth(); ++i) {
-            for (int j = 0; j < inventory.getHeight(); ++j) {
-                int k = i - x;
-                int l = j - y;
-                Ingredient ingredient = Ingredient.EMPTY;
+        for (var i = 0; i < inventory.getWidth(); i++) {
+            for (var j = 0; j < inventory.getHeight(); j++) {
+                var k = i - x;
+                var l = j - y;
+                var ingredient = Ingredient.EMPTY;
+
                 if (k >= 0 && l >= 0 && k < this.getRecipeWidth() && l < this.getRecipeHeight()) {
                     ingredient = this.getIngredients().get(k + l * this.getRecipeWidth());
                 }
@@ -62,39 +61,40 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedNoMirrorRecipe> {
         @Override
         public ShapedNoMirrorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            String s = GsonHelper.getAsString(json, "group", "");
-            Map<String, Ingredient> map = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
-            String[] astring = ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern"));
-            int i = astring[0].length();
-            int j = astring.length;
-            NonNullList<Ingredient> nonnulllist = ShapedRecipe.dissolvePattern(astring, map, i, j);
-            ItemStack itemstack = ShapedRecipe.itemFromJson(GsonHelper.getAsJsonObject(json, "result"));
-            return new ShapedNoMirrorRecipe(recipeId, s, i, j, nonnulllist, itemstack);
+            var group = GsonHelper.getAsString(json, "group", "");
+            var key = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
+            var pattern = ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern"));
+            var width = pattern[0].length();
+            var height = pattern.length;
+            var ingredients = ShapedRecipe.dissolvePattern(pattern, key, width, height);
+            var output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
+
+            return new ShapedNoMirrorRecipe(recipeId, group, width, height, ingredients, output);
         }
 
         @Override
         public ShapedNoMirrorRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            int i = buffer.readVarInt();
-            int j = buffer.readVarInt();
-            String s = buffer.readUtf(32767);
-            NonNullList<Ingredient> inputs = NonNullList.withSize(i * j, Ingredient.EMPTY);
+            var group = buffer.readUtf(32767);
+            var width = buffer.readVarInt();
+            var height = buffer.readVarInt();
+            var ingredients = NonNullList.withSize(width * height, Ingredient.EMPTY);
 
-            for (int k = 0; k < inputs.size(); ++k) {
-                inputs.set(k, Ingredient.fromNetwork(buffer));
+            for (var k = 0; k < ingredients.size(); ++k) {
+                ingredients.set(k, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack output = buffer.readItem();
+            var output = buffer.readItem();
 
-            return new ShapedNoMirrorRecipe(recipeId, s, i, j, inputs, output);
+            return new ShapedNoMirrorRecipe(recipeId, group, width, height, ingredients, output);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, ShapedNoMirrorRecipe recipe) {
+            buffer.writeUtf(recipe.getGroup());
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());
-            buffer.writeUtf(recipe.getGroup());
 
-            for (Ingredient ingredient : recipe.getIngredients()) {
+            for (var ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buffer);
             }
 

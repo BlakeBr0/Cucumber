@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.client.helper;
 
+import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Font;
@@ -63,37 +64,11 @@ public final class RenderHelper {
 //		drawScaledCenteredWrappedTextX(font, s, x, y, scale, width, height, color, shadow);
 	}
 
-	public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height) {
-		drawTexturedModalRect(x, y, textureX, textureY, width, height, 256, 256);
-	}
-
-	public static void drawTexturedModalRect(double x, double y, double u, double v, double width, double height, double textureWidth, double textureHeight) {
-//		double f = 1.0D / textureWidth;
-//		double f1 = 1.0D / textureHeight;
-//		Tessellator tessellator = Tessellator.getInstance();
-//		BufferBuilder buffer = tessellator.getBuilder();
-//		buffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-//		buffer.pos(x, (y + height), 0)
-//				.tex((float) (u * f), (float) ((v + height) * f1))
-//				.endVertex();
-//		buffer.pos(x + width, y + height, 0)
-//				.tex((float) ((u + width) * f), (float) ((v + height) * f1))
-//				.endVertex();
-//		buffer.pos(x + width, y, 0)
-//				.tex((float) ((u + width) * f), (float) (v * f1))
-//				.endVertex();
-//		buffer.pos(x, y, 0)
-//				.tex((float) (u * f), (float) (v * f1))
-//				.endVertex();
-//		tessellator.draw();
-	}
-
 	public static void drawScaledItemIntoGui(ItemRenderer render, ItemStack stack, int x, int y, float scale) {
-		RenderSystem.pushMatrix();
-		RenderSystem.scalef(scale, scale, scale);
-		com.mojang.blaze3d.platform.Lighting.setupForFlatItems();
-		render.renderAndDecorateItem(stack, (int) (x / scale), (int) (y / scale));
-		com.mojang.blaze3d.platform.Lighting.turnOff();
-		RenderSystem.popMatrix();
+//		RenderSystem.pushMatrix();
+//		RenderSystem.scalef(scale, scale, scale);
+//		Lighting.setupForFlatItems();
+//		render.renderAndDecorateItem(stack, (int) (x / scale), (int) (y / scale));
+//		RenderSystem.popMatrix();
 	}
 }

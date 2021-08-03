@@ -6,8 +6,6 @@ import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolType;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 public class BaseWallBlock extends WallBlock {
     public BaseWallBlock(Block block) {
         this(Properties.copy(block));

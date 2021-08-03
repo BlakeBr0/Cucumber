@@ -7,13 +7,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.tags.Tag;
 import net.minecraft.tags.SerializationTags;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -26,9 +26,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Writer;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -48,28 +46,29 @@ public class TagMapper implements ResourceManagerReloadListener {
     }
 
     public static void reloadTagMappings() {
-        Stopwatch stopwatch = Stopwatch.createStarted();
-        File dir = FMLPaths.CONFIGDIR.get().toFile();
+        var stopwatch = Stopwatch.createStarted();
+        var dir = FMLPaths.CONFIGDIR.get().toFile();
 
         TAG_TO_ITEM_MAP.clear();
 
         if (dir.exists() && dir.isDirectory()) {
-            File file = FMLPaths.CONFIGDIR.get().resolve("cucumber-tags.json").toFile();
+            var file = FMLPaths.CONFIGDIR.get().resolve("cucumber-tags.json").toFile();
+
             if (file.exists() && file.isFile()) {
                 JsonObject json;
                 FileReader reader = null;
 
                 try {
-                    JsonParser parser = new JsonParser();
+                    var parser = new JsonParser();
                     reader = new FileReader(file);
                     json = parser.parse(reader).getAsJsonObject();
 
                     json.entrySet().stream().filter(e -> {
-                        String value = e.getValue().getAsString();
+                        var value = e.getValue().getAsString();
                         return !"__comment".equalsIgnoreCase(e.getKey()) && !value.isEmpty() && !"null".equalsIgnoreCase(value);
                     }).forEach(entry -> {
-                        String tag = entry.getKey();
-                        String item = entry.getValue().getAsString();
+                        var tag = entry.getKey();
+                        var item = entry.getValue().getAsString();
 
                         TAG_TO_ITEM_MAP.put(tag, item);
                     });
@@ -92,11 +91,10 @@ public class TagMapper implements ResourceManagerReloadListener {
 
     public static Item getItemForTag(String tagId) {
         if (TAG_TO_ITEM_MAP.containsKey(tagId)) {
-            String id = TAG_TO_ITEM_MAP.get(tagId);
+            var id = TAG_TO_ITEM_MAP.get(tagId);
             return ForgeRegistries.ITEMS.getValue(new ResourceLocation(id));
         } else {
-            File file = FMLPaths.CONFIGDIR.get().resolve("cucumber-tags.json").toFile();
-
+            var file = FMLPaths.CONFIGDIR.get().resolve("cucumber-tags.json").toFile();
             if (!file.exists()) {
                 generateNewConfig(file);
             }
@@ -106,7 +104,7 @@ public class TagMapper implements ResourceManagerReloadListener {
                 FileReader reader = null;
 
                 try {
-                    JsonParser parser = new JsonParser();
+                    var parser = new JsonParser();
                     reader = new FileReader(file);
                     json = parser.parse(reader).getAsJsonObject();
                 } catch (Exception e) {
@@ -117,7 +115,7 @@ public class TagMapper implements ResourceManagerReloadListener {
 
                 if (json != null) {
                     if (json.has(tagId)) {
-                        String itemId = json.get(tagId).getAsString();
+                        var itemId = json.get(tagId).getAsString();
                         if (itemId.isEmpty() || "null".equalsIgnoreCase(itemId))
                             return addTagToFile(tagId, json, file);
 
@@ -135,16 +133,16 @@ public class TagMapper implements ResourceManagerReloadListener {
     }
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
-        List<String> mods = ModConfigs.MOD_TAG_PRIORITIES.get();
-        Tag<Item> tag = SerializationTags.getInstance().getItems().getTag(new ResourceLocation(tagId));
+        var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
+        var tag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(tagId));
         Item item = tag == null ? Items.AIR : tag.getValues().stream().min((item1, item2) -> {
-            int index1 = item1.getRegistryName() != null ? mods.indexOf(item1.getRegistryName().getNamespace()) : -1;
-            int index2 = item2.getRegistryName() != null ? mods.indexOf(item2.getRegistryName().getNamespace()) : -1;
+            var index1 = item1.getRegistryName() != null ? mods.indexOf(item1.getRegistryName().getNamespace()) : -1;
+            var index2 = item2.getRegistryName() != null ? mods.indexOf(item2.getRegistryName().getNamespace()) : -1;
 
             return index1 > index2 ? 1 : index1 == -1 ? 0 : -1;
         }).orElse(Items.AIR);
 
-        String itemId = "null";
+        var itemId = "null";
         if (item.getRegistryName() != null && item != Items.AIR) {
             itemId = item.getRegistryName().toString();
         }
@@ -152,7 +150,7 @@ public class TagMapper implements ResourceManagerReloadListener {
         json.addProperty(tagId, itemId);
         TAG_TO_ITEM_MAP.put(tagId, itemId);
 
-        try (Writer writer = new FileWriter(file)) {
+        try (var writer = new FileWriter(file)) {
             GSON.toJson(json, writer);
         } catch (IOException e) {
             LOGGER.error("An error occurred while writing to cucumber-tags.json", e);
@@ -162,8 +160,8 @@ public class TagMapper implements ResourceManagerReloadListener {
     }
 
     private static void generateNewConfig(File file) {
-        try (Writer writer = new FileWriter(file)) {
-            JsonObject object = new JsonObject();
+        try (var writer = new FileWriter(file)) {
+            var object = new JsonObject();
             object.addProperty("__comment", "Instructions: https://mods.blakebr0.com/docs/cucumber/tags-config");
 
             GSON.toJson(object, writer);

@@ -2,10 +2,8 @@ package com.blakebr0.cucumber.client.screen.button;
 
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.util.Localizable;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
-
-import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.resources.ResourceLocation;
 
 public class ArrowButton extends IconButton {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Cucumber.MOD_ID, "textures/gui/icons.png");

@@ -7,8 +7,6 @@ import net.minecraftforge.common.ToolType;
 
 import java.util.function.Function;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 public class BaseGlassBlock extends GlassBlock {
     // TODO: .isValidSpawn(Blocks::never).isRedstoneConductor(Blocks::never).isSuffocating(Blocks::never).isViewBlocking(Blocks::never)
 

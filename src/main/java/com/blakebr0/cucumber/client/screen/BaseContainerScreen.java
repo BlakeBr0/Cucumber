@@ -1,8 +1,10 @@
 package com.blakebr0.cucumber.client.screen;
 
 import com.blakebr0.cucumber.util.Localizable;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.resources.ResourceLocation;
@@ -37,7 +39,10 @@ public class BaseContainerScreen<T extends AbstractContainerMenu> extends Abstra
 
     @Override
     protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
-        this.getMinecraft().getTextureManager().bind(this.bgTexture);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, this.bgTexture);
+
         int x = this.getGuiLeft();
         int y = this.getGuiTop();
 

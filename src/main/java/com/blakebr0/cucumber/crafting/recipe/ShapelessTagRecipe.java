@@ -5,16 +5,15 @@ import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.world.item.Item;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class ShapelessTagRecipe extends ShapelessRecipe {
@@ -30,40 +29,41 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
     public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapelessTagRecipe> {
         @Override
         public ShapelessTagRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
-            String group = GsonHelper.getAsString(json, "group", "");
-            NonNullList<Ingredient> inputs = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
+            var group = GsonHelper.getAsString(json, "group", "");
+            var ingredients = readIngredients(GsonHelper.getAsJsonArray(json, "ingredients"));
 
-            if (inputs.isEmpty()) {
+            if (ingredients.isEmpty()) {
                 throw new JsonParseException("No ingredients for shapeless recipe");
-            } else if (inputs.size() > 9) {
+            } else if (ingredients.size() > 9) {
                 throw new JsonParseException("Too many ingredients for shapeless recipe the max is 9");
             }
 
-            JsonObject result = GsonHelper.getAsJsonObject(json, "result");
-            String tag = GsonHelper.getAsString(result, "tag");
-            int count = GsonHelper.getAsInt(result, "count", 1);
-            Item item = TagMapper.getItemForTag(tag);
+            var result = GsonHelper.getAsJsonObject(json, "result");
+            var tag = GsonHelper.getAsString(result, "tag");
+            var count = GsonHelper.getAsInt(result, "count", 1);
+            var item = TagMapper.getItemForTag(tag);
+
             if (item == Items.AIR)
                 return null;
 
-            ItemStack output = new ItemStack(item, count);
+            var output = new ItemStack(item, count);
 
-            return new ShapelessTagRecipe(recipeId, group, output, inputs);
+            return new ShapelessTagRecipe(recipeId, group, output, ingredients);
         }
 
         @Override
         public ShapelessTagRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            String group = buffer.readUtf(32767);
-            int size = buffer.readVarInt();
-            NonNullList<Ingredient> inputs = NonNullList.withSize(size, Ingredient.EMPTY);
+            var group = buffer.readUtf(32767);
+            var size = buffer.readVarInt();
+            var ingredients = NonNullList.withSize(size, Ingredient.EMPTY);
 
-            for (int j = 0; j < inputs.size(); j++) {
-                inputs.set(j, Ingredient.fromNetwork(buffer));
+            for (var j = 0; j < ingredients.size(); j++) {
+                ingredients.set(j, Ingredient.fromNetwork(buffer));
             }
 
-            ItemStack output = buffer.readItem();
+            var output = buffer.readItem();
 
-            return new ShapelessTagRecipe(recipeId, group, output, inputs);
+            return new ShapelessTagRecipe(recipeId, group, output, ingredients);
         }
 
         @Override
@@ -71,7 +71,7 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
             buffer.writeUtf(recipe.getGroup());
             buffer.writeVarInt(recipe.getIngredients().size());
 
-            for (Ingredient ingredient : recipe.getIngredients()) {
+            for (var ingredient : recipe.getIngredients()) {
                 ingredient.toNetwork(buffer);
             }
 
@@ -82,7 +82,8 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
             NonNullList<Ingredient> ingredients = NonNullList.create();
 
             for (int i = 0; i < ingredientArray.size(); ++i) {
-                Ingredient ingredient = Ingredient.fromJson(ingredientArray.get(i));
+                var ingredient = Ingredient.fromJson(ingredientArray.get(i));
+
                 if (!ingredient.isEmpty()) {
                     ingredients.add(ingredient);
                 }

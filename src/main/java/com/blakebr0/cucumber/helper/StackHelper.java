@@ -1,9 +1,7 @@
 package com.blakebr0.cucumber.helper;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.NbtUtils;
-
-import java.util.Set;
+import net.minecraft.world.item.ItemStack;
 
 public final class StackHelper {
 	public static ItemStack withSize(ItemStack stack, int size, boolean container) {
@@ -26,7 +24,9 @@ public final class StackHelper {
 	}
 
 	public static ItemStack shrink(ItemStack stack, int amount, boolean container) {
-		if (stack.isEmpty()) return ItemStack.EMPTY;
+		if (stack.isEmpty())
+			return ItemStack.EMPTY;
+
 		return withSize(stack, stack.getCount() - amount, container);
 	}
 
@@ -45,7 +45,9 @@ public final class StackHelper {
 	 * @return can these stacks be combined
 	 */
 	public static boolean canCombineStacks(ItemStack stack1, ItemStack stack2) {
-		if (!stack1.isEmpty() && stack2.isEmpty()) return true;
+		if (!stack1.isEmpty() && stack2.isEmpty())
+			return true;
+
 		return areStacksEqual(stack1, stack2) && (stack1.getCount() + stack2.getCount()) <= stack1.getMaxStackSize();
 	}
 
@@ -69,13 +71,16 @@ public final class StackHelper {
 	 * @return all the corresponding tags are the same
 	 */
 	public static boolean compareTags(ItemStack stack1, ItemStack stack2) {
-		if (!stack1.hasTag()) return true;
-		if (stack1.hasTag() && !stack2.hasTag()) return false;
+		if (!stack1.hasTag())
+			return true;
+
+		if (stack1.hasTag() && !stack2.hasTag())
+			return false;
 		
-		Set<String> stack1Keys = NBTHelper.getTagCompound(stack1).getAllKeys();
-		Set<String> stack2Keys = NBTHelper.getTagCompound(stack2).getAllKeys();
+		var stack1Keys = NBTHelper.getTagCompound(stack1).getAllKeys();
+		var stack2Keys = NBTHelper.getTagCompound(stack2).getAllKeys();
 		
-		for (String key : stack1Keys) {
+		for (var key : stack1Keys) {
 			if (stack2Keys.contains(key)) {
 				if (!NbtUtils.compareNbt(NBTHelper.getTag(stack1, key), NBTHelper.getTag(stack2, key), true)) {
 					return false;

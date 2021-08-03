@@ -1,9 +1,9 @@
 package com.blakebr0.cucumber.inventory;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.core.NonNullList;
 import net.minecraftforge.items.ItemStackHandler;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -32,6 +32,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
         if (this.outputSlots != null && ArrayUtils.contains(this.outputSlots, slot))
             return stack;
+
         return super.insertItem(slot, stack, simulate);
     }
 
@@ -39,6 +40,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
         if (this.outputSlots != null && !ArrayUtils.contains(this.outputSlots, slot))
             return ItemStack.EMPTY;
+
         return super.extractItem(slot, amount, simulate);
     }
 
@@ -99,7 +101,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
      * @return the copy of this BaseItemStackHandler
      */
     public BaseItemStackHandler copy() {
-        BaseItemStackHandler newInventory = new BaseItemStackHandler(this.getSlots(), this.onContentsChanged);
+        var newInventory = new BaseItemStackHandler(this.getSlots(), this.onContentsChanged);
 
         newInventory.setDefaultSlotLimit(this.maxStackSize);
         newInventory.setSlotValidator(this.slotValidator);
@@ -108,7 +110,8 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.slotSizeMap.forEach(newInventory::addSlotLimit);
 
         for (int i = 0; i < this.getSlots(); i++) {
-            ItemStack stack = this.getStackInSlot(i);
+            var stack = this.getStackInSlot(i);
+
             newInventory.setStackInSlot(i, stack.copy());
         }
 

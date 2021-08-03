@@ -5,15 +5,14 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Either;
-import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.block.model.BlockElement;
-import net.minecraft.client.resources.model.Material;
+import net.minecraft.client.renderer.block.model.BlockModel;
 import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 public class RetextureableBlockModelWrapper extends BlockModel {
@@ -35,14 +34,14 @@ public class RetextureableBlockModelWrapper extends BlockModel {
             elements.add(new BlockElement(part.from, part.to, Maps.newHashMap(part.faces), part.rotation, part.shade));
         }
 
-        BlockModel newModel = new BlockModel(this.model.getParentLocation(), elements,
+        var newModel = new BlockModel(this.model.getParentLocation(), elements,
                 Maps.newHashMap(this.model.textureMap), this.model.hasAmbientOcclusion(), this.model.getGuiLight(), //New Textures man VERY IMPORTANT
                 model.getTransforms(), Lists.newArrayList(model.getOverrides()));
         newModel.name = this.model.name;
         newModel.parent = this.model.parent;
 
         Set<String> removed = Sets.newHashSet();
-        for (Map.Entry<String, String> e : textures.entrySet()) {
+        for (var e : textures.entrySet()) {
             if ("".equals(e.getValue())) {
                 removed.add(e.getKey());
                 newModel.textureMap.remove(e.getKey());
@@ -53,10 +52,10 @@ public class RetextureableBlockModelWrapper extends BlockModel {
 
         // Map the model's texture references as if it was the parent of a model with the retexture map as its textures.
         Map<String, Either<Material, String>> remapped = Maps.newHashMap();
-        for (Map.Entry<String, Either<Material, String>> e : newModel.textureMap.entrySet()) {
-            Optional<String> right = e.getValue().right();
+        for (var e : newModel.textureMap.entrySet()) {
+            var right = e.getValue().right();
             if (right.isPresent() && right.get().startsWith("#")) {
-                String key = right.get().substring(1);
+                var key = right.get().substring(1);
                 if (newModel.textureMap.containsKey(key))
                     remapped.put(e.getKey(), newModel.textureMap.get(key));
             }
@@ -64,8 +63,8 @@ public class RetextureableBlockModelWrapper extends BlockModel {
 
         newModel.textureMap.putAll(remapped);
 
-        //Remove any faces that use a null texture, this is for performance reasons, also allows some cool layering stuff.
-        for (BlockElement part : newModel.getElements()) {
+        // Remove any faces that use a null texture, this is for performance reasons, also allows some cool layering stuff.
+        for (var part : newModel.getElements()) {
             part.faces.entrySet().removeIf(entry -> removed.contains(entry.getValue().texture));
         }
 

@@ -1,31 +1,24 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.core.NonNullList;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.level.Level;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.common.IForgeShearable;
 
-import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class BaseShearsItem extends ShearsItem {
     public BaseShearsItem(Function<Properties, Properties> properties) {
@@ -45,33 +38,35 @@ public class BaseShearsItem extends ShearsItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        Level world = player.level;
-        if (world.isClientSide())
+        var level = player.level;
+        if (level.isClientSide())
             return false;
 
-        BlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
+        var state = level.getBlockState(pos);
+        var block = state.getBlock();
+
         if (block instanceof IForgeShearable) {
-            BlockEntity tile = world.getBlockEntity(pos);
-            LootContext.Builder context = (new LootContext.Builder((ServerLevel) world))
-                    .withRandom(world.getRandom())
+            var tile = level.getBlockEntity(pos);
+            var context = (new LootContext.Builder((ServerLevel) level))
+                    .withRandom(level.getRandom())
                     .withParameter(LootContextParams.ORIGIN, new Vec3(pos.getX(), pos.getY(), pos.getZ()))
                     .withParameter(LootContextParams.TOOL, new ItemStack(Items.SHEARS))
                     .withOptionalParameter(LootContextParams.THIS_ENTITY, player)
                     .withOptionalParameter(LootContextParams.BLOCK_ENTITY, tile);
-            List<ItemStack> drops = state.getDrops(context);
-            Random rand = new Random();
+            var drops = state.getDrops(context);
+            var rand = new Random();
 
-            for (ItemStack drop : drops) {
+            for (var drop : drops) {
                 float f = 0.7F;
                 double d = rand.nextFloat() * f + (1D - f) * 0.5;
                 double d1 = rand.nextFloat() * f + (1D - f) * 0.5;
                 double d2 = rand.nextFloat() * f + (1D - f) * 0.5;
 
-                ItemEntity item = new ItemEntity(world, pos.getX() + d, pos.getY() + d1, pos.getZ() + d2, drop);
+                var item = new ItemEntity(level, pos.getX() + d, pos.getY() + d1, pos.getZ() + d2, drop);
+
                 item.setPickUpDelay(10);
 
-                world.addFreshEntity(item);
+                level.addFreshEntity(item);
             }
 
             stack.hurtAndBreak(1, player, entity -> {
@@ -80,7 +75,7 @@ public class BaseShearsItem extends ShearsItem {
 
             player.awardStat(Stats.BLOCK_MINED.get(block), 1);
 
-            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 11);
 
             return true;
         }

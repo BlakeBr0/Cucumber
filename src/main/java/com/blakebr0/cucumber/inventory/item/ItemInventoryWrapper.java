@@ -1,11 +1,11 @@
 package com.blakebr0.cucumber.inventory.item;
 
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.core.NonNullList;
 
 // TODO: 1.16: reevaluate
 public class ItemInventoryWrapper implements Container {
@@ -25,24 +25,28 @@ public class ItemInventoryWrapper implements Container {
 	}
 	
 	public void load() {
-		CompoundTag nbt = this.inventory.getTag();
-		if (!this.inventory.hasTag() || !nbt.contains("Items")) {
-			if (this.inventory.hasTag()) {
-				this.tag = nbt;
+		var nbt = this.inventory.getTag();
+
+		if (nbt != null) {
+			if (!nbt.contains("Items")) {
+				if (this.inventory.hasTag()) {
+					this.tag = nbt;
+					loadItems();
+					this.tag = new CompoundTag();
+					saveItems();
+				} else {
+					this.inventory.addTagElement("Inventory", new CompoundTag());
+				}
+
+				this.tag = nbt.getCompound("Inventory");
+
 				loadItems();
-				this.tag = new CompoundTag();
-				saveItems();
-			} else {
-				this.inventory.addTagElement("Inventory", new CompoundTag());
 			}
 		}
-
-		this.tag = nbt.getCompound("Inventory");
-		loadItems();
 	}
 	
 	protected void loadItems() {
-		for (int i = 0; i < this.size; i++) {
+		for (var i = 0; i < this.size; i++) {
 			if (this.tag.contains("Slot")) {
 				this.slots.set(i, ItemStack.of(tag.getCompound("Slot" + i)));
 			} else {
@@ -52,7 +56,7 @@ public class ItemInventoryWrapper implements Container {
 	}
 	
 	protected void saveItems() {
-		for (int i = 0; i < this.size; i++) {
+		for (var i = 0; i < this.size; i++) {
 			if (this.slots.get(i).isEmpty()) {
 				this.tag.remove("Slot" + i);
 			} else{ 
@@ -72,8 +76,10 @@ public class ItemInventoryWrapper implements Container {
 	}
 	
 	public boolean getDirty() {
-		boolean dirt = dirty;
+		var dirt = dirty;
+
 		this.dirty = false;
+
 		return dirt;
 	}
 

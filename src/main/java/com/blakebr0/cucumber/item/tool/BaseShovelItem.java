@@ -1,15 +1,13 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.world.item.Tier;
+import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShovelItem;
-import net.minecraft.core.NonNullList;
+import net.minecraft.world.item.Tier;
 
 import java.util.function.Function;
-
-import net.minecraft.world.item.Item.Properties;
 
 public class BaseShovelItem extends ShovelItem {
     private final float attackDamage;
@@ -27,8 +25,7 @@ public class BaseShovelItem extends ShovelItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable) {
-            IEnableable enableable = (IEnableable) this;
+        if (this instanceof IEnableable enableable) {
             if (enableable.isEnabled())
                 super.fillItemCategory(group, items);
         } else {

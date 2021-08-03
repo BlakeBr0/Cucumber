@@ -4,8 +4,6 @@ import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.util.Localizable;
 import net.minecraft.resources.ResourceLocation;
 
-import net.minecraft.client.gui.components.Button.OnPress;
-
 public class CloseButton extends IconButtonStatic {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(Cucumber.MOD_ID, "textures/gui/icons.png");
 	

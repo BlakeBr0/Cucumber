@@ -14,7 +14,7 @@ import com.mojang.math.Vector3f;
  *
  * @author aidancbrady
  */
-// TODO: 1.16: reevaluate
+// TODO: 1.17: delete
 public class Pos3d extends Vec3 {
 	public Pos3d() {
 		this(0, 0, 0);
@@ -152,12 +152,12 @@ public class Pos3d extends Vec3 {
 	 * @param pos - the Pos3D to find the distance to
 	 * @return the distance between this and the defined Pos3D
 	 */
-	public double distance(Vec3 pos) {
-		double subX = x - pos.x;
-		double subY = y - pos.y;
-		double subZ = z - pos.z;
-		return Mth.sqrt(subX * subX + subY * subY + subZ * subZ);
-	}
+//	public double distance(Vec3 pos) {
+//		double subX = x - pos.x;
+//		double subY = y - pos.y;
+//		double subZ = z - pos.z;
+//		return Mth.sqrt(subX * subX + subY * subY + subZ * subZ);
+//	}
 
 	/**
 	 * Rotates this Pos3D by the defined yaw value.
@@ -337,12 +337,12 @@ public class Pos3d extends Vec3 {
 				((Vec3) obj).x == z;
 	}
 
-	@Override
-	public int hashCode() {
-		int code = 1;
-		code = 31 * code + new Double(x).hashCode();
-		code = 31 * code + new Double(y).hashCode();
-		code = 31 * code + new Double(z).hashCode();
-		return code;
-	}
+//	@Override
+//	public int hashCode() {
+//		int code = 1;
+//		code = 31 * code + new Double(x).hashCode();
+//		code = 31 * code + new Double(y).hashCode();
+//		code = 31 * code + new Double(z).hashCode();
+//		return code;
+//	}
 }

@@ -1,14 +1,12 @@
 package com.blakebr0.cucumber.client.screen.button;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.Minecraft;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextComponent;
-
-import net.minecraft.client.gui.components.Button.OnPress;
+import net.minecraft.resources.ResourceLocation;
 
 public class IconButtonStatic extends Button {
 	private final ResourceLocation texture;
@@ -27,12 +25,13 @@ public class IconButtonStatic extends Button {
 	
 	@Override
 	public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-		Minecraft minecraft = Minecraft.getInstance();
-		minecraft.getTextureManager().bind(this.texture);
-		RenderSystem.color4f(1.0F, 1.0F, 1.0F, this.alpha);
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, this.texture);
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();
+
 		this.blit(stack, this.x, this.y, this.textureX, this.textureY, this.width, this.height);
 
 		if (this.isHovered()) {

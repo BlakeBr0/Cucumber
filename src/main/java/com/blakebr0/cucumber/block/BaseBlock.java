@@ -7,8 +7,6 @@ import net.minecraftforge.common.ToolType;
 
 import java.util.function.Function;
 
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-
 public class BaseBlock extends Block {
 	public BaseBlock(Material material, Function<Properties, Properties> properties) {
 		super(properties.apply(Properties.of(material)));
