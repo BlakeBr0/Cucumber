@@ -14,7 +14,7 @@ public class ModConfigs {
 
     // Client
     static {
-        final ForgeConfigSpec.Builder client = new ForgeConfigSpec.Builder();
+        final var client = new ForgeConfigSpec.Builder();
 
         client.comment("General configuration options.").push("General");
         ENABLE_TAG_TOOLTIPS = client
@@ -34,7 +34,7 @@ public class ModConfigs {
 
     // Common
     static {
-        final ForgeConfigSpec.Builder common = new ForgeConfigSpec.Builder();
+        final var common = new ForgeConfigSpec.Builder();
 
         common.comment("General configuration options.").push("General");
         MOD_TAG_PRIORITIES = common

@@ -27,8 +27,7 @@ public class BaseShearsItem extends ShearsItem {
 
     @Override
     public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable) {
-            IEnableable enableable = (IEnableable) this;
+        if (this instanceof IEnableable enableable) {
             if (enableable.isEnabled())
                 super.fillItemCategory(group, items);
         } else {

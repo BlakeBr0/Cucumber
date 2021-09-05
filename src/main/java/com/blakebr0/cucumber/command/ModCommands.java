@@ -24,18 +24,18 @@ public final class ModCommands {
             var tile = world.getBlockEntity(trace.getBlockPos());
 
             if (tile != null) {
-                var capability = tile.getCapability(CapabilityEnergy.ENERGY, trace.getDirection());
+                var capability = tile.getCapability(CapabilityEnergy.ENERGY, trace.getDirection()).resolve();
 
                 if (capability.isPresent()) {
-                    capability.ifPresent(energy -> {
-                        if (energy.canReceive()) {
-                            energy.receiveEnergy(Integer.MAX_VALUE, false);
+                    var energy = capability.get();
 
-                            var message = Localizable.of("message.cucumber.filled_energy").build();
+                    if (energy.canReceive()) {
+                        energy.receiveEnergy(Integer.MAX_VALUE, false);
 
-                            context.getSource().sendSuccess(message, false);
-                        }
-                    });
+                        var message = Localizable.of("message.cucumber.filled_energy").build();
+
+                        context.getSource().sendSuccess(message, false);
+                    }
                 } else {
                     var message = Localizable.of("message.cucumber.filled_energy_error").build();
 
