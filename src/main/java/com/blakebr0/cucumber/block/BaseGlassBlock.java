@@ -3,7 +3,6 @@ package com.blakebr0.cucumber.block;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.ToolType;
 
 import java.util.function.Function;
 
@@ -18,7 +17,7 @@ public class BaseGlassBlock extends GlassBlock {
         super(Properties.of(material).sound(sound).strength(hardness, resistance).noOcclusion());
     }
 
-    public BaseGlassBlock(Material material, SoundType sound, float hardness, float resistance, ToolType tool) {
-        super(Properties.of(material).sound(sound).strength(hardness, resistance).harvestTool(tool).requiresCorrectToolForDrops().noOcclusion());
+    public BaseGlassBlock(Material material, SoundType sound, float hardness, float resistance, boolean tool) {
+        super(Properties.of(material).sound(sound).strength(hardness, resistance).requiresCorrectToolForDrops().noOcclusion());
     }
 }

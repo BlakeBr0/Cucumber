@@ -5,7 +5,6 @@ import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.ToolType;
 
 import java.util.function.Supplier;
 
@@ -26,7 +25,7 @@ public class BaseStairsBlock extends StairBlock {
         this(state, Properties.of(material).sound(sound).strength(hardness, resistance));
     }
 
-    public BaseStairsBlock(Supplier<BlockState> state, Material material, SoundType sound, float hardness, float resistance, ToolType tool) {
-        this(state, Properties.of(material).sound(sound).strength(hardness, resistance).harvestTool(tool).requiresCorrectToolForDrops());
+    public BaseStairsBlock(Supplier<BlockState> state, Material material, SoundType sound, float hardness, float resistance, boolean tool) {
+        this(state, Properties.of(material).sound(sound).strength(hardness, resistance).requiresCorrectToolForDrops());
     }
 }

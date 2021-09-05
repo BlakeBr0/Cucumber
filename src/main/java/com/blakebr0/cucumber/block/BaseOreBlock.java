@@ -6,7 +6,6 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.ToolType;
 
 import java.util.function.Function;
 
@@ -25,7 +24,7 @@ public class BaseOreBlock extends BaseBlock {
     }
 
     public BaseOreBlock(Material material, Function<Properties, Properties> properties, int harvestLevel, int minExp, int maxExp) {
-        super(material, properties.compose(p -> p.harvestLevel(harvestLevel).harvestTool(ToolType.PICKAXE).requiresCorrectToolForDrops()));
+        super(material, properties.compose(p -> p.requiresCorrectToolForDrops()));
         this.minExp = minExp;
         this.maxExp = maxExp;
     }
