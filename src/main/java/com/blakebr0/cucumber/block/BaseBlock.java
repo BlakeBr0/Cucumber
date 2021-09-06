@@ -12,10 +12,17 @@ public class BaseBlock extends Block {
 	}
 
 	public BaseBlock(Material material, SoundType sound, float hardness, float resistance) {
-		super(Properties.of(material).sound(sound).strength(hardness, resistance));
+		super(Properties.of(material)
+				.sound(sound)
+				.strength(hardness, resistance)
+		);
 	}
 
 	public BaseBlock(Material material, SoundType sound, float hardness, float resistance, boolean tool) {
-		super(Properties.of(material).sound(sound).strength(hardness, resistance).requiresCorrectToolForDrops());
+		super(Properties.of(material)
+				.sound(sound)
+				.strength(hardness, resistance)
+				.requiresCorrectToolForDrops()
+		);
 	}
 }

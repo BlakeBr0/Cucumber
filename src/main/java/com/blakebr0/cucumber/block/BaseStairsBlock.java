@@ -22,10 +22,17 @@ public class BaseStairsBlock extends StairBlock {
     }
 
     public BaseStairsBlock(Supplier<BlockState> state, Material material, SoundType sound, float hardness, float resistance) {
-        this(state, Properties.of(material).sound(sound).strength(hardness, resistance));
+        this(state, Properties.of(material)
+                .sound(sound)
+                .strength(hardness, resistance)
+        );
     }
 
     public BaseStairsBlock(Supplier<BlockState> state, Material material, SoundType sound, float hardness, float resistance, boolean tool) {
-        this(state, Properties.of(material).sound(sound).strength(hardness, resistance).requiresCorrectToolForDrops());
+        this(state, Properties.of(material)
+                .sound(sound)
+                .strength(hardness, resistance)
+                .requiresCorrectToolForDrops()
+        );
     }
 }
