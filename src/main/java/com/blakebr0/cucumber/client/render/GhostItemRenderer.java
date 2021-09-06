@@ -1,25 +1,5 @@
 package com.blakebr0.cucumber.client.render;
 
-import com.blakebr0.cucumber.client.ModRenderTypes;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
-import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.core.Direction;
-import org.lwjgl.opengl.GL14;
-
-import java.util.Random;
-
 // TODO: 1.16: reevaluate, reimplement
 public final class GhostItemRenderer {
 //    public static void renderItemModel(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, float alpha) {

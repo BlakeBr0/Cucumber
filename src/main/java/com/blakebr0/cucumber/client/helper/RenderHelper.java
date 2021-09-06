@@ -1,12 +1,10 @@
 package com.blakebr0.cucumber.client.helper;
 
-import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.renderer.entity.ItemRenderer;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.network.chat.FormattedText;
+import net.minecraft.world.item.ItemStack;
 
 // TODO: 1.16: reevaluate
 public final class RenderHelper {

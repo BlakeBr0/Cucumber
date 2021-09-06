@@ -1,8 +1,8 @@
 package com.blakebr0.cucumber.util;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.TextComponent;
-import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.TranslatableComponent;
 
 public class Localizable {

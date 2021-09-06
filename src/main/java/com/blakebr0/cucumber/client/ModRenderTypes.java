@@ -1,15 +1,5 @@
 package com.blakebr0.cucumber.client;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.renderer.RenderStateShard;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
 // TODO: 1.17, reimplement
 public final class ModRenderTypes {
     //    public static final RenderType GHOST = RenderType.create(
