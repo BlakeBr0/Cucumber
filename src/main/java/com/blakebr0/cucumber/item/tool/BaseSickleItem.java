@@ -46,7 +46,7 @@ public class BaseSickleItem extends DiggerItem {
     }
 
     @Override
-    public boolean canHarvestBlock(ItemStack stack, BlockState state) {
+    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
         return isValidMaterial(state);
     }
 
@@ -97,7 +97,7 @@ public class BaseSickleItem extends DiggerItem {
     private boolean tryHarvest(Level world, BlockPos pos, boolean extra, ItemStack stack, Player player) {
         var state = world.getBlockState(pos);
         var hardness = state.getDestroySpeed(world, pos);
-        var harvest = !extra || (ForgeHooks.canHarvestBlock(state, player, world, pos) || this.canHarvestBlock(stack, state));
+        var harvest = !extra || (ForgeHooks.isCorrectToolForDrops(state, player) || this.isCorrectToolForDrops(stack, state));
 
         if (hardness >= 0.0F && harvest)
             return BlockHelper.breakBlocksAOE(stack, world, player, pos, !extra);
