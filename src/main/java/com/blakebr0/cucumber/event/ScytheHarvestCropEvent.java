@@ -10,23 +10,23 @@ import net.minecraftforge.eventbus.api.Event;
 
 @Cancelable
 public class ScytheHarvestCropEvent extends Event {
-    private final LevelAccessor world;
+    private final LevelAccessor level;
     private final BlockPos pos;
     private final BlockState state;
     private final ItemStack stack;
     private final Player player;
 
-    public ScytheHarvestCropEvent(LevelAccessor world, BlockPos pos, BlockState state, ItemStack stack, Player player) {
+    public ScytheHarvestCropEvent(LevelAccessor level, BlockPos pos, BlockState state, ItemStack stack, Player player) {
         this.pos = pos;
-        this.world = world;
+        this.level = level;
         this.state = state;
         this.stack = stack;
         this.player = player;
     }
 
-    public LevelAccessor getWorld()
+    public LevelAccessor getLevel()
     {
-        return this.world;
+        return this.level;
     }
 
     public BlockPos getPos()

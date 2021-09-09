@@ -14,14 +14,13 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.ForgeRegistryEntry;
 
-// Shaped recipe but no mirroring >:(
 public class ShapedNoMirrorRecipe extends ShapedRecipe {
     public ShapedNoMirrorRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, ItemStack output) {
         super(id, group, width, height, inputs, output);
     }
 
     @Override
-    public boolean matches(CraftingContainer inventory, Level world) {
+    public boolean matches(CraftingContainer inventory, Level level) {
         for (int i = 0; i <= inventory.getWidth() - this.getRecipeWidth(); i++) {
             for (int j = 0; j <= inventory.getHeight() - this.getRecipeHeight(); j++) {
                 if (this.checkMatch(inventory, i, j)) {

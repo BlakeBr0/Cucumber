@@ -63,21 +63,21 @@ public class BaseSickleItem extends DiggerItem {
         return this.attackSpeed;
     }
 
-    private boolean harvest(ItemStack stack, Level world, BlockPos pos, Player player) {
-        var state = world.getBlockState(pos);
-        var hardness = state.getDestroySpeed(world, pos);
+    private boolean harvest(ItemStack stack, Level level, BlockPos pos, Player player) {
+        var state = level.getBlockState(pos);
+        var hardness = state.getDestroySpeed(level, pos);
 
-        if (!this.tryHarvest(world, pos, false, stack, player) || !isValidMaterial(state))
+        if (!this.tryHarvest(level, pos, false, stack, player) || !isValidMaterial(state))
             return false;
 
         if (this.range > 0) {
             BlockPos.betweenClosed(pos.offset(-this.range, -this.range, -this.range), pos.offset(this.range, this.range, this.range)).forEach(aoePos -> {
                 if (aoePos != pos) {
-                    var aoeState = world.getBlockState(aoePos);
-                    var aoeHardness = aoeState.getDestroySpeed(world, aoePos);
+                    var aoeState = level.getBlockState(aoePos);
+                    var aoeHardness = aoeState.getDestroySpeed(level, aoePos);
 
                     if (aoeHardness <= hardness + 5.0F && isValidMaterial(aoeState)) {
-                        if (this.tryHarvest(world, aoePos, true, stack, player)) {
+                        if (this.tryHarvest(level, aoePos, true, stack, player)) {
                             if (aoeHardness <= 0.0F && Math.random() < 0.33) {
                                 if (!player.getAbilities().instabuild) {
                                     stack.hurtAndBreak(1, player, entity -> {
@@ -94,13 +94,13 @@ public class BaseSickleItem extends DiggerItem {
         return true;
     }
 
-    private boolean tryHarvest(Level world, BlockPos pos, boolean extra, ItemStack stack, Player player) {
-        var state = world.getBlockState(pos);
-        var hardness = state.getDestroySpeed(world, pos);
+    private boolean tryHarvest(Level level, BlockPos pos, boolean extra, ItemStack stack, Player player) {
+        var state = level.getBlockState(pos);
+        var hardness = state.getDestroySpeed(level, pos);
         var harvest = !extra || (ForgeHooks.isCorrectToolForDrops(state, player) || this.isCorrectToolForDrops(stack, state));
 
         if (hardness >= 0.0F && harvest)
-            return BlockHelper.breakBlocksAOE(stack, world, player, pos, !extra);
+            return BlockHelper.breakBlocksAOE(stack, level, player, pos, !extra);
 
         return false;
     }

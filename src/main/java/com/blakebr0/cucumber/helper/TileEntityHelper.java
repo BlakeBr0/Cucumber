@@ -27,8 +27,8 @@ public final class TileEntityHelper {
         }
     }
 
-    public static void dispatchToNearbyPlayers(Level world, int x, int y, int z) {
-        var tile = world.getBlockEntity(new BlockPos(x, y, z));
+    public static void dispatchToNearbyPlayers(Level level, int x, int y, int z) {
+        var tile = level.getBlockEntity(new BlockPos(x, y, z));
         if (tile != null) {
             dispatchToNearbyPlayers(tile);
         }

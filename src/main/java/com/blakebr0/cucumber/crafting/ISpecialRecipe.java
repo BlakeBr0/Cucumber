@@ -16,7 +16,7 @@ public interface ISpecialRecipe extends Recipe<Container> {
     }
 
     @Override
-    default boolean matches(Container inv, Level world) {
+    default boolean matches(Container inv, Level level) {
         return this.matches(new InvWrapper(inv));
     }
 

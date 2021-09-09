@@ -62,18 +62,18 @@ public class BasePaxelItem extends DiggerItem {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        var world = context.getLevel();
+        var level = context.getLevel();
         var pos = context.getClickedPos();
         var player = context.getPlayer();
         var stack = context.getItemInHand();
-        var state = world.getBlockState(pos);
-        var modifiedState = state.getToolModifiedState(world, pos, player, stack, ToolActions.AXE_STRIP);
+        var state = level.getBlockState(pos);
+        var modifiedState = state.getToolModifiedState(level, pos, player, stack, ToolActions.AXE_STRIP);
 
         if (modifiedState != null) {
-            world.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+            level.playSound(player, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-            if (!world.isClientSide()) {
-                world.setBlock(pos, modifiedState, 11);
+            if (!level.isClientSide()) {
+                level.setBlock(pos, modifiedState, 11);
 
                 if (player != null) {
                     stack.hurtAndBreak(1, player, entity -> {
@@ -82,15 +82,15 @@ public class BasePaxelItem extends DiggerItem {
                 }
             }
 
-            return InteractionResult.sidedSuccess(world.isClientSide());
-        } else if (context.getClickedFace() != Direction.DOWN && world.getBlockState(pos.above()).isAir()) {
+            return InteractionResult.sidedSuccess(level.isClientSide());
+        } else if (context.getClickedFace() != Direction.DOWN && level.getBlockState(pos.above()).isAir()) {
             var pathState = PATH_STUFF.get(state.getBlock());
 
             if (pathState != null) {
-                world.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+                level.playSound(player, pos, SoundEvents.SHOVEL_FLATTEN, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-                if (!world.isClientSide()) {
-                    world.setBlock(pos, pathState, 11);
+                if (!level.isClientSide()) {
+                    level.setBlock(pos, pathState, 11);
 
                     if (player != null) {
                         stack.hurtAndBreak(1, player, entity -> {

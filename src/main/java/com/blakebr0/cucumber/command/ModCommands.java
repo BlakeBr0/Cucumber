@@ -18,10 +18,10 @@ public final class ModCommands {
         var dispatcher = event.getDispatcher();
 
         dispatcher.register(ROOT.then(Commands.literal("fillenergy").requires(source -> source.hasPermission(4)).executes(context -> {
-            var world = context.getSource().getLevel();
+            var level = context.getSource().getLevel();
             var player = context.getSource().getPlayerOrException();
-            var trace = BlockHelper.rayTraceBlocks(world, player);
-            var tile = world.getBlockEntity(trace.getBlockPos());
+            var trace = BlockHelper.rayTraceBlocks(level, player);
+            var tile = level.getBlockEntity(trace.getBlockPos());
 
             if (tile != null) {
                 var capability = tile.getCapability(CapabilityEnergy.ENERGY, trace.getDirection()).resolve();

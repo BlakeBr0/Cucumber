@@ -24,7 +24,7 @@ public class BaseOreBlock extends BaseBlock {
     }
 
     @Override
-    public int getExpDrop(BlockState state, LevelReader world, BlockPos pos, int fortune, int silktouch) {
+    public int getExpDrop(BlockState state, LevelReader level, BlockPos pos, int fortune, int silktouch) {
         return silktouch == 0 ? Mth.nextInt(RANDOM, this.minExp, this.maxExp) : 0;
     }
 }

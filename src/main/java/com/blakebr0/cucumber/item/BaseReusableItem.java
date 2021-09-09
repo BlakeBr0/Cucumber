@@ -68,7 +68,7 @@ public class BaseReusableItem extends BaseItem {
 
 	@OnlyIn(Dist.CLIENT)
 	@Override
-	public void appendHoverText(ItemStack stack, Level world, List<Component> tooltip, TooltipFlag advanced) {
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag advanced) {
 		if (this.tooltip) {
 			if (this.damage) {
 				var damage = stack.getMaxDamage() - stack.getDamageValue() + 1;

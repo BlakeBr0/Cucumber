@@ -23,7 +23,7 @@ import net.minecraftforge.event.world.BlockEvent;
  * Or Draconic Evolution, by brandon3055 (https://github.com/brandon3055/Draconic-Evolution)
  */
 public final class BlockHelper {
-	private static BlockHitResult rayTraceBlocks(Level world, Player player, double reach, ClipContext.Fluid fluidMode) {
+	private static BlockHitResult rayTraceBlocks(Level level, Player player, double reach, ClipContext.Fluid fluidMode) {
         var pitch = player.getXRot();
         var yaw = player.getYRot();
         var eyePos = player.getEyePosition(1.0F);
@@ -36,58 +36,58 @@ public final class BlockHelper {
 
         var vec3d1 = eyePos.add((double) f6 * reach, (double) f5 * reach, (double) f7 * reach);
 
-        return world.clip(new ClipContext(eyePos, vec3d1, ClipContext.Block.OUTLINE, fluidMode, player));
+        return level.clip(new ClipContext(eyePos, vec3d1, ClipContext.Block.OUTLINE, fluidMode, player));
 	}
 
-	public static BlockHitResult rayTraceBlocks(Level world, Player player) {
-		return rayTraceBlocks(world, player, ClipContext.Fluid.NONE);
+	public static BlockHitResult rayTraceBlocks(Level level, Player player) {
+		return rayTraceBlocks(level, player, ClipContext.Fluid.NONE);
 	}
 
-	public static BlockHitResult rayTraceBlocks(Level world, Player player, ClipContext.Fluid fluidMode) {
+	public static BlockHitResult rayTraceBlocks(Level level, Player player, ClipContext.Fluid fluidMode) {
         var attribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
         var reach = attribute != null ? attribute.getValue() : 5.0D;
 
-		return rayTraceBlocks(world, player, reach, fluidMode);
+		return rayTraceBlocks(level, player, reach, fluidMode);
 	}
 
-	public static boolean breakBlocksAOE(ItemStack stack, Level world, Player player, BlockPos pos) {
-	    return breakBlocksAOE(stack, world, player, pos, true);
+	public static boolean breakBlocksAOE(ItemStack stack, Level level, Player player, BlockPos pos) {
+	    return breakBlocksAOE(stack, level, player, pos, true);
     }
 
-    public static boolean breakBlocksAOE(ItemStack stack, Level world, Player player, BlockPos pos, boolean playEvent) {
-        if (world.isEmptyBlock(pos))
+    public static boolean breakBlocksAOE(ItemStack stack, Level level, Player player, BlockPos pos, boolean playEvent) {
+        if (level.isEmptyBlock(pos))
             return false;
 
-        if (!world.isClientSide() && player instanceof ServerPlayer mplayer) {
-            var state = world.getBlockState(pos);
+        if (!level.isClientSide() && player instanceof ServerPlayer mplayer) {
+            var state = level.getBlockState(pos);
             var block = state.getBlock();
 
-            var event = new BlockEvent.BreakEvent(world, pos, state, mplayer);
+            var event = new BlockEvent.BreakEvent(level, pos, state, mplayer);
             if (MinecraftForge.EVENT_BUS.post(event))
                 return false;
 
             if (playEvent) {
-                world.levelEvent(2001, pos, Block.getId(state));
+                level.levelEvent(2001, pos, Block.getId(state));
             }
 
-            boolean changed = world.setBlockAndUpdate(pos, state.getFluidState().createLegacyBlock());
+            boolean changed = level.setBlockAndUpdate(pos, state.getFluidState().createLegacyBlock());
             if (changed) {
                 if (state.is(BlockTags.GUARDED_BY_PIGLINS)) {
                     PiglinAi.angerNearbyPiglins(player, false);
                 }
 
                 if (!player.getAbilities().instabuild) {
-                    var tile = world.getBlockEntity(pos);
+                    var tile = level.getBlockEntity(pos);
 
-                    block.destroy(world, pos, state);
-                    block.playerDestroy(world, player, pos, state, tile, stack);
-                    block.popExperience((ServerLevel) world, pos, event.getExpToDrop());
+                    block.destroy(level, pos, state);
+                    block.playerDestroy(level, player, pos, state, tile, stack);
+                    block.popExperience((ServerLevel) level, pos, event.getExpToDrop());
                 }
 
-                stack.mineBlock(world, state, pos, player);
+                stack.mineBlock(level, state, pos, player);
             }
 
-            mplayer.connection.send(new ClientboundBlockUpdatePacket(world, pos));
+            mplayer.connection.send(new ClientboundBlockUpdatePacket(level, pos));
 
             return true;
         }

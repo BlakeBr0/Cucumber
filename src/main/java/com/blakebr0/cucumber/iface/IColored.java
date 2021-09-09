@@ -19,7 +19,7 @@ public interface IColored {
 
 	class BlockColors implements BlockColor {
 		@Override
-		public int getColor(BlockState state, BlockAndTintGetter world, BlockPos pos, int index) {
+		public int getColor(BlockState state, BlockAndTintGetter level, BlockPos pos, int index) {
 			return ((IColored) state.getBlock()).getColor(index);
 		}
 	}

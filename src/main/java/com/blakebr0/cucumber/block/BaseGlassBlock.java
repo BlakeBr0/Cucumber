@@ -50,7 +50,7 @@ public class BaseGlassBlock extends GlassBlock {
         return false;
     }
 
-    private static boolean never(BlockState state, BlockGetter world, BlockPos pos) {
+    private static boolean never(BlockState state, BlockGetter level, BlockPos pos) {
         return false;
     }
 }
