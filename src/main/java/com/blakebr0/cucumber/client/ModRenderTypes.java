@@ -4,11 +4,22 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import org.lwjgl.opengl.GL14;
 
 public final class ModRenderTypes extends RenderType {
+    private static final TransparencyStateShard GHOST_TRANSPARENCY = new TransparencyStateShard("ghost_transparency",
+            () -> {
+                RenderSystem.enableBlend();
+                RenderSystem.blendFunc(GlStateManager.SourceFactor.CONSTANT_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA);
+                GL14.glBlendColor(1.0F, 1.0F, 1.0F, 0.25F);
+            },
+            () -> {
+                GL14.glBlendColor(1.0F, 1.0F, 1.0F, 1.0F);
+                RenderSystem.disableBlend();
+                RenderSystem.defaultBlendFunc();
+            });
+
     public static final RenderType GHOST = RenderType.create(
         "cucumber:ghost",
         DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false,
@@ -16,18 +27,7 @@ public final class ModRenderTypes extends RenderType {
                 .setLightmapState(LIGHTMAP)
                 .setShaderState(RENDERTYPE_SOLID_SHADER)
                 .setTextureState(BLOCK_SHEET)
-                .setTransparencyState(new RenderStateShard.TransparencyStateShard("ghost_transparency",
-                        () -> {
-                            RenderSystem.enableBlend();
-                            RenderSystem.blendFunc(GlStateManager.SourceFactor.CONSTANT_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA);
-                            GL14.glBlendColor(1.0F, 1.0F, 1.0F, 0.25F);
-                        },
-                        () -> {
-                            GL14.glBlendColor(1.0F, 1.0F, 1.0F, 1.0F);
-                            RenderSystem.disableBlend();
-                            RenderSystem.defaultBlendFunc();
-                        }
-                ))
+                .setTransparencyState(GHOST_TRANSPARENCY)
                 .createCompositeState(false)
     );
 
