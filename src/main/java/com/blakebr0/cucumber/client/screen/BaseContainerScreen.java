@@ -12,33 +12,33 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 
 import java.text.NumberFormat;
 
-public class BaseContainerScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
+public abstract class BaseContainerScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
     protected ResourceLocation bgTexture;
     protected int bgWidth;
     protected int bgHeight;
+    protected int bgImgWidth;
+    protected int bgImgHeight;
 
-    public BaseContainerScreen(T container, Inventory inventory, Component title, ResourceLocation bgTexture, int width, int height) {
-        this(container, inventory, title, bgTexture, width, height, 256, 256);
+    public BaseContainerScreen(T container, Inventory inventory, Component title, ResourceLocation bgTexture, int bgWidth, int bgHeight) {
+        this(container, inventory, title, bgTexture, bgWidth, bgHeight, 256, 256);
     }
 
-    public BaseContainerScreen(T container, Inventory inventory, Component title, ResourceLocation bgTexture, int width, int height, int bgWidth, int bgHeight) {
+    public BaseContainerScreen(T container, Inventory inventory, Component title, ResourceLocation bgTexture, int bgWidth, int bgHeight, int bgImgWidth, int bgImgHeight) {
         super(container, inventory, title);
-        this.width = width;
-        this.height = height;
-        this.bgTexture = bgTexture;
         this.bgWidth = bgWidth;
         this.bgHeight = bgHeight;
+        this.bgTexture = bgTexture;
+        this.bgImgWidth = bgImgWidth;
+        this.bgImgHeight = bgImgHeight;
     }
 
     @Override
-    public void render(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-        this.renderBackground(stack);
-        super.render(stack, mouseX, mouseY, partialTicks);
-        this.renderLabels(stack, mouseX, mouseY);
+    public void render(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+        this.renderBackground(matrix);
+        super.render(matrix, mouseX, mouseY, partialTicks);
     }
 
-    @Override
-    protected void renderBg(PoseStack stack, float partialTicks, int mouseX, int mouseY) {
+    protected void renderDefaultBg(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, this.bgTexture);
@@ -46,7 +46,7 @@ public class BaseContainerScreen<T extends AbstractContainerMenu> extends Abstra
         int x = this.getGuiLeft();
         int y = this.getGuiTop();
 
-        blit(stack, x, y, 0, 0, this.width, this.height, this.bgWidth, this.bgHeight);
+        blit(matrix, x, y, 0, 0, this.bgWidth, this.bgHeight, this.bgImgWidth, this.bgImgHeight);
     }
 
     protected static String text(String key, Object... args) {
