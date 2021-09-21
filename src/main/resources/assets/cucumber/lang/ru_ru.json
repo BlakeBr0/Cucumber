@@ -1,5 +1,5 @@
 {
-  "tooltip.cucumber.hold_shift_for_info": "Зажмите §e§oSHIFT §r§7для информации",
+  "tooltip.cucumber.hold_shift_for_info": "Зажмите §e§oSHIFT §r§7 для информации",
   "tooltip.cucumber.uses_left": "Использований осталось: %s",
   "tooltip.cucumber.one_use_left": "1 использование осталось",
   "tooltip.cucumber.unlimited_uses": "Неограниченное использование",
@@ -7,11 +7,11 @@
   "tooltip.cucumber.hold_alt_for_nbt": "Удерживайте ALT, чтобы увидеть NBT",
   "tooltip.cucumber.block_tags": "Теги блока:",
   "tooltip.cucumber.item_tags": "Теги предмета:",
-  "tooltip.cucumber.not_yet_implemented": "Еще не реализовано",
+  "tooltip.cucumber.not_yet_implemented": "Ещё не реализовано",
   "tooltip.cucumber.close": "Закрыть",
   "tooltip.cucumber.back": "Назад",
   "tooltip.cucumber.forward": "Вперёд",
 
-  "message.cucumber.filled_energy": "Этот блок забрал вашу энергию!",
-  "message.cucumber.filled_energy_error": "Этот блок не может забрать вашу энергию."
+  "message.cucumber.filled_energy": "Этот блок забрал Вашу энергию!",
+  "message.cucumber.filled_energy_error": "Этот блок не может забрать Вашу энергию."
 }
