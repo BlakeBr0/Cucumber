@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '4.1.10'
+version = '4.1.11'
 group = 'com.blakebr0.cucumber'
 archivesBaseName = 'Cucumber-1.17.1'
 
