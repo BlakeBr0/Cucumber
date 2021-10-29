@@ -12,27 +12,27 @@ import java.text.NumberFormat;
 
 public class BaseContainerScreen<T extends Container> extends ContainerScreen<T> {
     protected ResourceLocation bgTexture;
-    protected int bgWidth;
-    protected int bgHeight;
+    protected int bgImgWidth;
+    protected int bgImgHeight;
 
-    public BaseContainerScreen(T container, PlayerInventory inventory, ITextComponent title, ResourceLocation bgTexture, int width, int height) {
-        this(container, inventory, title, bgTexture, width, height, 256, 256);
+    public BaseContainerScreen(T container, PlayerInventory inventory, ITextComponent title, ResourceLocation bgTexture, int bgWidth, int bgHeight) {
+        this(container, inventory, title, bgTexture, bgWidth, bgHeight, 256, 256);
     }
 
-    public BaseContainerScreen(T container, PlayerInventory inventory, ITextComponent title, ResourceLocation bgTexture, int width, int height, int bgWidth, int bgHeight) {
+    public BaseContainerScreen(T container, PlayerInventory inventory, ITextComponent title, ResourceLocation bgTexture, int bgWidth, int bgHeight, int bgImgWidth, int bgImgHeight) {
         super(container, inventory, title);
-        this.width = width;
-        this.height = height;
         this.bgTexture = bgTexture;
-        this.bgWidth = bgWidth;
-        this.bgHeight = bgHeight;
+        this.imageWidth = bgWidth;
+        this.imageHeight = bgHeight;
+        this.bgImgWidth = bgImgWidth;
+        this.bgImgHeight = bgImgHeight;
     }
 
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(stack);
         super.render(stack, mouseX, mouseY, partialTicks);
-        this.renderLabels(stack, mouseX, mouseY);
+        this.renderTooltip(stack, mouseX, mouseY);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BaseContainerScreen<T extends Container> extends ContainerScreen<T>
         int x = this.getGuiLeft();
         int y = this.getGuiTop();
 
-        blit(stack, x, y, 0, 0, this.width, this.height, this.bgWidth, this.bgHeight);
+        blit(stack, x, y, 0, 0, this.imageWidth, this.imageHeight, this.bgImgWidth, this.bgImgHeight);
     }
 
     protected static String text(String key, Object... args) {
