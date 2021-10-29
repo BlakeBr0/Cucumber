@@ -14,8 +14,6 @@ import java.text.NumberFormat;
 
 public abstract class BaseContainerScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
     protected ResourceLocation bgTexture;
-    protected int bgWidth;
-    protected int bgHeight;
     protected int bgImgWidth;
     protected int bgImgHeight;
 
@@ -25,8 +23,8 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
 
     public BaseContainerScreen(T container, Inventory inventory, Component title, ResourceLocation bgTexture, int bgWidth, int bgHeight, int bgImgWidth, int bgImgHeight) {
         super(container, inventory, title);
-        this.bgWidth = bgWidth;
-        this.bgHeight = bgHeight;
+        this.imageWidth = bgWidth;
+        this.imageHeight = bgHeight;
         this.bgTexture = bgTexture;
         this.bgImgWidth = bgImgWidth;
         this.bgImgHeight = bgImgHeight;
@@ -36,6 +34,7 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
     public void render(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
         this.renderBackground(matrix);
         super.render(matrix, mouseX, mouseY, partialTicks);
+        this.renderTooltip(matrix, mouseX, mouseY);
     }
 
     protected void renderDefaultBg(PoseStack matrix, float partialTicks, int mouseX, int mouseY) {
@@ -46,7 +45,7 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
         int x = this.getGuiLeft();
         int y = this.getGuiTop();
 
-        blit(matrix, x, y, 0, 0, this.bgWidth, this.bgHeight, this.bgImgWidth, this.bgImgHeight);
+        blit(matrix, x, y, 0, 0, this.imageWidth, this.imageHeight, this.bgImgWidth, this.bgImgHeight);
     }
 
     protected static String text(String key, Object... args) {
