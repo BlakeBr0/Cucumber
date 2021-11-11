@@ -11,9 +11,9 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '4.1.12'
+version = '1.16.5-4.1.12'
 group = 'com.blakebr0.cucumber'
-archivesBaseName = 'Cucumber-1.17.1'
+archivesBaseName = 'Cucumber'
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(16)
 
@@ -75,17 +75,25 @@ jar {
     }
 }
 
-jar.finalizedBy('reobfJar')
-
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             artifact jar
         }
     }
+
     repositories {
         maven {
-            url "file://${project.projectDir}/mcmodsrepo"
+            url = 'https://maven.blakesmods.com'
+
+            credentials {
+                username = System.getenv('BLAKESMODS_MAVEN_USERNAME')
+                password = System.getenv('BLAKESMODS_MAVEN_PASSWORD')
+            }
+
+            authentication {
+                basic(BasicAuthentication)
+            }
         }
     }
 }
