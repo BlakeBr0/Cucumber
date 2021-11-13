@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.item.tool;
 
+import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.event.ScytheHarvestCropEvent;
 import com.blakebr0.cucumber.iface.IEnableable;
 import net.minecraft.core.BlockPos;
@@ -23,14 +24,11 @@ import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Method;
 import java.util.function.Function;
 
 public class BaseScytheItem extends SwordItem {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static final Method GET_SEED;
 
     private final float attackDamage;
@@ -163,7 +161,7 @@ public class BaseScytheItem extends SwordItem {
         try {
             return (Item) GET_SEED.invoke(block);
         } catch (Exception e) {
-            LOGGER.error("Unable to get seed from crop {}", e.getLocalizedMessage());
+            Cucumber.LOGGER.error("Unable to get seed from crop {}", e.getLocalizedMessage());
         }
 
         return null;

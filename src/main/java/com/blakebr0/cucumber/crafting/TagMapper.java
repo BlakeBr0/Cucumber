@@ -19,8 +19,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileReader;
@@ -32,7 +30,6 @@ import java.util.concurrent.TimeUnit;
 
 public class TagMapper implements ResourceManagerReloadListener {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-    private static final Logger LOGGER = LogManager.getLogger(Cucumber.NAME);
     private static final Map<String, String> TAG_TO_ITEM_MAP = new HashMap<>();
 
     @Override
@@ -75,7 +72,7 @@ public class TagMapper implements ResourceManagerReloadListener {
 
                     reader.close();
                 } catch (Exception e) {
-                    LOGGER.error("An error occurred while reading cucumber-tags.json", e);
+                    Cucumber.LOGGER.error("An error occurred while reading cucumber-tags.json", e);
                 } finally {
                     IOUtils.closeQuietly(reader);
                 }
@@ -86,7 +83,7 @@ public class TagMapper implements ResourceManagerReloadListener {
 
         stopwatch.stop();
 
-        LOGGER.info("Loaded cucumber-tags.json in {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        Cucumber.LOGGER.info("Loaded cucumber-tags.json in {} ms", stopwatch.elapsed(TimeUnit.MILLISECONDS));
     }
 
     public static Item getItemForTag(String tagId) {
@@ -108,7 +105,7 @@ public class TagMapper implements ResourceManagerReloadListener {
                     reader = new FileReader(file);
                     json = parser.parse(reader).getAsJsonObject();
                 } catch (Exception e) {
-                    LOGGER.error("An error occurred while reading cucumber-tags.json", e);
+                    Cucumber.LOGGER.error("An error occurred while reading cucumber-tags.json", e);
                 } finally {
                     IOUtils.closeQuietly(reader);
                 }
@@ -135,7 +132,7 @@ public class TagMapper implements ResourceManagerReloadListener {
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
         var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
         var tag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(tagId));
-        Item item = tag == null ? Items.AIR : tag.getValues().stream().min((item1, item2) -> {
+        var item = tag == null ? Items.AIR : tag.getValues().stream().min((item1, item2) -> {
             var index1 = item1.getRegistryName() != null ? mods.indexOf(item1.getRegistryName().getNamespace()) : -1;
             var index2 = item2.getRegistryName() != null ? mods.indexOf(item2.getRegistryName().getNamespace()) : -1;
 
@@ -153,7 +150,7 @@ public class TagMapper implements ResourceManagerReloadListener {
         try (var writer = new FileWriter(file)) {
             GSON.toJson(json, writer);
         } catch (IOException e) {
-            LOGGER.error("An error occurred while writing to cucumber-tags.json", e);
+            Cucumber.LOGGER.error("An error occurred while writing to cucumber-tags.json", e);
         }
 
         return item;
@@ -166,7 +163,7 @@ public class TagMapper implements ResourceManagerReloadListener {
 
             GSON.toJson(object, writer);
         } catch (IOException e) {
-            LOGGER.error("An error occurred while creating cucumber-tags.json", e);
+            Cucumber.LOGGER.error("An error occurred while creating cucumber-tags.json", e);
         }
     }
 }
