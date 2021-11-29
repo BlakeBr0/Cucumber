@@ -25,8 +25,7 @@ public final class NBTTooltipHandler {
                 var tooltip = event.getToolTip();
 
                 if (Screen.hasAltDown()) {
-                    // TODO: 1.17: what is the new tag.getPrettyDisplay(" ", 1)
-                    var text = tag.toString();
+                    var text = tag.getAsString();
 
                     tooltip.add(new TextComponent(Colors.DARK_GRAY + text));
                 } else {
