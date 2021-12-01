@@ -4,12 +4,11 @@ import com.blakebr0.cucumber.network.message.LoginMessage;
 import com.blakebr0.cucumber.network.message.Message;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fmllegacy.network.FMLHandshakeHandler;
-import net.minecraftforge.fmllegacy.network.NetworkDirection;
-import net.minecraftforge.fmllegacy.network.NetworkEvent;
-import net.minecraftforge.fmllegacy.network.NetworkRegistry;
-import net.minecraftforge.fmllegacy.network.PacketDistributor;
-import net.minecraftforge.fmllegacy.network.simple.SimpleChannel;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
@@ -42,7 +41,9 @@ public class BaseNetworkHandler {
                     BiConsumer<T, Supplier<NetworkEvent.Context>> handler;
 
                     if (context.get().getDirection().getReceptionSide().isServer()) {
-                        handler = FMLHandshakeHandler.indexFirst((handshake, msg, ctx) -> message.onMessage(msg, ctx));
+                        // TODO: FMLHandshakeHandler
+//                        handler = FMLHandshakeHandler.indexFirst((handshake, msg, ctx) -> message.onMessage(msg, ctx));
+                        handler = (t, contextSupplier) -> {};
                     } else {
                         handler = message::onMessage;
                     }

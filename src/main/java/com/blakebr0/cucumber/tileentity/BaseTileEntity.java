@@ -16,12 +16,14 @@ public class BaseTileEntity extends BlockEntity {
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return new ClientboundBlockEntityDataPacket(this.getBlockPos(), -1, this.getUpdateTag());
+		return ClientboundBlockEntityDataPacket.create(this, te -> this.getUpdateTag());
 	}
 
 	@Override
 	public void onDataPacket(Connection manager, ClientboundBlockEntityDataPacket packet) {
-		this.load(packet.getTag());
+		if (packet.getTag() != null) {
+			this.load(packet.getTag());
+		}
 	}
 
 	@Override

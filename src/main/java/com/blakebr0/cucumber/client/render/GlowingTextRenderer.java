@@ -32,16 +32,16 @@ public final class GlowingTextRenderer {
 		}
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	@SubscribeEvent
-	public void onTooltipRender(RenderTooltipEvent.PostText event) {
-		if (event.getStack().isEmpty()) { return; }
-		List<ItemStack> listOfStacks = stacks.keySet().stream().filter(s -> s.sameItem(event.getStack())).collect(Collectors.toList());
-		if (!listOfStacks.isEmpty()) {
-			FormattedText s = event.getLines().get(0);
-			drawGlowingText(event.getFontRenderer(), event.getStack().getDisplayName().getString(), event.getX(), event.getY() - 1 + (event.getFontRenderer().lineHeight) * (event.getLines().indexOf(s)) - 1 + 2, stacks.get(listOfStacks.get(0)));
-		}
-	}
+//	@OnlyIn(Dist.CLIENT)
+//	@SubscribeEvent
+//	public void onTooltipRender(RenderTooltipEvent.PostText event) {
+//		if (event.getStack().isEmpty()) { return; }
+//		List<ItemStack> listOfStacks = stacks.keySet().stream().filter(s -> s.sameItem(event.getStack())).collect(Collectors.toList());
+//		if (!listOfStacks.isEmpty()) {
+//			FormattedText s = event.getLines().get(0);
+//			drawGlowingText(event.getFontRenderer(), event.getStack().getDisplayName().getString(), event.getX(), event.getY() - 1 + (event.getFontRenderer().lineHeight) * (event.getLines().indexOf(s)) - 1 + 2, stacks.get(listOfStacks.get(0)));
+//		}
+//	}
 
 	public static void registerStack(ItemStack stack, int r, int g, int b, int rl, int gl, int bl) {
 		stacks.put(stack, new ColorInfo(r, g, b, rl, gl, bl));

@@ -34,7 +34,7 @@ public class IconButtonStatic extends Button {
 
 		this.blit(stack, this.x, this.y, this.textureX, this.textureY, this.width, this.height);
 
-		if (this.isHovered()) {
+		if (this.isHovered) {
 			super.renderToolTip(stack, mouseX, mouseY);
 		}
 	}
