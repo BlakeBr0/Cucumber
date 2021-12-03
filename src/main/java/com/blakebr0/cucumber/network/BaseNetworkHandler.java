@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.network.message.LoginMessage;
 import com.blakebr0.cucumber.network.message.Message;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.network.HandshakeHandler;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
@@ -41,9 +42,7 @@ public class BaseNetworkHandler {
                     BiConsumer<T, Supplier<NetworkEvent.Context>> handler;
 
                     if (context.get().getDirection().getReceptionSide().isServer()) {
-                        // TODO: FMLHandshakeHandler
-//                        handler = FMLHandshakeHandler.indexFirst((handshake, msg, ctx) -> message.onMessage(msg, ctx));
-                        handler = (t, contextSupplier) -> {};
+                        handler = HandshakeHandler.indexFirst((handshake, msg, ctx) -> message.onMessage(msg, ctx));
                     } else {
                         handler = message::onMessage;
                     }
