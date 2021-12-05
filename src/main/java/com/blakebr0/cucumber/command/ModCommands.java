@@ -6,6 +6,7 @@ import com.blakebr0.cucumber.util.Localizable;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.world.InteractionHand;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -17,37 +18,71 @@ public final class ModCommands {
     public void onRegisterCommands(RegisterCommandsEvent event) {
         var dispatcher = event.getDispatcher();
 
-        dispatcher.register(ROOT.then(Commands.literal("fillenergy").requires(source -> source.hasPermission(4)).executes(context -> {
-            var level = context.getSource().getLevel();
-            var player = context.getSource().getPlayerOrException();
-            var trace = BlockHelper.rayTraceBlocks(level, player);
-            var tile = level.getBlockEntity(trace.getBlockPos());
+        dispatcher.register(ROOT.then(Commands.literal("fillenergy").requires(source -> source.hasPermission(4))
+                .then(Commands.literal("block").executes(context -> {
+                    var source = context.getSource();
+                    var level = source.getLevel();
+                    var player = source.getPlayerOrException();
+                    var trace = BlockHelper.rayTraceBlocks(level, player);
+                    var tile = level.getBlockEntity(trace.getBlockPos());
 
-            if (tile != null) {
-                var capability = tile.getCapability(CapabilityEnergy.ENERGY, trace.getDirection()).resolve();
+                    if (tile != null) {
+                        var capability = tile.getCapability(CapabilityEnergy.ENERGY, trace.getDirection()).resolve();
 
-                if (capability.isPresent()) {
-                    var energy = capability.get();
+                        if (capability.isPresent()) {
+                            var energy = capability.get();
 
-                    if (energy.canReceive()) {
-                        energy.receiveEnergy(Integer.MAX_VALUE, false);
+                            if (energy.canReceive()) {
+                                energy.receiveEnergy(Integer.MAX_VALUE, false);
 
-                        var message = Localizable.of("message.cucumber.filled_energy").build();
+                                var message = Localizable.of("message.cucumber.filled_energy").args("block").build();
 
-                        context.getSource().sendSuccess(message, false);
+                                source.sendSuccess(message, false);
+                            }
+                        } else {
+                            var message = Localizable.of("message.cucumber.filled_energy_error").args("block").build();
+
+                            source.sendFailure(message);
+                        }
+                    } else {
+                        var message = Localizable.of("message.cucumber.filled_energy_error").args("block").build();
+
+                        source.sendFailure(message);
                     }
-                } else {
-                    var message = Localizable.of("message.cucumber.filled_energy_error").build();
 
-                    context.getSource().sendFailure(message);
-                }
-            } else {
-                var message = Localizable.of("message.cucumber.filled_energy_error").build();
+                    return 0;
+                }))
+                .then(Commands.literal("hand").executes(context -> {
+                    var source = context.getSource();
+                    var player = source.getPlayerOrException();
+                    var stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
-                context.getSource().sendFailure(message);
-            }
+                    if (!stack.isEmpty()) {
+                        var capability = stack.getCapability(CapabilityEnergy.ENERGY).resolve();
 
-            return 0;
-        })));
+                        if (capability.isPresent()) {
+                            var energy = capability.get();
+
+                            if (energy.canReceive()) {
+                                energy.receiveEnergy(Integer.MAX_VALUE, false);
+
+                                var message = Localizable.of("message.cucumber.filled_energy").args("item").build();
+
+                                source.sendSuccess(message, false);
+                            }
+                        } else {
+                            var message = Localizable.of("message.cucumber.filled_energy_error").args("item").build();
+
+                            source.sendFailure(message);
+                        }
+                    } else {
+                        var message = Localizable.of("message.cucumber.filled_energy_error").args("item").build();
+
+                        source.sendFailure(message);
+                    }
+
+                    return 0;
+                }))
+        ));
     }
 }
