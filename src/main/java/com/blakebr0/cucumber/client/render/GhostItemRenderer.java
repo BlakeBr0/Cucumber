@@ -8,17 +8,19 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
-import net.minecraft.core.Direction;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-
-import java.util.Random;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HalfTransparentBlock;
+import net.minecraft.world.level.block.StainedGlassPaneBlock;
 
 // TODO: 1.16: reevaluate, reimplement
 public final class GhostItemRenderer {
@@ -53,34 +55,58 @@ public final class GhostItemRenderer {
         renderItemModelIntoGUI(stack, x, y, itemRenderer.getModel(stack, null, null, 0), itemRenderer);
     }
 
-    private static void renderModel(BakedModel modelIn, ItemStack stack, int combinedLightIn, int combinedOverlayIn, PoseStack matrixStackIn, VertexConsumer bufferIn, ItemRenderer itemRenderer) {
-        var random = new Random();
-
-        for (var direction : Direction.values()) {
-            random.setSeed(42L);
-            itemRenderer.renderQuadList(matrixStackIn, bufferIn, modelIn.getQuads(null, direction, random), stack, combinedLightIn, combinedOverlayIn);
-        }
-
-        random.setSeed(42L);
-        itemRenderer.renderQuadList(matrixStackIn, bufferIn, modelIn.getQuads(null, null, random), stack, combinedLightIn, combinedOverlayIn);
-    }
-
     private static void renderItem(ItemStack itemStackIn, ItemTransforms.TransformType transformTypeIn, boolean leftHand, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, BakedModel modelIn, ItemRenderer itemRenderer) {
         if (!itemStackIn.isEmpty()) {
             matrixStackIn.pushPose();
-            boolean flag = transformTypeIn == ItemTransforms.TransformType.GUI;
-            boolean flag1 = flag || transformTypeIn == ItemTransforms.TransformType.GROUND || transformTypeIn == ItemTransforms.TransformType.FIXED;
-            if (itemStackIn.getItem() == Items.TRIDENT && flag1) {
-                modelIn = itemRenderer.getItemModelShaper().getModelManager().getModel(new ModelResourceLocation("minecraft:trident#inventory"));
+            boolean flag = transformTypeIn == ItemTransforms.TransformType.GUI || transformTypeIn == ItemTransforms.TransformType.GROUND || transformTypeIn == ItemTransforms.TransformType.FIXED;
+            if (flag) {
+                if (itemStackIn.is(Items.TRIDENT)) {
+                    modelIn = itemRenderer.getItemModelShaper().getModelManager().getModel(new ModelResourceLocation("minecraft:trident#inventory"));
+                } else if (itemStackIn.is(Items.SPYGLASS)) {
+                    modelIn = itemRenderer.getItemModelShaper().getModelManager().getModel(new ModelResourceLocation("minecraft:spyglass#inventory"));
+                }
             }
 
             modelIn = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(matrixStackIn, modelIn, transformTypeIn, leftHand);
             matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
-            if (!modelIn.isCustomRenderer() && (itemStackIn.getItem() != Items.TRIDENT || flag1)) {
-                VertexConsumer ivertexbuilder = bufferIn.getBuffer(ModRenderTypes.GHOST);
-                itemRenderer.renderModelLists(modelIn, itemStackIn, combinedLightIn, combinedOverlayIn, matrixStackIn, ivertexbuilder);
+            if (!modelIn.isCustomRenderer() && (!itemStackIn.is(Items.TRIDENT) || flag)) {
+                boolean flag1;
+                if (transformTypeIn != ItemTransforms.TransformType.GUI && !transformTypeIn.firstPerson() && itemStackIn.getItem() instanceof BlockItem) {
+                    Block block = ((BlockItem)itemStackIn.getItem()).getBlock();
+                    flag1 = !(block instanceof HalfTransparentBlock) && !(block instanceof StainedGlassPaneBlock);
+                } else {
+                    flag1 = true;
+                }
+                if (modelIn.isLayered()) { net.minecraftforge.client.ForgeHooksClient.drawItemLayered(itemRenderer, modelIn, itemStackIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, flag1); }
+                else {
+                    RenderType rendertype = ModRenderTypes.GHOST;
+                    VertexConsumer vertexconsumer;
+                    if (itemStackIn.is(Items.COMPASS) && itemStackIn.hasFoil()) {
+                        matrixStackIn.pushPose();
+                        PoseStack.Pose posestack$pose = matrixStackIn.last();
+                        if (transformTypeIn == ItemTransforms.TransformType.GUI) {
+                            posestack$pose.pose().multiply(0.5F);
+                        } else if (transformTypeIn.firstPerson()) {
+                            posestack$pose.pose().multiply(0.75F);
+                        }
+
+                        if (flag1) {
+                            vertexconsumer = ItemRenderer.getCompassFoilBufferDirect(bufferIn, rendertype, posestack$pose);
+                        } else {
+                            vertexconsumer = ItemRenderer.getCompassFoilBuffer(bufferIn, rendertype, posestack$pose);
+                        }
+
+                        matrixStackIn.popPose();
+                    } else if (flag1) {
+                        vertexconsumer = ItemRenderer.getFoilBufferDirect(bufferIn, rendertype, true, itemStackIn.hasFoil());
+                    } else {
+                        vertexconsumer = ItemRenderer.getFoilBuffer(bufferIn, rendertype, true, itemStackIn.hasFoil());
+                    }
+
+                    itemRenderer.renderModelLists(modelIn, itemStackIn, combinedLightIn, combinedOverlayIn, matrixStackIn, vertexconsumer);
+                }
             } else {
-//                itemStackIn.getItem().getItemStackTileEntityRenderer().renderByItem(itemStackIn, transformTypeIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+                net.minecraftforge.client.RenderProperties.get(itemStackIn).getItemStackRenderer().renderByItem(itemStackIn, transformTypeIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
             }
 
             matrixStackIn.popPose();
@@ -90,6 +116,7 @@ public final class GhostItemRenderer {
     private static void renderItemModelIntoGUI(ItemStack stack, int x, int y, BakedModel bakedmodel, ItemRenderer itemRenderer) {
         Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+        RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
