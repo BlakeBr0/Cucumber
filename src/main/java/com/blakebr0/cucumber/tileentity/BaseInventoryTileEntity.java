@@ -28,11 +28,8 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag) {
-        super.save(tag);
+    public void saveAdditional(CompoundTag tag) {
         tag.merge(this.getInventory().serializeNBT());
-
-        return tag;
     }
 
     @Override

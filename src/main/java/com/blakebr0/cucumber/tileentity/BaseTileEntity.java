@@ -3,7 +3,6 @@ package com.blakebr0.cucumber.tileentity;
 import com.blakebr0.cucumber.helper.TileEntityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -16,19 +15,12 @@ public class BaseTileEntity extends BlockEntity {
 
 	@Override
 	public ClientboundBlockEntityDataPacket getUpdatePacket() {
-		return ClientboundBlockEntityDataPacket.create(this, te -> this.getUpdateTag());
+		return ClientboundBlockEntityDataPacket.create(this, BlockEntity::saveWithFullMetadata);
 	}
 
 	@Override
-	public void onDataPacket(Connection manager, ClientboundBlockEntityDataPacket packet) {
-		if (packet.getTag() != null) {
-			this.load(packet.getTag());
-		}
-	}
-
-	@Override
-	public final CompoundTag getUpdateTag() {
-		return this.save(new CompoundTag());
+	public CompoundTag getUpdateTag() {
+		return this.saveWithFullMetadata();
 	}
 
 	public void markDirtyAndDispatch() {
