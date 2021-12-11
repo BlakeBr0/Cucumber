@@ -11,7 +11,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.16.5-4.1.12'
+version = '1.18.1-5.0.0'
 group = 'com.blakebr0.cucumber'
 archivesBaseName = 'Cucumber'
 
@@ -68,7 +68,7 @@ jar {
             'Specification-Vendor': 'BlakeBr0',
             'Specification-Version': '1',
             'Implementation-Title': project.name,
-            'Implementation-Version': "${archiveVersion}",
+            'Implementation-Version': "${version.split('-').last()}",
             'Implementation-Vendor' : 'BlakeBr0',
             'Implementation-Timestamp': new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
