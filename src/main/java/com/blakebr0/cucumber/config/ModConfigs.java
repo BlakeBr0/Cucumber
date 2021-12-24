@@ -19,11 +19,9 @@ public class ModConfigs {
         client.comment("General configuration options.").push("General");
         ENABLE_TAG_TOOLTIPS = client
                 .comment("Enable tag list tooltips for blocks/items?")
-                .translation("configGui.cucumber.enable_tag_tooltips")
                 .define("tagTooltips", true);
         ENABLE_NBT_TOOLTIPS = client
                 .comment("Enable NBT tooltips for items?")
-                .translation("configGui.cucumber.enable_nbt_tooltips")
                 .define("nbtTooltips", false);
         client.pop();
 
@@ -39,7 +37,6 @@ public class ModConfigs {
         common.comment("General configuration options.").push("General");
         MOD_TAG_PRIORITIES = common
                 .comment("Mod ids (in order) to prioritize using items for when generating the cucumber-tags.json file.")
-                .translation("configGui.cucumber.mod_tag_priorities")
                 .define("modTagPriorities", Lists.newArrayList("thermal", "mekanism", "tconstruct", "immersiveengineering", "appliedenergistics2"));
         common.pop();
 
