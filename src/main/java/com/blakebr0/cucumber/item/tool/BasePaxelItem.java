@@ -17,7 +17,6 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ToolAction;
 import net.minecraftforge.common.ToolActions;
 
@@ -41,16 +40,6 @@ public class BasePaxelItem extends DiggerItem {
         } else {
             super.fillItemCategory(group, items);
         }
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return isValidMaterial(state);
-    }
-
-    @Override
-    public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return isValidMaterial(state) ? this.speed : super.getDestroySpeed(stack, state);
     }
 
     @Override
@@ -104,13 +93,5 @@ public class BasePaxelItem extends DiggerItem {
         }
 
         return InteractionResult.PASS;
-    }
-
-    private static boolean isValidMaterial(BlockState state) {
-        var material = state.getMaterial();
-        return material == Material.STONE || material == Material.METAL || material == Material.HEAVY_METAL
-                || material == Material.WOOD || material == Material.NETHER_WOOD || material == Material.PLANT
-                || material == Material.REPLACEABLE_PLANT || material == Material.BAMBOO
-                || material == Material.VEGETABLE || state.is(Blocks.SNOW) || state.is(Blocks.SNOW_BLOCK);
     }
 }
