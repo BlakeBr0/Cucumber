@@ -15,7 +15,7 @@ public final class BowFOVHandler {
 		var stack = entity.getUseItem();
 		if (!stack.isEmpty()) {
 			var item = stack.getItem();
-			if (item instanceof ICustomBow bow) {
+			if (item instanceof ICustomBow bow && bow.hasFOVChange()) {
 				float f = Mth.clamp((stack.getUseDuration() - entity.getUseItemRemainingTicks()) * bow.getDrawSpeedMulti(stack) / 20.0F, 0, 1.0F);
 
 				event.setNewfov(event.getNewfov() - (f * f * 0.15F));
