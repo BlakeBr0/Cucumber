@@ -2,6 +2,7 @@ package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.helper.BlockHelper;
 import com.blakebr0.cucumber.iface.IEnableable;
+import com.blakebr0.cucumber.lib.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
@@ -22,7 +23,7 @@ public class BaseSickleItem extends DiggerItem {
     private final int range;
 
     public BaseSickleItem(Tier tier, float attackDamage, float attackSpeed, int range, Function<Properties, Properties> properties) {
-        super(attackDamage, attackSpeed, tier, null, properties.apply(new Properties()));
+        super(attackDamage, attackSpeed, tier, ModTags.MINEABLE_WITH_SICKLE, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
         this.range = range;
@@ -105,6 +106,6 @@ public class BaseSickleItem extends DiggerItem {
 
     private static boolean isValidMaterial(BlockState state) {
         var material = state.getMaterial();
-        return material == Material.LEAVES || material == Material.PLANT || material == Material.REPLACEABLE_PLANT;
+        return state.is(ModTags.MINEABLE_WITH_SICKLE) || material == Material.LEAVES || material == Material.PLANT || material == Material.REPLACEABLE_PLANT;
     }
 }

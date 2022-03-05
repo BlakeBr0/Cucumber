@@ -9,4 +9,5 @@ import static com.blakebr0.cucumber.Cucumber.MOD_ID;
 
 public final class ModTags {
     public static final TagKey<Block> MINEABLE_WITH_PAXEL = BlockTags.create(new ResourceLocation(MOD_ID, "mineable/paxel"));
+    public static final TagKey<Block> MINEABLE_WITH_SICKLE = BlockTags.create(new ResourceLocation(MOD_ID, "mineable/sickle"));
 }
