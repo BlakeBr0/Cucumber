@@ -3,7 +3,6 @@ package com.blakebr0.cucumber.handler;
 import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.cucumber.lib.Tooltips;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
@@ -29,7 +28,7 @@ public final class NBTTooltipHandler {
 
                     tooltip.add(new TextComponent(Colors.DARK_GRAY + text));
                 } else {
-                    tooltip.add(Tooltips.HOLD_ALT_FOR_NBT.color(ChatFormatting.DARK_GRAY).build());
+                    tooltip.add(Tooltips.HOLD_ALT_FOR_NBT.build());
                 }
             }
         }

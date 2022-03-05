@@ -4,7 +4,6 @@ import com.blakebr0.cucumber.helper.BlockHelper;
 import com.blakebr0.cucumber.iface.IEnableable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DiggerItem;
@@ -15,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.common.ForgeHooks;
 
-import java.util.Set;
 import java.util.function.Function;
 
 public class BaseSickleItem extends DiggerItem {
@@ -24,7 +22,7 @@ public class BaseSickleItem extends DiggerItem {
     private final int range;
 
     public BaseSickleItem(Tier tier, float attackDamage, float attackSpeed, int range, Function<Properties, Properties> properties) {
-        super(attackDamage, attackSpeed, tier, Tag.fromSet(Set.of()), properties.apply(new Properties()));
+        super(attackDamage, attackSpeed, tier, null, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
         this.range = range;

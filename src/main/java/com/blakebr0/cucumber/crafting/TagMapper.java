@@ -7,11 +7,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.tags.SerializationTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.AddReloadListenerEvent;
@@ -25,6 +26,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -131,8 +133,14 @@ public class TagMapper implements ResourceManagerReloadListener {
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
         var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
-        var tag = SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getTag(new ResourceLocation(tagId));
-        var item = tag == null ? Items.AIR : tag.getValues().stream().min((item1, item2) -> {
+        var key = ItemTags.create(new ResourceLocation(tagId));
+        var tag = Registry.ITEM.getTag(key);
+        var items = tag.stream()
+                .map(t -> t.stream().map(Holder::value).toList())
+                .flatMap(List::stream)
+                .toList();
+
+        var item = items.stream().min((item1, item2) -> {
             var index1 = item1.getRegistryName() != null ? mods.indexOf(item1.getRegistryName().getNamespace()) : -1;
             var index2 = item2.getRegistryName() != null ? mods.indexOf(item2.getRegistryName().getNamespace()) : -1;
 

@@ -6,6 +6,7 @@ import com.blakebr0.cucumber.util.Localizable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -18,16 +19,20 @@ public final class TagTooltipHandler {
             return;
 
         if (Minecraft.getInstance().options.advancedItemTooltips) {
-            var item = event.getItemStack().getItem();
-            var blockTags = Block.byItem(item).getTags();
-            var itemTags = item.getTags();
+            var stack = event.getItemStack();
+            var blockTags = Block.byItem(stack.getItem()).defaultBlockState().getTags()
+                    .map(TagKey::location)
+                    .toList();
+            var itemTags = stack.getTags()
+                    .map(TagKey::location)
+                    .toList();
 
             if (!blockTags.isEmpty() || !itemTags.isEmpty()) {
                 var tooltip = event.getToolTip();
 
                 if (Screen.hasControlDown()) {
                     if (!blockTags.isEmpty()) {
-                        tooltip.add(Tooltips.BLOCK_TAGS.color(ChatFormatting.DARK_GRAY).build());
+                        tooltip.add(Tooltips.BLOCK_TAGS.build());
                         blockTags.stream()
                                 .map(Object::toString)
                                 .map(s -> "  " + s)
@@ -36,7 +41,7 @@ public final class TagTooltipHandler {
                     }
 
                     if (!itemTags.isEmpty()) {
-                        tooltip.add(Tooltips.ITEM_TAGS.color(ChatFormatting.DARK_GRAY).build());
+                        tooltip.add(Tooltips.ITEM_TAGS.build());
                         itemTags.stream()
                                 .map(Object::toString)
                                 .map(s -> "  " + s)
@@ -44,7 +49,7 @@ public final class TagTooltipHandler {
                                 .forEach(tooltip::add);
                     }
                 } else {
-                    tooltip.add(Tooltips.HOLD_CTRL_FOR_TAGS.color(ChatFormatting.DARK_GRAY).build());
+                    tooltip.add(Tooltips.HOLD_CTRL_FOR_TAGS.build());
                 }
             }
         }
