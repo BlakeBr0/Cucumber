@@ -17,8 +17,7 @@ public class ModReloadListeners {
     private static class RegisterRecipesReloadListener implements ResourceManagerReloadListener {
         @Override
         public void onResourceManagerReload(ResourceManager manager) {
-            // TODO: re-add once forge updates
-            // MinecraftForge.EVENT_BUS.post(new RegisterRecipesEvent(RecipeHelper.getRecipeManager()));
+            MinecraftForge.EVENT_BUS.post(new RegisterRecipesEvent(RecipeHelper.getRecipeManager()));
         }
     }
 }

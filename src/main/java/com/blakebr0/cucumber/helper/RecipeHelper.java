@@ -19,7 +19,7 @@ public final class RecipeHelper {
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onAddReloadListeners(AddReloadListenerEvent event) {
-//        recipeManager = event.getServerResources().getRecipeManager();
+        recipeManager = event.getServerResources().getRecipeManager();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)
