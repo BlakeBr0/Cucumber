@@ -58,7 +58,7 @@ minecraft {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.0.1'
+    minecraft 'net.minecraftforge:forge:1.18.2-40.0.12'
 }
 
 jar {

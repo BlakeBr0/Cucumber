@@ -7,7 +7,7 @@ license="MIT"
     modId="cucumber"
     version="${file.jarVersion}"
     # logoFile="examplemod.png"
-    displayURL="https://www.curseforge.com/minecraft/mc-mods/cucumber"
+    displayURL="https://blakesmods.com/cucumber"
     # credits="Thanks for this example mod goes to Java"
     authors="BlakeBr0"
     displayName="Cucumber Library"
@@ -19,7 +19,7 @@ license="MIT"
     [[dependencies.cucumber]]
         modId="forge"
         mandatory=true
-        versionRange="[40.0,)"
+        versionRange="[40.0.12,)"
         ordering="NONE"
         side="BOTH"
     [[dependencies.cucumber]]
