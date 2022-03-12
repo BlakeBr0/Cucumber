@@ -14,6 +14,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -131,6 +132,11 @@ public class TagMapper implements ResourceManagerReloadListener {
         }
     }
 
+    public static ItemStack getItemStackForTag(String tag, int size) {
+        var item = getItemForTag(tag);
+        return item != null && item != Items.AIR ? new ItemStack(item, size) : ItemStack.EMPTY;
+    }
+
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
         var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
         var key = ItemTags.create(new ResourceLocation(tagId));
@@ -167,7 +173,7 @@ public class TagMapper implements ResourceManagerReloadListener {
     private static void generateNewConfig(File file) {
         try (var writer = new FileWriter(file)) {
             var object = new JsonObject();
-            object.addProperty("__comment", "Instructions: https://mods.blakebr0.com/docs/cucumber/tags-config");
+            object.addProperty("__comment", "Instructions: https://blakesmods.com/docs/cucumber/tags-config");
 
             GSON.toJson(object, writer);
         } catch (IOException e) {
