@@ -1,0 +1,17 @@
+{
+  "tooltip.cucumber.hold_shift_for_info": "Maintenir §e§oMAJ §r§7pour info",
+  "tooltip.cucumber.uses_left": "%s Utilisation restantes",
+  "tooltip.cucumber.one_use_left": "1 Utilisation restante",
+  "tooltip.cucumber.unlimited_uses": "Utilisations illimitées",
+  "tooltip.cucumber.hold_ctrl_for_tags": "Maintenez CTRL pour voir les tags",
+  "tooltip.cucumber.hold_alt_for_nbt": "Maintenez ALT pour voir NBT",
+  "tooltip.cucumber.block_tags": "Tags de bloc :",
+  "tooltip.cucumber.item_tags": "Tags d'objet :",
+  "tooltip.cucumber.not_yet_implemented": "Pas encore implémenté",
+  "tooltip.cucumber.close": "Fermer",
+  "tooltip.cucumber.back": "Arrière",
+  "tooltip.cucumber.forward": "Avant",
+
+  "message.cucumber.filled_energy": "Ce bloc a pris votre énergie!",
+  "message.cucumber.filled_energy_error": "Ce bloc est incapable de prendre votre énergie."
+}
