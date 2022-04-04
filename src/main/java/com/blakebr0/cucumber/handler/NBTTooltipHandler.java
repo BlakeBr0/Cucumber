@@ -3,6 +3,10 @@ package com.blakebr0.cucumber.handler;
 import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.lib.Colors;
 import com.blakebr0.cucumber.lib.Tooltips;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.TextComponent;
@@ -11,6 +15,8 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public final class NBTTooltipHandler {
+    private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
+
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onItemTooltip(ItemTooltipEvent event) {
         if (!ModConfigs.ENABLE_NBT_TOOLTIPS.get())
@@ -24,9 +30,16 @@ public final class NBTTooltipHandler {
                 var tooltip = event.getToolTip();
 
                 if (Screen.hasAltDown()) {
-                    var text = tag.getAsString();
+                    try {
+                        var text = JsonParser.parseString(tag.getAsString());
+                        var json = GSON.toJson(text);
 
-                    tooltip.add(new TextComponent(Colors.DARK_GRAY + text));
+                        for (var line : json.split("\n")) {
+                            tooltip.add(new TextComponent(Colors.DARK_GRAY + line));
+                        }
+                    } catch (JsonParseException e) {
+                        tooltip.add(Tooltips.FAILED_TO_LOAD_NBT.build());
+                    }
                 } else {
                     tooltip.add(Tooltips.HOLD_ALT_FOR_NBT.build());
                 }

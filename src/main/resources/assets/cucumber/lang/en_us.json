@@ -5,6 +5,7 @@
   "tooltip.cucumber.unlimited_uses": "Unlimited Uses",
   "tooltip.cucumber.hold_ctrl_for_tags": "Hold CTRL to see tags",
   "tooltip.cucumber.hold_alt_for_nbt": "Hold ALT to see NBT",
+  "tooltip.cucumber.failed_to_load_nbt": "Failed to load NBT",
   "tooltip.cucumber.block_tags": "Block Tags:",
   "tooltip.cucumber.item_tags": "Item Tags:",
   "tooltip.cucumber.not_yet_implemented": "Not Yet Implemented",
