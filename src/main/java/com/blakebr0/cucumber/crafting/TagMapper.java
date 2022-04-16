@@ -140,15 +140,16 @@ public class TagMapper implements ResourceManagerReloadListener {
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
         var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
         var key = ItemTags.create(new ResourceLocation(tagId));
-        var tag = Registry.ITEM.getTag(key);
-        var items = tag.stream()
-                .map(t -> t.stream().map(Holder::value).toList())
-                .flatMap(List::stream)
-                .toList();
+        var tags = ForgeRegistries.ITEMS.tags();
 
-        var item = items.stream().min((item1, item2) -> {
-            var index1 = item1.getRegistryName() != null ? mods.indexOf(item1.getRegistryName().getNamespace()) : -1;
-            var index2 = item2.getRegistryName() != null ? mods.indexOf(item2.getRegistryName().getNamespace()) : -1;
+        assert tags != null;
+        
+        var item = tags.getTag(key).stream().min((item1, item2) -> {
+            var id1 = item1.getRegistryName();
+            var index1 = id1 != null ? mods.indexOf(id1.getNamespace()) : -1;
+
+            var id2 = item2.getRegistryName();
+            var index2 = id2 != null ? mods.indexOf(id2.getNamespace()) : -1;
 
             return index1 > index2 ? 1 : index1 == -1 ? 0 : -1;
         }).orElse(Items.AIR);
