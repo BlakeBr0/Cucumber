@@ -10,6 +10,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
 
 public class BaseItemStackHandler extends ItemStackHandler {
     private final Runnable onContentsChanged;
@@ -116,5 +117,19 @@ public class BaseItemStackHandler extends ItemStackHandler {
         }
 
         return newInventory;
+    }
+
+    public static BaseItemStackHandler create(int size) {
+        return create(size, builder -> {});
+    }
+
+    public static BaseItemStackHandler create(int size, Consumer<BaseItemStackHandler> builder) {
+        return create(size, null, builder);
+    }
+
+    public static BaseItemStackHandler create(int size, Runnable onContentsChanged, Consumer<BaseItemStackHandler> builder) {
+        var handler = new BaseItemStackHandler(size, onContentsChanged);
+        builder.accept(handler);
+        return handler;
     }
 }
