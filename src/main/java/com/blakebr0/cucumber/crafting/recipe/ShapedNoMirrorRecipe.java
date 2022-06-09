@@ -12,7 +12,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class ShapedNoMirrorRecipe extends ShapedRecipe {
     public ShapedNoMirrorRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, ItemStack output) {
@@ -57,7 +56,7 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
         return true;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedNoMirrorRecipe> {
+    public static class Serializer implements RecipeSerializer<ShapedNoMirrorRecipe> {
         @Override
         public ShapedNoMirrorRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var group = GsonHelper.getAsString(json, "group", "");

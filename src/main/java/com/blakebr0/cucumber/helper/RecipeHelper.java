@@ -44,7 +44,7 @@ public final class RecipeHelper {
         return getRecipeManager().recipes;
     }
 
-    public static <C extends Container, T extends Recipe<C>> Map<ResourceLocation, Recipe<C>> getRecipes(RecipeType<T> type) {
+    public static <C extends Container, T extends Recipe<C>> Map<ResourceLocation, T> getRecipes(RecipeType<T> type) {
         return getRecipeManager().byType(type);
     }
 

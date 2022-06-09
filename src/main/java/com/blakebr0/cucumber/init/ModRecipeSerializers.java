@@ -9,8 +9,9 @@ import com.blakebr0.cucumber.crafting.recipe.ShapelessTagRecipe;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
 public final class ModRecipeSerializers {
     public static final RecipeSerializer<?> CRAFTING_SHAPED_NO_MIRROR = new ShapedNoMirrorRecipe.Serializer();
@@ -19,14 +20,14 @@ public final class ModRecipeSerializers {
     public static final RecipeSerializer<?> CRAFTING_SHAPELESS_TAG = new ShapelessTagRecipe.Serializer();
 
     @SubscribeEvent
-    public void onRegisterSerializers(RegistryEvent.Register<RecipeSerializer<?>> event) {
-        var registry = event.getRegistry();
+    public void onRegisterSerializers(RegisterEvent event) {
+        event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS, registry -> {
+            registry.register(new ResourceLocation(Cucumber.MOD_ID, "shaped_no_mirror"), CRAFTING_SHAPED_NO_MIRROR);
+            registry.register(new ResourceLocation(Cucumber.MOD_ID, "shaped_transfer_damage"), CRAFTING_SHAPED_TRANSFER_DAMAGE);
+            registry.register(new ResourceLocation(Cucumber.MOD_ID, "shaped_tag"), CRAFTING_SHAPED_TAG);
+            registry.register(new ResourceLocation(Cucumber.MOD_ID, "shapeless_tag"), CRAFTING_SHAPELESS_TAG);
 
-        registry.register(CRAFTING_SHAPED_NO_MIRROR.setRegistryName(new ResourceLocation(Cucumber.MOD_ID, "shaped_no_mirror")));
-        registry.register(CRAFTING_SHAPED_TRANSFER_DAMAGE.setRegistryName(new ResourceLocation(Cucumber.MOD_ID, "shaped_transfer_damage")));
-        registry.register(CRAFTING_SHAPED_TAG.setRegistryName(new ResourceLocation(Cucumber.MOD_ID, "shaped_tag")));
-        registry.register(CRAFTING_SHAPELESS_TAG.setRegistryName(new ResourceLocation(Cucumber.MOD_ID, "shapeless_tag")));
-
-        CraftingHelper.register(EnableableCondition.Serializer.INSTANCE);
+            CraftingHelper.register(EnableableCondition.Serializer.INSTANCE);
+        });
     }
 }

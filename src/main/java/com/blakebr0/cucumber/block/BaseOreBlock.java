@@ -2,6 +2,7 @@ package com.blakebr0.cucumber.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,7 +25,7 @@ public class BaseOreBlock extends BaseBlock {
     }
 
     @Override
-    public int getExpDrop(BlockState state, LevelReader level, BlockPos pos, int fortune, int silktouch) {
-        return silktouch == 0 ? Mth.nextInt(RANDOM, this.minExp, this.maxExp) : 0;
+    public int getExpDrop(BlockState state, LevelReader level, RandomSource random, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
+        return silkTouchLevel == 0 ? Mth.nextInt(random, this.minExp, this.maxExp) : 0;
     }
 }

@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class ShapedTransferDamageRecipe extends ShapedRecipe {
     public ShapedTransferDamageRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, ItemStack output) {
@@ -40,7 +39,7 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
         return result;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedTransferDamageRecipe> {
+    public static class Serializer implements RecipeSerializer<ShapedTransferDamageRecipe> {
         @Override
         public ShapedTransferDamageRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var group = GsonHelper.getAsString(json, "group", "");

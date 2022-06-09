@@ -37,6 +37,11 @@ public class ItemInventoryContainer extends AbstractContainerMenu {
 	}
 
 	@Override
+	public ItemStack quickMoveStack(Player p_38941_, int p_38942_) {
+		return ItemStack.EMPTY;
+	}
+
+	@Override
 	public boolean stillValid(Player player) {
 		this.onSlotChanged();
 

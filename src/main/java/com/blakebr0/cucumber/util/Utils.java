@@ -1,10 +1,11 @@
 package com.blakebr0.cucumber.util;
 
+import net.minecraft.util.RandomSource;
+
 import java.text.NumberFormat;
-import java.util.Random;
 
 public final class Utils {
-	public static final Random RANDOM = new Random();
+	public static final RandomSource RANDOM = RandomSource.create();
 
 	public static String format(Object obj) {
 		return NumberFormat.getInstance().format(obj);

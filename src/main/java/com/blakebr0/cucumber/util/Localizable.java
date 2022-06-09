@@ -1,9 +1,8 @@
 package com.blakebr0.cucumber.util;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.TextComponent;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class Localizable {
     private final String key;
@@ -84,10 +83,10 @@ public class Localizable {
         }
 
         public MutableComponent build() {
-            MutableComponent component = new TranslatableComponent(this.key, this.args);
+            var component = Component.translatable(this.key, this.args);
 
-            if (!prependText.equals("")) {
-                component = new TextComponent(prependText).append(component);
+            if (!this.prependText.equals("")) {
+                component = Component.literal(this.prependText).append(component);
             }
 
             if (this.color != null) {

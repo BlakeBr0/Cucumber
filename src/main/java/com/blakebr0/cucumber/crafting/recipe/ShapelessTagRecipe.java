@@ -13,7 +13,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class ShapelessTagRecipe extends ShapelessRecipe {
     private final String tag;
@@ -49,7 +48,7 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
         return ModRecipeSerializers.CRAFTING_SHAPED_TAG;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapelessTagRecipe> {
+    public static class Serializer implements RecipeSerializer<ShapelessTagRecipe> {
         @Override
         public ShapelessTagRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var group = GsonHelper.getAsString(json, "group", "");

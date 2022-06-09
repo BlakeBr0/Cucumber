@@ -19,7 +19,7 @@ public record EnableableCondition(ResourceLocation item) implements ICondition {
     }
 
     @Override
-    public boolean test() {
+    public boolean test(IContext context) {
         var item = ForgeRegistries.ITEMS.getValue(this.item);
         if (item == Items.AIR)
             return false;

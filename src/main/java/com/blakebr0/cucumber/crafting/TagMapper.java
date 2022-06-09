@@ -7,8 +7,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -27,7 +25,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -145,18 +142,18 @@ public class TagMapper implements ResourceManagerReloadListener {
         assert tags != null;
         
         var item = tags.getTag(key).stream().min((item1, item2) -> {
-            var id1 = item1.getRegistryName();
+            var id1 = ForgeRegistries.ITEMS.getKey(item1);
             var index1 = id1 != null ? mods.indexOf(id1.getNamespace()) : -1;
 
-            var id2 = item2.getRegistryName();
+            var id2 = ForgeRegistries.ITEMS.getKey(item2);
             var index2 = id2 != null ? mods.indexOf(id2.getNamespace()) : -1;
 
             return index1 > index2 ? 1 : index1 == -1 ? 0 : -1;
         }).orElse(Items.AIR);
 
         var itemId = "null";
-        if (item.getRegistryName() != null && item != Items.AIR) {
-            itemId = item.getRegistryName().toString();
+        if (ForgeRegistries.ITEMS.containsValue(item) && item != Items.AIR) {
+            itemId = ForgeRegistries.ITEMS.getKey(item).toString();
         }
 
         json.addProperty(tagId, itemId);

@@ -11,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
-import net.minecraftforge.registries.ForgeRegistryEntry;
 
 public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
     private final String tag;
@@ -47,7 +46,7 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
         return ModRecipeSerializers.CRAFTING_SHAPED_TAG;
     }
 
-    public static class Serializer extends ForgeRegistryEntry<RecipeSerializer<?>> implements RecipeSerializer<ShapedTagRecipe> {
+    public static class Serializer implements RecipeSerializer<ShapedTagRecipe> {
         @Override
         public ShapedTagRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var group = GsonHelper.getAsString(json, "group", "");

@@ -9,7 +9,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -35,7 +35,7 @@ public final class NBTTooltipHandler {
                         var json = GSON.toJson(text);
 
                         for (var line : json.split("\n")) {
-                            tooltip.add(new TextComponent(Colors.DARK_GRAY + line));
+                            tooltip.add(Component.literal(Colors.DARK_GRAY + line));
                         }
                     } catch (JsonParseException e) {
                         tooltip.add(Tooltips.FAILED_TO_LOAD_NBT.build());

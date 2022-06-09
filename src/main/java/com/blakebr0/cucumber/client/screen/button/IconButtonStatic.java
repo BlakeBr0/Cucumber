@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
 import net.minecraft.resources.ResourceLocation;
 
 public class IconButtonStatic extends Button {
@@ -13,7 +12,7 @@ public class IconButtonStatic extends Button {
 	private final int textureX, textureY;
 
 	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, OnPress onPress) {
-		this(x, y, width, height, textureX, textureY, new TextComponent(""), texture, onPress);
+		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress);
 	}
 
 	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress) {

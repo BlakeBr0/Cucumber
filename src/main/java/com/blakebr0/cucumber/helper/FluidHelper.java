@@ -22,7 +22,7 @@ public final class FluidHelper {
 	}
 
 	public static ItemStack getFilledBucket(FluidStack fluid, Item bucket, int capacity) {
-		if (ForgeRegistries.FLUIDS.containsKey(fluid.getFluid().getRegistryName())) {
+		if (ForgeRegistries.FLUIDS.containsValue(fluid.getFluid())) {
 			var filledBucket = new ItemStack(bucket);
 			var fluidContents = new FluidStack(fluid, capacity);
 

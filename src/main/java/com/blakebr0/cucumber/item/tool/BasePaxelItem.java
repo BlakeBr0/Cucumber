@@ -3,20 +3,16 @@ package com.blakebr0.cucumber.item.tool;
 import com.blakebr0.cucumber.iface.IEnableable;
 import com.blakebr0.cucumber.lib.ModTags;
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolAction;
@@ -51,6 +47,19 @@ public class BasePaxelItem extends DiggerItem {
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
+        // attempt to handle axe useOn functionality
+        var result = tryAxeUseOn(context);
+
+        // axe functionality did not apply
+        if (result == InteractionResult.PASS) {
+            // attempt to handle shovel useOn functionality
+            result = tryShovelUseOn(context);
+        }
+
+        return result;
+    }
+
+    private static InteractionResult tryAxeUseOn(UseOnContext context) {
         var level = context.getLevel();
         var pos = context.getClickedPos();
         var player = context.getPlayer();
@@ -58,22 +67,9 @@ public class BasePaxelItem extends DiggerItem {
         var hand = context.getHand();
         var state = level.getBlockState(pos);
 
-        // attempt to handle axe useOn functionality
-        var result = tryAxeUseOn(stack, level, pos, state, player, hand);
-
-        // axe functionality did not apply
-        if (result == InteractionResult.PASS) {
-            // attempt to handle shovel useOn functionality
-            result = tryShovelUseOn(stack, level, pos, state, player, hand);
-        }
-
-        return result;
-    }
-
-    private static InteractionResult tryAxeUseOn(ItemStack stack, Level level, BlockPos pos, BlockState state, Player player, InteractionHand hand) {
-        Optional<BlockState> axeStripped = Optional.ofNullable(state.getToolModifiedState(level, pos, player, stack, ToolActions.AXE_STRIP));
-        Optional<BlockState> axeScraped = Optional.ofNullable(state.getToolModifiedState(level, pos, player, stack, ToolActions.AXE_SCRAPE));
-        Optional<BlockState> axeWaxedOff = Optional.ofNullable(state.getToolModifiedState(level, pos, player, stack, ToolActions.AXE_WAX_OFF));
+        var axeStripped = Optional.ofNullable(state.getToolModifiedState(context, ToolActions.AXE_STRIP, false));
+        var axeScraped = Optional.ofNullable(state.getToolModifiedState(context, ToolActions.AXE_SCRAPE, false));
+        var axeWaxedOff = Optional.ofNullable(state.getToolModifiedState(context, ToolActions.AXE_WAX_OFF, false));
 
         Optional<BlockState> modifiedState = Optional.empty();
 
@@ -109,8 +105,15 @@ public class BasePaxelItem extends DiggerItem {
         return InteractionResult.PASS;
     }
 
-    private static InteractionResult tryShovelUseOn(ItemStack stack, Level level, BlockPos pos, BlockState state, Player player, InteractionHand hand) {
-        var modifiedState = state.getToolModifiedState(level, pos, player, stack, ToolActions.SHOVEL_FLATTEN);
+    private static InteractionResult tryShovelUseOn(UseOnContext context) {
+        var level = context.getLevel();
+        var pos = context.getClickedPos();
+        var player = context.getPlayer();
+        var stack = context.getItemInHand();
+        var hand = context.getHand();
+        var state = level.getBlockState(pos);
+
+        var modifiedState = state.getToolModifiedState(context, ToolActions.SHOVEL_FLATTEN, false);
         BlockState newState = null;
 
         if (modifiedState != null && level.isEmptyBlock(pos.above())) {
