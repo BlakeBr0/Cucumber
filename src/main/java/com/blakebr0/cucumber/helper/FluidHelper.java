@@ -13,7 +13,7 @@ public final class FluidHelper {
 	}
 
 	public static Rarity getFluidRarity(FluidStack fluid) {
-		return fluid.getFluid().getAttributes().getRarity();
+		return fluid.getFluid().getFluidType().getRarity();
 	}
 
 	public static int getFluidAmount(ItemStack stack) {
