@@ -1,0 +1,18 @@
+{
+  "tooltip.cucumber.hold_shift_for_info": "Утримуйте §e§oSHIFT §r§7 для отримання інформації",
+  "tooltip.cucumber.uses_left": "Залишилось %s використань",
+  "tooltip.cucumber.one_use_left": "Залишилось 1 використання",
+  "tooltip.cucumber.unlimited_uses": "Необмежене використання",
+  "tooltip.cucumber.hold_ctrl_for_tags": "Утримуйте CTRL, щоби побачити теги",
+  "tooltip.cucumber.hold_alt_for_nbt": "Утримуйте ALT, щоби побачити NBT",
+  "tooltip.cucumber.failed_to_load_nbt": "Не вдалося завантажити NBT",
+  "tooltip.cucumber.block_tags": "Теги блока:",
+  "tooltip.cucumber.item_tags": "Теги предмета:",
+  "tooltip.cucumber.not_yet_implemented": "Ще не реалізовано",
+  "tooltip.cucumber.close": "Закрити",
+  "tooltip.cucumber.back": "Назад",
+  "tooltip.cucumber.forward": "Вперед",
+
+  "message.cucumber.filled_energy": "Цей %s забрав вашу енергію!",
+  "message.cucumber.filled_energy_error": "Цей %s не може забрати вашу енергію."
+}
