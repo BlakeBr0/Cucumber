@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
 
-// TODO: 1.16: reevaluate, reimplement
+// TODO: 1.19: look into this
 public final class GhostItemRenderer {
     public static void renderItemModel(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, float alpha) {
         if (!stack.isEmpty()) {
@@ -77,7 +77,9 @@ public final class GhostItemRenderer {
                 } else {
                     flag1 = true;
                 }
-                if (modelIn.isLayered()) { net.minecraftforge.client.ForgeHooksClient.drawItemLayered(itemRenderer, modelIn, itemStackIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, flag1); }
+                if (/*modelIn.isLayered()*/false) {
+                    //net.minecraftforge.client.ForgeHooksClient.drawItemLayered(itemRenderer, modelIn, itemStackIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, flag1);
+                }
                 else {
                     RenderType rendertype = ModRenderTypes.GHOST;
                     VertexConsumer vertexconsumer;
@@ -106,7 +108,7 @@ public final class GhostItemRenderer {
                     itemRenderer.renderModelLists(modelIn, itemStackIn, combinedLightIn, combinedOverlayIn, matrixStackIn, vertexconsumer);
                 }
             } else {
-                net.minecraftforge.client.RenderProperties.get(itemStackIn).getItemStackRenderer().renderByItem(itemStackIn, transformTypeIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+//                net.minecraftforge.client.RenderProperties.get(itemStackIn).getItemStackRenderer().renderByItem(itemStackIn, transformTypeIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
             }
 
             matrixStackIn.popPose();

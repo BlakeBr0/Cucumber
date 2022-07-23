@@ -38,12 +38,12 @@ public class BaseReusableItem extends BaseItem {
 	}
 	
 	@Override
-	public boolean hasContainerItem(ItemStack stack) {
+	public boolean hasCraftingRemainingItem(ItemStack stack) {
 		return true;
 	}
 	
 	@Override
-	public ItemStack getContainerItem(ItemStack stack) {
+	public ItemStack getCraftingRemainingItem(ItemStack stack) {
 		var copy = stack.copy();
 
 		copy.setCount(1);
@@ -51,7 +51,7 @@ public class BaseReusableItem extends BaseItem {
 		if (!this.damage)
 			return copy;
 
-		var unbreaking = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, stack);
+		var unbreaking = EnchantmentHelper.getTagEnchantmentLevel(Enchantments.UNBREAKING, stack);
 
 		for (var i = 0; i < unbreaking; i++) {
 			if (DigDurabilityEnchantment.shouldIgnoreDurabilityDrop(stack, unbreaking, Utils.RANDOM))
