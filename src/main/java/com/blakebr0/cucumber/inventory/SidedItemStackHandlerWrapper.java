@@ -59,7 +59,7 @@ public record SidedItemStackHandlerWrapper(BaseItemStackHandler inventory,
 
     @SuppressWarnings("unchecked")
     public static LazyOptional<IItemHandlerModifiable>[] create(BaseItemStackHandler inv, Direction[] sides, TriFunction<Integer, ItemStack, Direction, Boolean> canInsert, BiFunction<Integer, Direction, Boolean> canExtract) {
-        LazyOptional<IItemHandlerModifiable>[] ret = new LazyOptional[sides.length];
+        var ret = new LazyOptional[sides.length];
         for (int x = 0; x < sides.length; x++) {
             final var side = sides[x];
             ret[x] = LazyOptional.of(() -> new SidedItemStackHandlerWrapper(inv, side, canInsert, canExtract));

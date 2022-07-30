@@ -11,11 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class BaseItemStackHandler extends ItemStackHandler {
     private final Runnable onContentsChanged;
     private final Map<Integer, Integer> slotSizeMap;
     private BiFunction<Integer, ItemStack, Boolean> slotValidator = null;
+    private Function<Integer, Boolean> canExtract = null;
     private int maxStackSize = 64;
     private int[] outputSlots = null;
 
@@ -39,6 +41,9 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
+        if (this.canExtract != null && !this.canExtract.apply(slot))
+            return ItemStack.EMPTY;
+
         if (this.outputSlots != null && !ArrayUtils.contains(this.outputSlots, slot))
             return ItemStack.EMPTY;
 
@@ -89,6 +94,10 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.slotValidator = validator;
     }
 
+    public void setCanExtract(Function<Integer, Boolean> canExtract) {
+        this.canExtract = canExtract;
+    }
+
     public void setOutputSlots(int... slots) {
         this.outputSlots = slots;
     }
@@ -106,6 +115,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
         newInventory.setDefaultSlotLimit(this.maxStackSize);
         newInventory.setSlotValidator(this.slotValidator);
+        newInventory.setCanExtract(this.canExtract);
         newInventory.setOutputSlots(this.outputSlots);
 
         this.slotSizeMap.forEach(newInventory::addSlotLimit);
