@@ -45,7 +45,7 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.CRAFTING_SHAPED_TAG;
+        return ModRecipeSerializers.CRAFTING_SHAPELESS_TAG.get();
     }
 
     public static class Serializer implements RecipeSerializer<ShapelessTagRecipe> {

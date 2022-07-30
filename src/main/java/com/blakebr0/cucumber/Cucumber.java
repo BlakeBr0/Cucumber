@@ -32,6 +32,8 @@ public final class Cucumber {
 		bus.register(this);
 		bus.register(new ModRecipeSerializers());
 
+		ModRecipeSerializers.REGISTRY.register(bus);
+
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModConfigs.COMMON);
 	}

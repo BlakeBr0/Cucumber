@@ -33,7 +33,7 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.CRAFTING_SHAPED_NO_MIRROR;
+        return ModRecipeSerializers.CRAFTING_SHAPED_NO_MIRROR.get();
     }
 
     private boolean checkMatch(CraftingContainer inventory, int x, int y) {

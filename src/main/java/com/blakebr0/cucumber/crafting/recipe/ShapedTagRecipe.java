@@ -43,7 +43,7 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.CRAFTING_SHAPED_TAG;
+        return ModRecipeSerializers.CRAFTING_SHAPED_TAG.get();
     }
 
     public static class Serializer implements RecipeSerializer<ShapedTagRecipe> {

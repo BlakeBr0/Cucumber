@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.crafting.recipe;
 
+import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
@@ -37,6 +38,11 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
         result.setDamageValue(damageable.getDamageValue());
 
         return result;
+    }
+
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return ModRecipeSerializers.CRAFTING_SHAPED_TRANSFER_DAMAGE.get();
     }
 
     public static class Serializer implements RecipeSerializer<ShapedTransferDamageRecipe> {
