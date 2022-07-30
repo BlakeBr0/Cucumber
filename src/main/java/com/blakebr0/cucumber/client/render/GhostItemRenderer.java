@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -77,38 +78,37 @@ public final class GhostItemRenderer {
                 } else {
                     flag1 = true;
                 }
-                if (/*modelIn.isLayered()*/false) {
-                    //net.minecraftforge.client.ForgeHooksClient.drawItemLayered(itemRenderer, modelIn, itemStackIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn, flag1);
-                }
-                else {
-                    RenderType rendertype = ModRenderTypes.GHOST;
-                    VertexConsumer vertexconsumer;
-                    if (itemStackIn.is(Items.COMPASS) && itemStackIn.hasFoil()) {
-                        matrixStackIn.pushPose();
-                        PoseStack.Pose posestack$pose = matrixStackIn.last();
-                        if (transformTypeIn == ItemTransforms.TransformType.GUI) {
-                            posestack$pose.pose().multiply(0.5F);
-                        } else if (transformTypeIn.firstPerson()) {
-                            posestack$pose.pose().multiply(0.75F);
-                        }
+                for (var model : modelIn.getRenderPasses(itemStackIn, flag1)) {
+                    for (var rendertype : model.getRenderTypes(itemStackIn, flag1)) {
+                        rendertype = ModRenderTypes.GHOST;
+                        VertexConsumer vertexconsumer;
+                        if (itemStackIn.is(ItemTags.COMPASSES) && itemStackIn.hasFoil()) {
+                            matrixStackIn.pushPose();
+                            PoseStack.Pose posestack$pose = matrixStackIn.last();
+                            if (transformTypeIn == ItemTransforms.TransformType.GUI) {
+                                posestack$pose.pose().multiply(0.5F);
+                            } else if (transformTypeIn.firstPerson()) {
+                                posestack$pose.pose().multiply(0.75F);
+                            }
 
-                        if (flag1) {
-                            vertexconsumer = ItemRenderer.getCompassFoilBufferDirect(bufferIn, rendertype, posestack$pose);
+                            if (flag1) {
+                                vertexconsumer = ItemRenderer.getCompassFoilBufferDirect(bufferIn, rendertype, posestack$pose);
+                            } else {
+                                vertexconsumer = ItemRenderer.getCompassFoilBuffer(bufferIn, rendertype, posestack$pose);
+                            }
+
+                            matrixStackIn.popPose();
+                        } else if (flag1) {
+                            vertexconsumer = ItemRenderer.getFoilBufferDirect(bufferIn, rendertype, true, itemStackIn.hasFoil());
                         } else {
-                            vertexconsumer = ItemRenderer.getCompassFoilBuffer(bufferIn, rendertype, posestack$pose);
+                            vertexconsumer = ItemRenderer.getFoilBuffer(bufferIn, rendertype, true, itemStackIn.hasFoil());
                         }
 
-                        matrixStackIn.popPose();
-                    } else if (flag1) {
-                        vertexconsumer = ItemRenderer.getFoilBufferDirect(bufferIn, rendertype, true, itemStackIn.hasFoil());
-                    } else {
-                        vertexconsumer = ItemRenderer.getFoilBuffer(bufferIn, rendertype, true, itemStackIn.hasFoil());
+                        itemRenderer.renderModelLists(model, itemStackIn, combinedLightIn, combinedOverlayIn, matrixStackIn, vertexconsumer);
                     }
-
-                    itemRenderer.renderModelLists(modelIn, itemStackIn, combinedLightIn, combinedOverlayIn, matrixStackIn, vertexconsumer);
                 }
             } else {
-//                net.minecraftforge.client.RenderProperties.get(itemStackIn).getItemStackRenderer().renderByItem(itemStackIn, transformTypeIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
+                net.minecraftforge.client.extensions.common.IClientItemExtensions.of(itemStackIn).getCustomRenderer().renderByItem(itemStackIn, transformTypeIn, matrixStackIn, bufferIn, combinedLightIn, combinedOverlayIn);
             }
 
             matrixStackIn.popPose();
