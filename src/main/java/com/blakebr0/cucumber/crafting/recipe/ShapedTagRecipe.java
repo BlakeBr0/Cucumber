@@ -51,7 +51,7 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
         public ShapedTagRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var group = GsonHelper.getAsString(json, "group", "");
             var key = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
-            var pattern = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
+            var pattern = ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern"));
             var width = pattern[0].length();
             var height = pattern.length;
             var ingredients = ShapedRecipe.dissolvePattern(pattern, key, width, height);
