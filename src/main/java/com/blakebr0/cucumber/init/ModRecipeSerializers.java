@@ -2,6 +2,7 @@ package com.blakebr0.cucumber.init;
 
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.crafting.conditions.EnableableCondition;
+import com.blakebr0.cucumber.crafting.conditions.FeatureFlagCondition;
 import com.blakebr0.cucumber.crafting.recipe.ShapedNoMirrorRecipe;
 import com.blakebr0.cucumber.crafting.recipe.ShapedTagRecipe;
 import com.blakebr0.cucumber.crafting.recipe.ShapedTransferDamageRecipe;
@@ -28,6 +29,7 @@ public final class ModRecipeSerializers {
     public void onRegisterSerializers(RegisterEvent event) {
         event.register(ForgeRegistries.Keys.RECIPE_SERIALIZERS, registry -> {
             CraftingHelper.register(EnableableCondition.Serializer.INSTANCE);
+            CraftingHelper.register(FeatureFlagCondition.Serializer.INSTANCE);
         });
     }
 
