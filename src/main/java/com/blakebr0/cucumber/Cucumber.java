@@ -9,6 +9,7 @@ import com.blakebr0.cucumber.handler.TagTooltipHandler;
 import com.blakebr0.cucumber.helper.RecipeHelper;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.blakebr0.cucumber.init.ModReloadListeners;
+import com.blakebr0.cucumber.util.FeatureFlagInitializer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -33,6 +34,8 @@ public final class Cucumber {
 		bus.register(new ModRecipeSerializers());
 
 		ModRecipeSerializers.REGISTRY.register(bus);
+
+		FeatureFlagInitializer.init();
 
 		ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ModConfigs.CLIENT);
 		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ModConfigs.COMMON);
