@@ -71,20 +71,26 @@ public class BaseSickleItem extends DiggerItem {
 
         if (this.range > 0) {
             BlockPos.betweenClosed(pos.offset(-this.range, -this.range, -this.range), pos.offset(this.range, this.range, this.range)).forEach(aoePos -> {
+                if (stack.isEmpty())
+                    return;
+
                 if (aoePos != pos) {
                     var aoeState = level.getBlockState(aoePos);
+
+                    if (!isValidMaterial(aoeState))
+                        return;
+
                     var aoeHardness = aoeState.getDestroySpeed(level, aoePos);
 
-                    if (aoeHardness <= hardness + 5.0F && isValidMaterial(aoeState)) {
-                        if (this.tryHarvest(level, aoePos, true, stack, player)) {
-                            if (aoeHardness <= 0.0F && Math.random() < 0.33) {
-                                if (!player.getAbilities().instabuild) {
-                                    stack.hurtAndBreak(1, player, entity -> {
-                                        entity.broadcastBreakEvent(player.getUsedItemHand());
-                                    });
-                                }
-                            }
-                        }
+                    if (aoeHardness > hardness + 5.0F)
+                        return;
+
+                    var harvested = this.tryHarvest(level, aoePos, true, stack, player);
+
+                    if (harvested && !player.getAbilities().instabuild && aoeHardness <= 0.0F && Math.random() < 0.33) {
+                        stack.hurtAndBreak(1, player, entity -> {
+                            entity.broadcastBreakEvent(player.getUsedItemHand());
+                        });
                     }
                 }
             });
