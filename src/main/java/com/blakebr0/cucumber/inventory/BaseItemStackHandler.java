@@ -16,15 +16,19 @@ import java.util.function.Function;
 public class BaseItemStackHandler extends ItemStackHandler {
     private final Runnable onContentsChanged;
     private final Map<Integer, Integer> slotSizeMap;
-    private BiFunction<Integer, ItemStack, Boolean> slotValidator = null;
+    private BiFunction<Integer, ItemStack, Boolean> canInsert = null;
     private Function<Integer, Boolean> canExtract = null;
     private int maxStackSize = 64;
     private int[] outputSlots = null;
+    private boolean container;
 
+    @Deprecated(forRemoval = true)
     public BaseItemStackHandler(int size) {
         this(size, null);
     }
 
+    // TODO: make private
+    @Deprecated
     public BaseItemStackHandler(int size, Runnable onContentsChanged) {
         super(size);
         this.onContentsChanged = onContentsChanged;
@@ -33,7 +37,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if (this.outputSlots != null && ArrayUtils.contains(this.outputSlots, slot))
+        if (!this.container && this.outputSlots != null && ArrayUtils.contains(this.outputSlots, slot))
             return stack;
 
         return super.insertItem(slot, stack, simulate);
@@ -41,11 +45,13 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (this.canExtract != null && !this.canExtract.apply(slot))
-            return ItemStack.EMPTY;
+        if (!this.container) {
+            if (this.canExtract != null && !this.canExtract.apply(slot))
+                return ItemStack.EMPTY;
 
-        if (this.outputSlots != null && !ArrayUtils.contains(this.outputSlots, slot))
-            return ItemStack.EMPTY;
+            if (this.outputSlots != null && !ArrayUtils.contains(this.outputSlots, slot))
+                return ItemStack.EMPTY;
+        }
 
         return super.extractItem(slot, amount, simulate);
     }
@@ -57,7 +63,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public boolean isItemValid(int slot, ItemStack stack) {
-        return this.slotValidator == null || this.slotValidator.apply(slot, stack);
+        return this.canInsert == null || this.canInsert.apply(slot, stack);
     }
 
     @Override
@@ -66,10 +72,12 @@ public class BaseItemStackHandler extends ItemStackHandler {
             this.onContentsChanged.run();
     }
 
+    @Deprecated(forRemoval = true)
     public ItemStack insertItemSuper(int slot, ItemStack stack, boolean simulate) {
         return super.insertItem(slot, stack, simulate);
     }
 
+    @Deprecated(forRemoval = true)
     public ItemStack extractItemSuper(int slot, int amount, boolean simulate) {
         return super.extractItem(slot, amount, simulate);
     }
@@ -90,8 +98,13 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.slotSizeMap.put(slot, size);
     }
 
+    @Deprecated(forRemoval = true)
     public void setSlotValidator(BiFunction<Integer, ItemStack, Boolean> validator) {
-        this.slotValidator = validator;
+        this.setCanInsert(validator);
+    }
+
+    public void setCanInsert(BiFunction<Integer, ItemStack, Boolean> validator) {
+        this.canInsert = validator;
     }
 
     public void setCanExtract(Function<Integer, Boolean> canExtract) {
@@ -107,6 +120,15 @@ public class BaseItemStackHandler extends ItemStackHandler {
     }
 
     /**
+     * Sets this inventory handler to 'container' mode, making it so that slot validation is disabled.
+     * @return this BaseItemStackHandler
+     */
+    public BaseItemStackHandler forContainer() {
+        this.container = true;
+        return this;
+    }
+
+    /**
      * Creates a deep copy of this BaseItemStackHandler, including new copies of the items
      * @return the copy of this BaseItemStackHandler
      */
@@ -114,7 +136,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
         var newInventory = new BaseItemStackHandler(this.getSlots(), this.onContentsChanged);
 
         newInventory.setDefaultSlotLimit(this.maxStackSize);
-        newInventory.setSlotValidator(this.slotValidator);
+        newInventory.setSlotValidator(this.canInsert);
         newInventory.setCanExtract(this.canExtract);
         newInventory.setOutputSlots(this.outputSlots);
 

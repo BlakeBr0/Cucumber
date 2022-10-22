@@ -5,6 +5,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
+@Deprecated(forRemoval = true)
 public class BaseItemStackHandlerSlot extends SlotItemHandler {
     private final BaseItemStackHandler inventory;
     private final int index;
