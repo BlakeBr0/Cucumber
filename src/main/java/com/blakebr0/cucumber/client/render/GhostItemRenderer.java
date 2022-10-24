@@ -8,7 +8,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -23,39 +22,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
 
-// TODO: 1.19: look into this
 public final class GhostItemRenderer {
-    public static void renderItemModel(ItemStack stack, PoseStack matrix, MultiBufferSource buffer, float alpha) {
-        if (!stack.isEmpty()) {
-//            Minecraft minecraft = Minecraft.getInstance();
-//            minecraft.getTextureManager().bind(TextureAtlas.LOCATION_BLOCKS);
-//            minecraft.getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).setBlurMipmap(false, false);
-//            RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
-//            RenderSystem.enableRescaleNormal();
-//            RenderSystem.alphaFunc(516, 0.1F);
-//            RenderSystem.pushMatrix();
-//            RenderSystem.enableBlend();
-//            GL14.glBlendColor(1, 1, 1, alpha);
-//            RenderSystem.blendFunc(GlStateManager.SourceFactor.CONSTANT_ALPHA, GlStateManager.DestFactor.ONE_MINUS_CONSTANT_ALPHA);
-//
-//            minecraft.getItemRenderer().renderStatic(stack, ItemTransforms.TransformType.NONE, 1, 1, matrix, buffer);
-//
-//            GL14.glBlendColor(1, 1, 1, 1);
-//            RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-//
-////            RenderSystem.cullFace(GlStateManager.CullFace.BACK);
-//            RenderSystem.popMatrix();
-//            RenderSystem.disableRescaleNormal();
-//            RenderSystem.disableBlend();
-//            minecraft.getTextureManager().bind(TextureAtlas.LOCATION_BLOCKS);
-//            minecraft.getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).restoreLastBlurMipmap();
-        }
-    }
-
     public static void renderItemIntoGui(ItemStack stack, int x, int y, ItemRenderer itemRenderer) {
         renderItemModelIntoGUI(stack, x, y, itemRenderer.getModel(stack, null, null, 0), itemRenderer);
     }
 
+    /**
+     * Copied from ItemRenderer#render(ItemStack, ItemTransforms.TransformType, boolean, PoseStack, MultiBufferSource, int, int, BakedModel)
+     */
     private static void renderItem(ItemStack itemStackIn, ItemTransforms.TransformType transformTypeIn, boolean leftHand, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, BakedModel modelIn, ItemRenderer itemRenderer) {
         if (!itemStackIn.isEmpty()) {
             matrixStackIn.pushPose();
@@ -80,6 +54,7 @@ public final class GhostItemRenderer {
                 }
                 for (var model : modelIn.getRenderPasses(itemStackIn, flag1)) {
                     for (var rendertype : model.getRenderTypes(itemStackIn, flag1)) {
+                        // CHANGE: use ghost render type for all layers
                         rendertype = ModRenderTypes.GHOST;
                         VertexConsumer vertexconsumer;
                         if (itemStackIn.is(ItemTags.COMPASSES) && itemStackIn.hasFoil()) {
@@ -115,6 +90,9 @@ public final class GhostItemRenderer {
         }
     }
 
+    /**
+     * Copied from ItemRenderer#renderGuiItem(ItemStack, int, int, BakedModel)
+     */
     private static void renderItemModelIntoGUI(ItemStack stack, int x, int y, BakedModel bakedmodel, ItemRenderer itemRenderer) {
         Minecraft.getInstance().getTextureManager().getTexture(TextureAtlas.LOCATION_BLOCKS).setFilter(false, false);
         RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
@@ -136,6 +114,7 @@ public final class GhostItemRenderer {
             Lighting.setupForFlatItems();
         }
 
+        // CHANGE: use render function from this class
         renderItem(stack, ItemTransforms.TransformType.GUI, false, posestack1, multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel, itemRenderer);
 
         multibuffersource$buffersource.endBatch();
