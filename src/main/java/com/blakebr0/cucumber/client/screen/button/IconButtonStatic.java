@@ -15,8 +15,16 @@ public class IconButtonStatic extends Button {
 		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress);
 	}
 
+	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, OnPress onPress, OnTooltip onTooltip) {
+		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress, onTooltip);
+	}
+
 	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress) {
-		super(x, y, width, height, text, onPress);
+		this(x, y, width, height, textureX, textureY, text, texture, onPress, NO_TOOLTIP);
+	}
+
+	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress, OnTooltip onTooltip) {
+		super(x, y, width, height, text, onPress, onTooltip);
 		this.textureX = textureX;
 		this.textureY = textureY;
 		this.texture = texture;

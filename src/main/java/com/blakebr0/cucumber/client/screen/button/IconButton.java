@@ -15,8 +15,16 @@ public class IconButton extends Button {
 		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress);
 	}
 
+	public IconButton(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, OnPress onPress, OnTooltip onTooltip) {
+		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress, onTooltip);
+	}
+
 	public IconButton(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress) {
-		super(x, y, width, height, text, onPress);
+		this(x, y, width, height, textureX, textureY, text, texture, onPress, NO_TOOLTIP);
+	}
+
+	public IconButton(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress, OnTooltip onTooltip) {
+		super(x, y, width, height, text, onPress, onTooltip);
 		this.textureX = textureX;
 		this.textureY = textureY;
 		this.texture = texture;
