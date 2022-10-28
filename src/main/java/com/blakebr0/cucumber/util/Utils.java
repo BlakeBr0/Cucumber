@@ -7,6 +7,7 @@ import java.text.NumberFormat;
 public final class Utils {
 	public static final RandomSource RANDOM = RandomSource.create();
 
+	@Deprecated(forRemoval = true)
 	public static String format(Object obj) {
 		return NumberFormat.getInstance().format(obj);
 	}
