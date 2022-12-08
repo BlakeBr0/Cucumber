@@ -5,9 +5,23 @@ import net.minecraft.core.BlockPos;
 import java.util.ArrayList;
 import java.util.List;
 
-public record MultiblockPositions(List<BlockPos> positions) {
+public class MultiblockPositions {
+    private final List<BlockPos> positions;
+
+    private MultiblockPositions(List<BlockPos> positions) {
+        this.positions = positions;
+    }
+
     public List<BlockPos> get(BlockPos pos) {
         return this.positions.stream().map(pos::offset).toList();
+    }
+
+    public static MultiblockPositions of(List<BlockPos> positions) {
+        return new MultiblockPositions(positions);
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     public static class Builder {
