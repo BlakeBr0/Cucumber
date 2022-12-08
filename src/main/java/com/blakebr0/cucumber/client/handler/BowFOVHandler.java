@@ -1,4 +1,4 @@
-package com.blakebr0.cucumber.handler;
+package com.blakebr0.cucumber.client.handler;
 
 import com.blakebr0.cucumber.iface.ICustomBow;
 import net.minecraft.util.Mth;
