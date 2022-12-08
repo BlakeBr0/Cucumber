@@ -22,14 +22,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
     private int[] outputSlots = null;
     private boolean container;
 
-    @Deprecated(forRemoval = true)
-    public BaseItemStackHandler(int size) {
-        this(size, null);
-    }
-
-    // TODO: make private
-    @Deprecated
-    public BaseItemStackHandler(int size, Runnable onContentsChanged) {
+    private BaseItemStackHandler(int size, Runnable onContentsChanged) {
         super(size);
         this.onContentsChanged = onContentsChanged;
         this.slotSizeMap = new HashMap<>();
@@ -70,16 +63,6 @@ public class BaseItemStackHandler extends ItemStackHandler {
     protected void onContentsChanged(int slot) {
         if (this.onContentsChanged != null)
             this.onContentsChanged.run();
-    }
-
-    @Deprecated(forRemoval = true)
-    public ItemStack insertItemSuper(int slot, ItemStack stack, boolean simulate) {
-        return super.insertItem(slot, stack, simulate);
-    }
-
-    @Deprecated(forRemoval = true)
-    public ItemStack extractItemSuper(int slot, int amount, boolean simulate) {
-        return super.extractItem(slot, amount, simulate);
     }
 
     public NonNullList<ItemStack> getStacks() {
