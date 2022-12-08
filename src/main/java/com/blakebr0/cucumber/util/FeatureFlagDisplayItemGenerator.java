@@ -8,16 +8,11 @@ import net.minecraft.world.level.ItemLike;
 import java.util.function.Supplier;
 
 @FunctionalInterface
-public interface FeatureFlagDisplayItemGenerator extends CreativeModeTab.DisplayItemsGenerator {
+public interface FeatureFlagDisplayItemGenerator {
     void accept(FeatureFlagSet flagSet, Output output, boolean hasPermission);
 
-    @Override
-    default void accept(FeatureFlagSet flagSet, CreativeModeTab.Output output, boolean hasPermission) {
-        this.accept(flagSet, Output.from(output), hasPermission);
-    }
-
     static CreativeModeTab.DisplayItemsGenerator create(FeatureFlagDisplayItemGenerator generator) {
-        return generator;
+        return (flagSet, output, hasPermission) -> generator.accept(flagSet, Output.from(output), hasPermission);
     }
 
     interface Output extends CreativeModeTab.Output {
