@@ -8,6 +8,12 @@ public final class VoxelShapeBuilder {
     private VoxelShape leftShape;
     private VoxelShape lastOrShape;
 
+    private VoxelShapeBuilder() { }
+
+    public static VoxelShapeBuilder builder() {
+        return new VoxelShapeBuilder();
+    }
+
     public static VoxelShapeBuilder fromShapes(VoxelShape... shapes) {
         var builder = new VoxelShapeBuilder();
 
