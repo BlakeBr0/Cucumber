@@ -1,12 +1,9 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.helper.BlockHelper;
-import com.blakebr0.cucumber.iface.IEnableable;
 import com.blakebr0.cucumber.lib.ModTags;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
@@ -27,16 +24,6 @@ public class BaseSickleItem extends DiggerItem {
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
         this.range = range;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     @Override

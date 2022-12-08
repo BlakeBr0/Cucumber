@@ -1,28 +1,14 @@
 package com.blakebr0.cucumber.item.tool;
 
-import com.blakebr0.cucumber.iface.IEnableable;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.FishingRodItem;
-import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Function;
 
 public class BaseFishingRodItem extends FishingRodItem {
     public BaseFishingRodItem(Function<Properties, Properties> properties) {
         super(properties.apply(new Properties()));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     public static ItemPropertyFunction getCastPropertyGetter() {

@@ -2,9 +2,7 @@ package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.event.ScytheHarvestCropEvent;
-import com.blakebr0.cucumber.iface.IEnableable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
@@ -13,7 +11,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -44,16 +41,6 @@ public class BaseScytheItem extends SwordItem {
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
         this.range = range;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     @Override

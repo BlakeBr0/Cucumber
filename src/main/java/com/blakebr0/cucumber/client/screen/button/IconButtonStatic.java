@@ -15,15 +15,15 @@ public class IconButtonStatic extends Button {
 		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress);
 	}
 
-	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, OnPress onPress, OnTooltip onTooltip) {
+	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, OnPress onPress, CreateNarration onTooltip) {
 		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress, onTooltip);
 	}
 
 	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress) {
-		this(x, y, width, height, textureX, textureY, text, texture, onPress, NO_TOOLTIP);
+		this(x, y, width, height, textureX, textureY, text, texture, onPress, DEFAULT_NARRATION);
 	}
 
-	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress, OnTooltip onTooltip) {
+	public IconButtonStatic(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress, CreateNarration onTooltip) {
 		super(x, y, width, height, text, onPress, onTooltip);
 		this.textureX = textureX;
 		this.textureY = textureY;
@@ -39,10 +39,6 @@ public class IconButtonStatic extends Button {
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();
 
-		this.blit(stack, this.x, this.y, this.textureX, this.textureY, this.width, this.height);
-
-		if (this.isHovered) {
-			super.renderToolTip(stack, mouseX, mouseY);
-		}
+		this.blit(stack, this.getX(), this.getY(), this.textureX, this.textureY, this.width, this.height);
 	}
 }

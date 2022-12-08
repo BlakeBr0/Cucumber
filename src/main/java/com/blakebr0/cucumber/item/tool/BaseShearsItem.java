@@ -1,13 +1,10 @@
 package com.blakebr0.cucumber.item.tool;
 
-import com.blakebr0.cucumber.iface.IEnableable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
@@ -23,16 +20,6 @@ import java.util.function.Function;
 public class BaseShearsItem extends ShearsItem {
     public BaseShearsItem(Function<Properties, Properties> properties) {
         super(properties.apply(new Properties()));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     @Override

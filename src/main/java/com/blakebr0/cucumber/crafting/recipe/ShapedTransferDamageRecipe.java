@@ -8,13 +8,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public class ShapedTransferDamageRecipe extends ShapedRecipe {
-    public ShapedTransferDamageRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, ItemStack output) {
-        super(id, group, width, height, inputs, output);
+    public ShapedTransferDamageRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, ItemStack output) {
+        super(id, group, category, width, height, inputs, output);
     }
 
     @Override
@@ -49,6 +50,7 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
         @Override
         public ShapedTransferDamageRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var group = GsonHelper.getAsString(json, "group", "");
+            var category = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", null), CraftingBookCategory.MISC);
             var key = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
             var pattern = ShapedRecipe.shrink(ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern")));
             var width = pattern[0].length();
@@ -56,12 +58,13 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
             var ingredients = ShapedRecipe.dissolvePattern(pattern, key, width, height);
             var output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
 
-            return new ShapedTransferDamageRecipe(recipeId, group, width, height, ingredients, output);
+            return new ShapedTransferDamageRecipe(recipeId, group, category, width, height, ingredients, output);
         }
 
         @Override
         public ShapedTransferDamageRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             var group = buffer.readUtf(32767);
+            var category = buffer.readEnum(CraftingBookCategory.class);
             var width = buffer.readVarInt();
             var height = buffer.readVarInt();
             var ingredients = NonNullList.withSize(width * height, Ingredient.EMPTY);
@@ -72,12 +75,13 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
 
             var output = buffer.readItem();
 
-            return new ShapedTransferDamageRecipe(recipeId, group, width, height, ingredients, output);
+            return new ShapedTransferDamageRecipe(recipeId, group, category, width, height, ingredients, output);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, ShapedTransferDamageRecipe recipe) {
             buffer.writeUtf(recipe.getGroup());
+            buffer.writeEnum(recipe.category());
             buffer.writeVarInt(recipe.getRecipeWidth());
             buffer.writeVarInt(recipe.getRecipeHeight());
 

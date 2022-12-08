@@ -7,7 +7,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.world.InteractionHand;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -27,7 +27,7 @@ public final class ModCommands {
                     var tile = level.getBlockEntity(trace.getBlockPos());
 
                     if (tile != null) {
-                        var capability = tile.getCapability(CapabilityEnergy.ENERGY, trace.getDirection()).resolve();
+                        var capability = tile.getCapability(ForgeCapabilities.ENERGY, trace.getDirection()).resolve();
 
                         if (capability.isPresent()) {
                             var energy = capability.get();
@@ -58,7 +58,7 @@ public final class ModCommands {
                     var stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
                     if (!stack.isEmpty()) {
-                        var capability = stack.getCapability(CapabilityEnergy.ENERGY).resolve();
+                        var capability = stack.getCapability(ForgeCapabilities.ENERGY).resolve();
 
                         if (capability.isPresent()) {
                             var energy = capability.get();

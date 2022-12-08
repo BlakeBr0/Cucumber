@@ -1,9 +1,7 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.ICustomBow;
-import com.blakebr0.cucumber.iface.IEnableable;
 import net.minecraft.client.renderer.item.ItemPropertyFunction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -12,7 +10,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.ArrowItem;
 import net.minecraft.world.item.BowItem;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -24,16 +21,6 @@ import java.util.function.Function;
 public class BaseBowItem extends BowItem implements ICustomBow {
     public BaseBowItem(Function<Properties, Properties> properties) {
         super(properties.apply(new Properties()));
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     @Override // copied from BowItem with the initial declaration of 'i' changed

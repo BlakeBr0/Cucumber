@@ -1,10 +1,6 @@
 package com.blakebr0.cucumber.item.tool;
 
-import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.HoeItem;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 
 import java.util.function.Function;
@@ -21,16 +17,6 @@ public class BaseHoeItem extends HoeItem {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     public float getAttackDamage() {

@@ -6,6 +6,7 @@ import com.mojang.blaze3d.platform.Lighting;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.math.MatrixUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
@@ -36,9 +37,9 @@ public final class GhostItemRenderer {
             boolean flag = transformTypeIn == ItemTransforms.TransformType.GUI || transformTypeIn == ItemTransforms.TransformType.GROUND || transformTypeIn == ItemTransforms.TransformType.FIXED;
             if (flag) {
                 if (itemStackIn.is(Items.TRIDENT)) {
-                    modelIn = itemRenderer.getItemModelShaper().getModelManager().getModel(new ModelResourceLocation("minecraft:trident#inventory"));
+                    modelIn = itemRenderer.getItemModelShaper().getModelManager().getModel(ModelResourceLocation.vanilla("trident", "#inventory"));
                 } else if (itemStackIn.is(Items.SPYGLASS)) {
-                    modelIn = itemRenderer.getItemModelShaper().getModelManager().getModel(new ModelResourceLocation("minecraft:spyglass#inventory"));
+                    modelIn = itemRenderer.getItemModelShaper().getModelManager().getModel(ModelResourceLocation.vanilla("spyglass", "inventory"));
                 }
             }
 
@@ -61,9 +62,9 @@ public final class GhostItemRenderer {
                             matrixStackIn.pushPose();
                             PoseStack.Pose posestack$pose = matrixStackIn.last();
                             if (transformTypeIn == ItemTransforms.TransformType.GUI) {
-                                posestack$pose.pose().multiply(0.5F);
+                                MatrixUtil.mulComponentWise(posestack$pose.pose(), 0.5F);
                             } else if (transformTypeIn.firstPerson()) {
-                                posestack$pose.pose().multiply(0.75F);
+                                MatrixUtil.mulComponentWise(posestack$pose.pose(), 0.75F);
                             }
 
                             if (flag1) {

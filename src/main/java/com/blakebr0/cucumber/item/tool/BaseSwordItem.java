@@ -1,9 +1,5 @@
 package com.blakebr0.cucumber.item.tool;
 
-import com.blakebr0.cucumber.iface.IEnableable;
-import net.minecraft.core.NonNullList;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 
@@ -21,16 +17,6 @@ public class BaseSwordItem extends SwordItem {
         super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
-    }
-
-    @Override
-    public void fillItemCategory(CreativeModeTab group, NonNullList<ItemStack> items) {
-        if (this instanceof IEnableable enableable) {
-            if (enableable.isEnabled())
-                super.fillItemCategory(group, items);
-        } else {
-            super.fillItemCategory(group, items);
-        }
     }
 
     @Override

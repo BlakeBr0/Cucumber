@@ -8,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
@@ -17,8 +18,8 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
     private final int count;
     private ItemStack output;
 
-    public ShapedTagRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, String tag, int count) {
-        super(id, group, width, height, inputs, ItemStack.EMPTY);
+    public ShapedTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, String tag, int count) {
+        super(id, group, category, width, height, inputs, ItemStack.EMPTY);
         this.tag = tag;
         this.count = count;
     }
@@ -50,6 +51,7 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
         @Override
         public ShapedTagRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             var group = GsonHelper.getAsString(json, "group", "");
+            var category = CraftingBookCategory.CODEC.byName(GsonHelper.getAsString(json, "category", null), CraftingBookCategory.MISC);
             var key = ShapedRecipe.keyFromJson(GsonHelper.getAsJsonObject(json, "key"));
             var pattern = ShapedRecipe.patternFromJson(GsonHelper.getAsJsonArray(json, "pattern"));
             var width = pattern[0].length();
@@ -59,12 +61,13 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
             var tag = GsonHelper.getAsString(result, "tag");
             var count = GsonHelper.getAsInt(result, "count", 1);
 
-            return new ShapedTagRecipe(recipeId, group, width, height, ingredients, tag, count);
+            return new ShapedTagRecipe(recipeId, group, category, width, height, ingredients, tag, count);
         }
 
         @Override
         public ShapedTagRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
             var group = buffer.readUtf(32767);
+            var category = buffer.readEnum(CraftingBookCategory.class);
             var width = buffer.readVarInt();
             var height = buffer.readVarInt();
             var ingredients = NonNullList.withSize(width * height, Ingredient.EMPTY);
@@ -76,12 +79,13 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
             var tag = buffer.readUtf();
             var count = buffer.readVarInt();
 
-            return new ShapedTagRecipe(recipeId, group, width, height, ingredients, tag, count);
+            return new ShapedTagRecipe(recipeId, group, category, width, height, ingredients, tag, count);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buffer, ShapedTagRecipe recipe) {
             buffer.writeUtf(recipe.getGroup());
+            buffer.writeEnum(recipe.category());
             buffer.writeVarInt(recipe.getWidth());
             buffer.writeVarInt(recipe.getHeight());
 
