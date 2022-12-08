@@ -26,7 +26,7 @@ public class BaseNetworkHandler {
         this.channel.messageBuilder(clazz, this.id++)
                 .encoder(message::write)
                 .decoder(message::read)
-                .consumer(message::onMessage)
+                .consumerMainThread(message::onMessage)
                 .add();
     }
 
@@ -34,7 +34,7 @@ public class BaseNetworkHandler {
         this.channel.messageBuilder(clazz, this.id++)
                 .encoder(message::write)
                 .decoder(message::read)
-                .consumer((loginMessage, context) -> {
+                .consumerMainThread((loginMessage, context) -> {
                     BiConsumer<T, Supplier<NetworkEvent.Context>> handler;
 
                     if (context.get().getDirection().getReceptionSide().isServer()) {
