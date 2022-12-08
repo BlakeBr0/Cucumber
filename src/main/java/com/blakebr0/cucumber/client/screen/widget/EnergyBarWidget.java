@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber.client.screen.widget;
 
 import com.blakebr0.cucumber.Cucumber;
+import com.blakebr0.cucumber.util.Formatting;
 import com.blakebr0.cucumber.util.Utils;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -38,7 +39,7 @@ public class EnergyBarWidget extends AbstractWidget {
         this.blit(matrix, this.getX(), this.getY() + this.height - offset, 14, this.height - offset, this.width,  offset + 1);
 
         if (mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height) {
-            var text = Component.literal(Utils.format(this.energy.getEnergyStored()) + " / " + Utils.format(this.energy.getMaxEnergyStored()) + " FE");
+            var text = Component.literal(Formatting.number(this.energy.getEnergyStored()) + " / " + Formatting.energy(this.energy.getMaxEnergyStored()));
 
             this.screen.renderTooltip(matrix, text, mouseX, mouseY);
         }
