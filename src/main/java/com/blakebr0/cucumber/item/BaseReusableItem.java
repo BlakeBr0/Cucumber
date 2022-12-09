@@ -19,8 +19,8 @@ public class BaseReusableItem extends BaseItem {
 	private final boolean damage;
 	private final boolean tooltip;
 
-	public BaseReusableItem() {
-		this(p -> p);
+	public BaseReusableItem(int uses) {
+		this(uses, p -> p);
 	}
 
 	public BaseReusableItem(Function<Properties, Properties> properties) {
