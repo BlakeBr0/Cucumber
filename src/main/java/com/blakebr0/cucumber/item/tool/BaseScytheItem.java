@@ -36,10 +36,14 @@ public class BaseScytheItem extends SwordItem {
         GET_SEED = ObfuscationReflectionHelper.findMethod(CropBlock.class, "m_6404_");
     }
 
-    public BaseScytheItem(Tier tier, int attackDamage, float attackSpeed,  int range, Function<Properties, Properties> properties) {
-        super(tier, attackDamage, attackSpeed, properties.apply(new Properties()));
-        this.attackDamage = attackDamage;
-        this.attackSpeed = attackSpeed;
+    public BaseScytheItem(Tier tier, int range) {
+        this(tier, range, p -> p);
+    }
+
+    public BaseScytheItem(Tier tier, int range, Function<Properties, Properties> properties) {
+        super(tier, 4, -2.8F, properties.apply(new Properties()));
+        this.attackDamage = 4F;
+        this.attackSpeed = -2.8F;
         this.range = range;
     }
 

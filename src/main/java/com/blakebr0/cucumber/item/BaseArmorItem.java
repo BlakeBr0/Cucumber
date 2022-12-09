@@ -7,6 +7,10 @@ import net.minecraft.world.item.ArmorMaterial;
 import java.util.function.Function;
 
 public class BaseArmorItem extends ArmorItem {
+    public BaseArmorItem(ArmorMaterial material, EquipmentSlot slot) {
+        super(material, slot, new Properties());
+    }
+
     public BaseArmorItem(ArmorMaterial material, EquipmentSlot slot, Function<Properties, Properties> properties) {
         super(material, slot, properties.apply(new Properties()));
     }

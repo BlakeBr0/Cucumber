@@ -9,6 +9,10 @@ public class BaseAxeItem extends AxeItem {
     private final float attackDamage;
     private final float attackSpeed;
 
+    public BaseAxeItem(Tier tier) {
+        this(tier, 6.0F, -3.0F, p -> p);
+    }
+
     public BaseAxeItem(Tier tier, Function<Properties, Properties> properties) {
         this(tier, 6.0F, -3.0F, properties);
     }

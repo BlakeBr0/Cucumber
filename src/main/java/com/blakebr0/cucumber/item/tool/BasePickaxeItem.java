@@ -9,6 +9,10 @@ public class BasePickaxeItem extends PickaxeItem {
     private final float attackDamage;
     private final float attackSpeed;
 
+    public BasePickaxeItem(Tier tier) {
+        this(tier, 1, -2.8F, p -> p);
+    }
+
     public BasePickaxeItem(Tier tier, Function<Properties, Properties> properties) {
         this(tier, 1, -2.8F, properties);
     }

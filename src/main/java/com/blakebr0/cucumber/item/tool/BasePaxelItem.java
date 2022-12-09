@@ -19,6 +19,10 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class BasePaxelItem extends DiggerItem {
+    public BasePaxelItem(Tier tier) {
+        this(tier, p -> p);
+    }
+
     public BasePaxelItem(Tier tier, Function<Properties, Properties> properties) {
         super(4.0F, -3.2F, tier, ModTags.MINEABLE_WITH_PAXEL, properties.apply(new Properties()
                 .defaultDurability((int) (tier.getUses() * 1.5))

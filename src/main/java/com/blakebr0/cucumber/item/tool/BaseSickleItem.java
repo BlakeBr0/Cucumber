@@ -19,10 +19,14 @@ public class BaseSickleItem extends DiggerItem {
     private final float attackSpeed;
     private final int range;
 
-    public BaseSickleItem(Tier tier, float attackDamage, float attackSpeed, int range, Function<Properties, Properties> properties) {
-        super(attackDamage, attackSpeed, tier, ModTags.MINEABLE_WITH_SICKLE, properties.apply(new Properties()));
-        this.attackDamage = attackDamage;
-        this.attackSpeed = attackSpeed;
+    public BaseSickleItem(Tier tier, int range) {
+        this(tier, range, p -> p);
+    }
+
+    public BaseSickleItem(Tier tier, int range, Function<Properties, Properties> properties) {
+        super(4.0F, -3.0F, tier, ModTags.MINEABLE_WITH_SICKLE, properties.apply(new Properties()));
+        this.attackDamage = 4.0F;
+        this.attackSpeed = -3.0F;
         this.range = range;
     }
 

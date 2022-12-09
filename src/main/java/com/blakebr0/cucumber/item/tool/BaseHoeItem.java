@@ -9,6 +9,10 @@ public class BaseHoeItem extends HoeItem {
     private final float attackDamage;
     private final float attackSpeed;
 
+    public BaseHoeItem(Tier tier) {
+        this(tier, -1, -2.0F, p -> p);
+    }
+
     public BaseHoeItem(Tier tier, Function<Properties, Properties> properties) {
         this(tier, -1, -2.0F, properties);
     }
