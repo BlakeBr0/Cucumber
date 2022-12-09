@@ -5,6 +5,7 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
 @FunctionalInterface
@@ -20,8 +21,8 @@ public interface FeatureFlagDisplayItemGenerator {
             return output::accept;
         }
 
-        default void accept(ItemStack stack, FeatureFlag flag) {
-            if (flag.isEnabled()) {
+        default void accept(ItemStack stack, FeatureFlag... flags) {
+            if (Arrays.stream(flags).allMatch(FeatureFlag::isEnabled)) {
                 this.accept(stack);
             }
         }
@@ -30,9 +31,9 @@ public interface FeatureFlagDisplayItemGenerator {
             this.accept(new ItemStack(item.get()));
         }
 
-        default void accept(Supplier<? extends ItemLike> item, FeatureFlag flag) {
-            if (flag.isEnabled()) {
-                this.accept(new ItemStack(item.get()), flag);
+        default void accept(Supplier<? extends ItemLike> item, FeatureFlag... flags) {
+            if (Arrays.stream(flags).allMatch(FeatureFlag::isEnabled)) {
+                this.accept(new ItemStack(item.get()));
             }
         }
     }
