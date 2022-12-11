@@ -81,11 +81,6 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.slotSizeMap.put(slot, size);
     }
 
-    @Deprecated(forRemoval = true)
-    public void setSlotValidator(BiFunction<Integer, ItemStack, Boolean> validator) {
-        this.setCanInsert(validator);
-    }
-
     public void setCanInsert(BiFunction<Integer, ItemStack, Boolean> validator) {
         this.canInsert = validator;
     }
@@ -119,7 +114,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
         var newInventory = new BaseItemStackHandler(this.getSlots(), this.onContentsChanged);
 
         newInventory.setDefaultSlotLimit(this.maxStackSize);
-        newInventory.setSlotValidator(this.canInsert);
+        newInventory.setCanInsert(this.canInsert);
         newInventory.setCanExtract(this.canExtract);
         newInventory.setOutputSlots(this.outputSlots);
 
@@ -136,6 +131,10 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     public static BaseItemStackHandler create(int size) {
         return create(size, builder -> {});
+    }
+
+    public static BaseItemStackHandler create(int size, Runnable onContentsChanged) {
+        return create(size, onContentsChanged, builder -> {});
     }
 
     public static BaseItemStackHandler create(int size, Consumer<BaseItemStackHandler> builder) {
