@@ -4,7 +4,11 @@ import com.blakebr0.cucumber.network.message.LoginMessage;
 import com.blakebr0.cucumber.network.message.Message;
 import net.minecraft.network.Connection;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.*;
+import net.minecraftforge.network.HandshakeHandler;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.function.BiConsumer;

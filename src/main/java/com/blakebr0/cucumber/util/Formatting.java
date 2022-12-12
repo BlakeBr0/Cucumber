@@ -11,15 +11,15 @@ public final class Formatting {
     }
 
     public static Component energy(Object value) {
-        return Component.literal(number(value) + " FE");
+        return Component.literal(number(value).getString() + " FE");
     }
 
     public static Component perTick(Object value) {
-        return Component.literal(number(value) + " /t");
+        return Component.literal(number(value).getString() + " /t");
     }
 
     public static Component energyPerTick(Object value) {
-        return Component.literal(number(value) + " FE/t");
+        return Component.literal(number(value).getString() + " FE/t");
     }
 
     public static Component itemWithCount(ItemStack stack) {
