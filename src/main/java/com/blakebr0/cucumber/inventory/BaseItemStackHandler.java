@@ -22,7 +22,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
     private int[] outputSlots = null;
     private boolean container;
 
-    private BaseItemStackHandler(int size, Runnable onContentsChanged) {
+    protected BaseItemStackHandler(int size, Runnable onContentsChanged) {
         super(size);
         this.onContentsChanged = onContentsChanged;
         this.slotSizeMap = new HashMap<>();
