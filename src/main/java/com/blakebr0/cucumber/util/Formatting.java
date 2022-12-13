@@ -1,32 +1,33 @@
 package com.blakebr0.cucumber.util;
 
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 
 import java.text.NumberFormat;
 
 public final class Formatting {
-    public static Component number(Object value) {
+    public static MutableComponent number(Object value) {
         return Component.literal(NumberFormat.getInstance().format(value));
     }
 
-    public static Component energy(Object value) {
-        return Component.literal(number(value).getString() + " FE");
+    public static MutableComponent energy(Object value) {
+        return number(value).append(" FE");
     }
 
-    public static Component perTick(Object value) {
-        return Component.literal(number(value).getString() + " /t");
+    public static MutableComponent perTick(Object value) {
+        return number(value).append(" /t");
     }
 
-    public static Component energyPerTick(Object value) {
-        return Component.literal(number(value).getString() + " FE/t");
+    public static MutableComponent energyPerTick(Object value) {
+        return number(value).append(" FE/t");
     }
 
-    public static Component itemWithCount(ItemStack stack) {
+    public static MutableComponent itemWithCount(ItemStack stack) {
         return itemWithCount(stack, stack.getCount());
     }
 
-    public static Component itemWithCount(ItemStack stack, int count) {
+    public static MutableComponent itemWithCount(ItemStack stack, int count) {
         return Component.literal(count + "x " + stack.getHoverName());
     }
 }
