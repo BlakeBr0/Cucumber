@@ -11,6 +11,10 @@ public final class Formatting {
         return Component.literal(NumberFormat.getInstance().format(value));
     }
 
+    public static MutableComponent percent(Object value) {
+        return number(value).append("%");
+    }
+
     public static MutableComponent energy(Object value) {
         return number(value).append(" FE");
     }
