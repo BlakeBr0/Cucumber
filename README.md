@@ -9,6 +9,7 @@ The official release builds can be downloaded from the following websites.
 
 - [Blake's Mods](https://blakesmods.com/cucumber/download)
 - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/cucumber)
+- [Modrinth](https://modrinth.com/mod/cucumber)
 
 ## Development
 
