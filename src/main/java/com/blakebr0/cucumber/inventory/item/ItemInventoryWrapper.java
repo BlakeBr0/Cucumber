@@ -7,7 +7,6 @@ import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-// TODO: 1.16: reevaluate
 public class ItemInventoryWrapper implements Container {
 	private final ItemStack inventory;
 	private final int size;

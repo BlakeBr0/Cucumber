@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
  * Based on CoFHCore's inventory item container 
  * https://github.com/CoFH/CoFHCore/blob/1.12/src/main/java/cofh/core/gui/container/ContainerInventoryItem.java
  */
-// TODO: 1.16: reevaluate
 public class ItemInventoryContainer extends AbstractContainerMenu {
 	protected final ItemInventoryWrapper wrapper;
 	protected final Inventory inventory;
