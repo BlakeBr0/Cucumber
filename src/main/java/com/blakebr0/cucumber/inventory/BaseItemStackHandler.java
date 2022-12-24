@@ -20,7 +20,6 @@ public class BaseItemStackHandler extends ItemStackHandler {
     private Function<Integer, Boolean> canExtract = null;
     private int maxStackSize = 64;
     private int[] outputSlots = null;
-    private boolean container;
 
     protected BaseItemStackHandler(int size, Runnable onContentsChanged) {
         super(size);
@@ -30,7 +29,11 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-        if (!this.container && this.outputSlots != null && ArrayUtils.contains(this.outputSlots, slot))
+        return this.insertItem(slot, stack, simulate, false);
+    }
+
+    public ItemStack insertItem(int slot, ItemStack stack, boolean simulate, boolean container) {
+        if (!container && this.outputSlots != null && ArrayUtils.contains(this.outputSlots, slot))
             return stack;
 
         return super.insertItem(slot, stack, simulate);
@@ -38,7 +41,11 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (!this.container) {
+        return this.extractItem(slot, amount, simulate, false);
+    }
+
+    public ItemStack extractItem(int slot, int amount, boolean simulate, boolean container) {
+        if (!container) {
             if (this.canExtract != null && !this.canExtract.apply(slot))
                 return ItemStack.EMPTY;
 
@@ -95,15 +102,6 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     public Container toIInventory() {
         return new SimpleContainer(this.stacks.toArray(new ItemStack[0]));
-    }
-
-    /**
-     * Sets this inventory handler to 'container' mode, making it so that slot validation is disabled.
-     * @return this BaseItemStackHandler
-     */
-    public BaseItemStackHandler forContainer() {
-        this.container = true;
-        return this;
     }
 
     /**
