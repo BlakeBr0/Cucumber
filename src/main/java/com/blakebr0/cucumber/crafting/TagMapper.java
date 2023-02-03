@@ -8,13 +8,11 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.event.AddReloadListenerEvent;
+import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -28,18 +26,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-public class TagMapper implements ResourceManagerReloadListener {
+public class TagMapper {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
     private static final Map<String, String> TAG_TO_ITEM_MAP = new HashMap<>();
 
-    @Override
-    public void onResourceManagerReload(ResourceManager manager) {
-        reloadTagMappings();
-    }
-
     @SubscribeEvent
-    public void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(this);
+    public void onTagsUpdated(TagsUpdatedEvent event) {
+        if (event.shouldUpdateStaticData())
+            reloadTagMappings();
     }
 
     public static void reloadTagMappings() {
@@ -64,11 +58,26 @@ public class TagMapper implements ResourceManagerReloadListener {
                         var value = e.getValue().getAsString();
                         return !"__comment".equalsIgnoreCase(e.getKey()) && !value.isEmpty() && !"null".equalsIgnoreCase(value);
                     }).forEach(entry -> {
-                        var tag = entry.getKey();
-                        var item = entry.getValue().getAsString();
+                        var tagId = entry.getKey();
+                        var itemId = entry.getValue().getAsString();
 
-                        TAG_TO_ITEM_MAP.put(tag, item);
+                        TAG_TO_ITEM_MAP.put(tagId, itemId);
+
+                        // if auto refresh tag entries is enabled, we check any entries that contain an item ID to see
+                        // if they are still present. if not we just refresh the entry
+                        if (ModConfigs.AUTO_REFRESH_TAG_ENTRIES.get()) {
+                            if (!itemId.isEmpty() && !"null".equalsIgnoreCase(itemId)) {
+                                var item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
+                                if (item == null || item == Items.AIR) {
+                                    addTagToFile(tagId, json, file, false);
+                                }
+                            }
+                        }
                     });
+
+                    // save changes to disk if refresh is enabled
+                    if (ModConfigs.AUTO_REFRESH_TAG_ENTRIES.get())
+                        saveToFile(json, file);
 
                     reader.close();
                 } catch (Exception e) {
@@ -119,9 +128,9 @@ public class TagMapper implements ResourceManagerReloadListener {
                         TAG_TO_ITEM_MAP.put(tagId, itemId);
 
                         return ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemId));
-                    } else {
-                        return addTagToFile(tagId, json, file);
                     }
+
+                    return addTagToFile(tagId, json, file);
                 }
             }
 
@@ -129,12 +138,16 @@ public class TagMapper implements ResourceManagerReloadListener {
         }
     }
 
-    public static ItemStack getItemStackForTag(String tag, int size) {
-        var item = getItemForTag(tag);
+    public static ItemStack getItemStackForTag(String tagId, int size) {
+        var item = getItemForTag(tagId);
         return item != null && item != Items.AIR ? new ItemStack(item, size) : ItemStack.EMPTY;
     }
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
+        return addTagToFile(tagId, json, file, true);
+    }
+
+    private static Item addTagToFile(String tagId, JsonObject json, File file, boolean save) {
         var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
         var key = ItemTags.create(new ResourceLocation(tagId));
         var tags = ForgeRegistries.ITEMS.tags();
@@ -152,20 +165,26 @@ public class TagMapper implements ResourceManagerReloadListener {
         }).orElse(Items.AIR);
 
         var itemId = "null";
-        if (ForgeRegistries.ITEMS.containsValue(item) && item != Items.AIR) {
+        if (item != Items.AIR && ForgeRegistries.ITEMS.containsValue(item)) {
             itemId = ForgeRegistries.ITEMS.getKey(item).toString();
         }
 
         json.addProperty(tagId, itemId);
         TAG_TO_ITEM_MAP.put(tagId, itemId);
 
+        if (save) {
+            saveToFile(json, file);
+        }
+
+        return item;
+    }
+
+    private static void saveToFile(JsonObject json, File file) {
         try (var writer = new FileWriter(file)) {
             GSON.toJson(json, writer);
         } catch (IOException e) {
             Cucumber.LOGGER.error("An error occurred while writing to cucumber-tags.json", e);
         }
-
-        return item;
     }
 
     private static void generateNewConfig(File file) {

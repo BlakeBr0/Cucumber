@@ -29,6 +29,7 @@ public class ModConfigs {
     }
 
     public static final ForgeConfigSpec.ConfigValue<List<String>> MOD_TAG_PRIORITIES;
+    public static final ForgeConfigSpec.BooleanValue AUTO_REFRESH_TAG_ENTRIES;
 
     // Common
     static {
@@ -38,6 +39,9 @@ public class ModConfigs {
         MOD_TAG_PRIORITIES = common
                 .comment("Mod ids (in order) to prioritize using items for when generating the cucumber-tags.json file.")
                 .define("modTagPriorities", Lists.newArrayList("thermal", "mekanism", "tconstruct", "immersiveengineering", "appliedenergistics2"));
+        AUTO_REFRESH_TAG_ENTRIES = common
+                .comment("If enabled, any tags in the cucumber-tags.json file set to items that don't exist will be refreshed if possible.")
+                .define("autoRefreshTagOptions", true);
         common.pop();
 
         COMMON = common.build();
