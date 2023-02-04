@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber.crafting;
 
 import com.blakebr0.cucumber.Cucumber;
+import com.blakebr0.cucumber.compat.almostunified.AlmostUnifiedAdapter;
 import com.blakebr0.cucumber.config.ModConfigs;
 import com.google.common.base.Stopwatch;
 import com.google.gson.Gson;
@@ -96,6 +97,11 @@ public class TagMapper {
     }
 
     public static Item getItemForTag(String tagId) {
+        var preferredItem = AlmostUnifiedAdapter.getPreferredItemForTag(tagId);
+        if (preferredItem != null) {
+            return preferredItem;
+        }
+
         if (TAG_TO_ITEM_MAP.containsKey(tagId)) {
             var id = TAG_TO_ITEM_MAP.get(tagId);
             return ForgeRegistries.ITEMS.getValue(new ResourceLocation(id));
@@ -153,7 +159,7 @@ public class TagMapper {
         var tags = ForgeRegistries.ITEMS.tags();
 
         assert tags != null;
-        
+
         var item = tags.getTag(key).stream().min((item1, item2) -> {
             var id1 = ForgeRegistries.ITEMS.getKey(item1);
             var index1 = id1 != null ? mods.indexOf(id1.getNamespace()) : -1;
