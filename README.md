@@ -1,7 +1,24 @@
-# Cucumber Library [![](http://cf.way2muchnoise.eu/full_272335_downloads.svg)](https://minecraft.curseforge.com/projects/cucumber)
-A library of shared code and functionality used by my mods.
+# Cucumber Library
 
-[Documentation](https://blakesmods.com/docs/cucumber)
+<p align="left">
+    <a href="https://blakesmods.com/cucumber" alt="Downloads">
+        <img src="https://img.shields.io/endpoint?url=https://api.blakesmods.com/v2/badges/cucumber/downloads&style=for-the-badge" />
+    </a>
+    <a href="https://blakesmods.com/cucumber" alt="Latest Version">
+        <img src="https://img.shields.io/endpoint?url=https://api.blakesmods.com/v2/badges/cucumber/version&style=for-the-badge" />
+    </a>
+    <a href="https://blakesmods.com/cucumber" alt="Minecraft Version">
+        <img src="https://img.shields.io/endpoint?url=https://api.blakesmods.com/v2/badges/cucumber/mc_version&style=for-the-badge" />
+    </a>
+    <a href="https://blakesmods.com/docs/cucumber" alt="Docs">
+        <img src="https://img.shields.io/static/v1?label=docs&message=view&color=brightgreen&style=for-the-badge" />
+    </a>
+    <a href="https://blakesmods.com/wiki/cucumber" alt="Wiki">
+        <img src="https://img.shields.io/static/v1?label=wiki&message=view&color=brightgreen&style=for-the-badge" />
+    </a>
+</p>
+
+A library of shared code and functionality used by my mods.
 
 ## Download
 
