@@ -3,6 +3,7 @@ package com.blakebr0.cucumber.item.tool;
 import com.blakebr0.cucumber.helper.BlockHelper;
 import com.blakebr0.cucumber.lib.ModTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
@@ -10,7 +11,6 @@ import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
-import net.minecraftforge.common.ForgeHooks;
 
 import java.util.function.Function;
 
@@ -42,7 +42,7 @@ public class BaseSickleItem extends DiggerItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        return !this.harvest(stack, player.level, pos, player);
+        return this.harvest(stack, player.level, pos, player);
     }
 
     public float getAttackDamage() {
@@ -54,13 +54,15 @@ public class BaseSickleItem extends DiggerItem {
     }
 
     private boolean harvest(ItemStack stack, Level level, BlockPos pos, Player player) {
+        if (level.isClientSide())
+            return true;
+
         var state = level.getBlockState(pos);
         var hardness = state.getDestroySpeed(level, pos);
 
-        if (!this.tryHarvest(level, pos, false, stack, player) || !isValidMaterial(state))
-            return false;
+        BlockHelper.harvestBlock(stack, level, (ServerPlayer) player, pos);
 
-        if (this.range > 0) {
+        if (this.range > 0 && isValidMaterial(state)) {
             BlockPos.betweenClosed(pos.offset(-this.range, -this.range, -this.range), pos.offset(this.range, this.range, this.range)).forEach(aoePos -> {
                 if (stack.isEmpty())
                     return;
@@ -76,7 +78,7 @@ public class BaseSickleItem extends DiggerItem {
                     if (aoeHardness > hardness + 5.0F)
                         return;
 
-                    var harvested = this.tryHarvest(level, aoePos, true, stack, player);
+                    var harvested = BlockHelper.harvestAOEBlock(stack, level, (ServerPlayer) player, aoePos.immutable());
 
                     if (harvested && !player.getAbilities().instabuild && aoeHardness <= 0.0F && Math.random() < 0.33) {
                         stack.hurtAndBreak(1, player, entity -> {
@@ -88,17 +90,6 @@ public class BaseSickleItem extends DiggerItem {
         }
 
         return true;
-    }
-
-    private boolean tryHarvest(Level level, BlockPos pos, boolean extra, ItemStack stack, Player player) {
-        var state = level.getBlockState(pos);
-        var hardness = state.getDestroySpeed(level, pos);
-        var harvest = !extra || (ForgeHooks.isCorrectToolForDrops(state, player) || this.isCorrectToolForDrops(stack, state));
-
-        if (hardness >= 0.0F && harvest)
-            return BlockHelper.breakBlocksAOE(stack, level, player, pos, !extra);
-
-        return false;
     }
 
     private static boolean isValidMaterial(BlockState state) {

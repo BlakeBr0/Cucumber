@@ -57,8 +57,19 @@ minecraft {
     }
 }
 
+repositories {
+    maven {
+        url = 'https://maven.blamejared.com/'
+        content {
+            includeGroup "com.almostreliable.mods"
+        }
+    }
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
+
+    compileOnly fg.deobf("com.almostreliable.mods:almostunified-forge:${almostunified_version}")
 }
 
 jar {
