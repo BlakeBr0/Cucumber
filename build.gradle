@@ -69,7 +69,7 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
 
-    compileOnly(fg.deobf("com.almostreliable.mods:almostunified-forge:${almostunified_version}"))
+    compileOnly fg.deobf("com.almostreliable.mods:almostunified-forge:${almostunified_version}")
 }
 
 jar {

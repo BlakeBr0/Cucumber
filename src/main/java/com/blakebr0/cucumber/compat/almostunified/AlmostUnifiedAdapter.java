@@ -8,14 +8,13 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.fml.ModList;
 
 public class AlmostUnifiedAdapter {
-
     public static boolean isLoaded() {
         return ModList.get().isLoaded("almostunified");
     }
 
     public static Item getPreferredItemForTag(String tagId) {
         if (isLoaded()) {
-            TagKey<Item> tagKey = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(tagId));
+            var tagKey = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(tagId));
             return Adapter.getPreferredItemForTag(tagKey);
         }
 
