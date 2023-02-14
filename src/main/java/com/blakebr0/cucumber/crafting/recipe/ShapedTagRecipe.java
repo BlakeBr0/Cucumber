@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.crafting.recipe;
 
+import com.blakebr0.cucumber.crafting.OutputResolver;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;

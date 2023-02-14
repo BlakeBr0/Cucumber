@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.crafting.recipe;
 
+import com.blakebr0.cucumber.crafting.OutputResolver;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -26,7 +27,6 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
         super(id, group, ItemStack.EMPTY, inputs);
         this.outputResolver = new OutputResolver.Tag(tag, count);
     }
-
 
     @Override
     public ItemStack getResultItem() {

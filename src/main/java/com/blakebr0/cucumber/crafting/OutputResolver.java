@@ -1,6 +1,5 @@
-package com.blakebr0.cucumber.crafting.recipe;
+package com.blakebr0.cucumber.crafting;
 
-import com.blakebr0.cucumber.crafting.TagMapper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
 
