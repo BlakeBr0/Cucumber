@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.crafting.recipe;
 
-import com.blakebr0.cucumber.crafting.TagMapper;
+import com.blakebr0.cucumber.crafting.OutputResolver;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
@@ -13,20 +13,23 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
-    private final String tag;
-    private final int count;
+    private final OutputResolver outputResolver;
     private ItemStack output;
+
+    public ShapedTagRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, OutputResolver.Item outputResolver) {
+        super(id, group, width, height, inputs, ItemStack.EMPTY);
+        this.outputResolver = outputResolver;
+    }
 
     public ShapedTagRecipe(ResourceLocation id, String group, int width, int height, NonNullList<Ingredient> inputs, String tag, int count) {
         super(id, group, width, height, inputs, ItemStack.EMPTY);
-        this.tag = tag;
-        this.count = count;
+        this.outputResolver = new OutputResolver.Tag(tag, count);
     }
 
     @Override
     public ItemStack getResultItem() {
         if (this.output == null) {
-            this.output = TagMapper.getItemStackForTag(this.tag, this.count);
+            this.output = this.outputResolver.resolve();
         }
 
         return this.output;
@@ -35,7 +38,7 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
     @Override
     public boolean isSpecial() {
         if (this.output == null) {
-            this.output = TagMapper.getItemStackForTag(this.tag, this.count);
+            this.output = this.outputResolver.resolve();
         }
 
         return this.output.isEmpty();
@@ -73,10 +76,9 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
                 ingredients.set(k, Ingredient.fromNetwork(buffer));
             }
 
-            var tag = buffer.readUtf();
-            var count = buffer.readVarInt();
+            var output = OutputResolver.create(buffer);
 
-            return new ShapedTagRecipe(recipeId, group, width, height, ingredients, tag, count);
+            return new ShapedTagRecipe(recipeId, group, width, height, ingredients, output);
         }
 
         @Override
@@ -89,8 +91,7 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
                 ingredient.toNetwork(buffer);
             }
 
-            buffer.writeUtf(recipe.tag);
-            buffer.writeVarInt(recipe.count);
+            buffer.writeItemStack(recipe.outputResolver.resolve(), false);
         }
     }
 }
