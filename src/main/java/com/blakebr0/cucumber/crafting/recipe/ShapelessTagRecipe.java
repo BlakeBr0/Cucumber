@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.crafting.recipe;
 
-import com.blakebr0.cucumber.crafting.TagMapper;
+import com.blakebr0.cucumber.crafting.OutputResolver;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -16,20 +16,23 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 public class ShapelessTagRecipe extends ShapelessRecipe {
-    private final String tag;
-    private final int count;
+    private final OutputResolver outputResolver;
     private ItemStack output;
+
+    public ShapelessTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, NonNullList<Ingredient> inputs, OutputResolver.Item outputResolver) {
+        super(id, group, category, ItemStack.EMPTY, inputs);
+        this.outputResolver = outputResolver;
+    }
 
     public ShapelessTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, NonNullList<Ingredient> inputs, String tag, int count) {
         super(id, group, category, ItemStack.EMPTY, inputs);
-        this.tag = tag;
-        this.count = count;
+        this.outputResolver = new OutputResolver.Tag(tag, count);
     }
 
     @Override
     public ItemStack getResultItem() {
         if (this.output == null) {
-            this.output = TagMapper.getItemStackForTag(this.tag, this.count);
+            this.output = this.outputResolver.resolve();
         }
 
         return this.output;
@@ -38,7 +41,7 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
     @Override
     public boolean isSpecial() {
         if (this.output == null) {
-            this.output = TagMapper.getItemStackForTag(this.tag, this.count);
+            this.output = this.outputResolver.resolve();
         }
 
         return this.output.isEmpty();
@@ -80,10 +83,9 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
                 ingredients.set(j, Ingredient.fromNetwork(buffer));
             }
 
-            var tag = buffer.readUtf();
-            var count = buffer.readVarInt();
+            var output = OutputResolver.create(buffer);
 
-            return new ShapelessTagRecipe(recipeId, group, category, ingredients, tag, count);
+            return new ShapelessTagRecipe(recipeId, group, category, ingredients, output);
         }
 
         @Override
@@ -96,8 +98,7 @@ public class ShapelessTagRecipe extends ShapelessRecipe {
                 ingredient.toNetwork(buffer);
             }
 
-            buffer.writeUtf(recipe.tag);
-            buffer.writeVarInt(recipe.count);
+            buffer.writeItemStack(recipe.outputResolver.resolve(), false);
         }
 
         private static NonNullList<Ingredient> readIngredients(JsonArray ingredientArray) {
