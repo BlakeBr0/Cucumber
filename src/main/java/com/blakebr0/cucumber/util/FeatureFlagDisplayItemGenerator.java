@@ -1,6 +1,5 @@
 package com.blakebr0.cucumber.util;
 
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
@@ -10,10 +9,10 @@ import java.util.function.Supplier;
 
 @FunctionalInterface
 public interface FeatureFlagDisplayItemGenerator {
-    void accept(FeatureFlagSet flagSet, Output output, boolean hasPermission);
+    void accept(CreativeModeTab.ItemDisplayParameters parameters, Output output);
 
     static CreativeModeTab.DisplayItemsGenerator create(FeatureFlagDisplayItemGenerator generator) {
-        return (flagSet, output, hasPermission) -> generator.accept(flagSet, Output.from(output), hasPermission);
+        return (parameters, output) -> generator.accept(parameters, Output.from(output));
     }
 
     interface Output extends CreativeModeTab.Output {

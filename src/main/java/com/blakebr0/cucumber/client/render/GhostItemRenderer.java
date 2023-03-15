@@ -9,7 +9,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.MatrixUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
@@ -17,11 +16,13 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HalfTransparentBlock;
 import net.minecraft.world.level.block.StainedGlassPaneBlock;
+import org.joml.Matrix4f;
 
 public final class GhostItemRenderer {
     public static void renderItemIntoGui(ItemStack stack, int x, int y, ItemRenderer itemRenderer) {
@@ -31,10 +32,10 @@ public final class GhostItemRenderer {
     /**
      * Copied from ItemRenderer#render(ItemStack, ItemTransforms.TransformType, boolean, PoseStack, MultiBufferSource, int, int, BakedModel)
      */
-    private static void renderItem(ItemStack itemStackIn, ItemTransforms.TransformType transformTypeIn, boolean leftHand, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, BakedModel modelIn, ItemRenderer itemRenderer) {
+    private static void renderItem(ItemStack itemStackIn, ItemDisplayContext transformTypeIn, boolean leftHand, PoseStack matrixStackIn, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, BakedModel modelIn, ItemRenderer itemRenderer) {
         if (!itemStackIn.isEmpty()) {
             matrixStackIn.pushPose();
-            boolean flag = transformTypeIn == ItemTransforms.TransformType.GUI || transformTypeIn == ItemTransforms.TransformType.GROUND || transformTypeIn == ItemTransforms.TransformType.FIXED;
+            boolean flag = transformTypeIn == ItemDisplayContext.GUI || transformTypeIn == ItemDisplayContext.GROUND || transformTypeIn == ItemDisplayContext.FIXED;
             if (flag) {
                 if (itemStackIn.is(Items.TRIDENT)) {
                     modelIn = itemRenderer.getItemModelShaper().getModelManager().getModel(ModelResourceLocation.vanilla("trident", "#inventory"));
@@ -47,7 +48,7 @@ public final class GhostItemRenderer {
             matrixStackIn.translate(-0.5D, -0.5D, -0.5D);
             if (!modelIn.isCustomRenderer() && (!itemStackIn.is(Items.TRIDENT) || flag)) {
                 boolean flag1;
-                if (transformTypeIn != ItemTransforms.TransformType.GUI && !transformTypeIn.firstPerson() && itemStackIn.getItem() instanceof BlockItem) {
+                if (transformTypeIn != ItemDisplayContext.GUI && !transformTypeIn.firstPerson() && itemStackIn.getItem() instanceof BlockItem) {
                     Block block = ((BlockItem)itemStackIn.getItem()).getBlock();
                     flag1 = !(block instanceof HalfTransparentBlock) && !(block instanceof StainedGlassPaneBlock);
                 } else {
@@ -61,7 +62,7 @@ public final class GhostItemRenderer {
                         if (itemStackIn.is(ItemTags.COMPASSES) && itemStackIn.hasFoil()) {
                             matrixStackIn.pushPose();
                             PoseStack.Pose posestack$pose = matrixStackIn.last();
-                            if (transformTypeIn == ItemTransforms.TransformType.GUI) {
+                            if (transformTypeIn == ItemDisplayContext.GUI) {
                                 MatrixUtil.mulComponentWise(posestack$pose.pose(), 0.5F);
                             } else if (transformTypeIn.firstPerson()) {
                                 MatrixUtil.mulComponentWise(posestack$pose.pose(), 0.75F);
@@ -103,9 +104,9 @@ public final class GhostItemRenderer {
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         PoseStack posestack = RenderSystem.getModelViewStack();
         posestack.pushPose();
-        posestack.translate((double)x, (double)y, (double)(100.0F + itemRenderer.blitOffset));
-        posestack.translate(8.0D, 8.0D, 0.0D);
-        posestack.scale(1.0F, -1.0F, 1.0F);
+        posestack.translate((float)x, (float)y, 100.0F);
+        posestack.translate(8.0F, 8.0F, 0.0F);
+        posestack.mulPoseMatrix((new Matrix4f()).scaling(1.0F, -1.0F, 1.0F));
         posestack.scale(16.0F, 16.0F, 16.0F);
         RenderSystem.applyModelViewMatrix();
         PoseStack posestack1 = new PoseStack();
@@ -116,7 +117,7 @@ public final class GhostItemRenderer {
         }
 
         // CHANGE: use render function from this class
-        renderItem(stack, ItemTransforms.TransformType.GUI, false, posestack1, multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel, itemRenderer);
+        renderItem(stack, ItemDisplayContext.GUI, false, posestack1, multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, bakedmodel, itemRenderer);
 
         multibuffersource$buffersource.endBatch();
         RenderSystem.enableDepthTest();

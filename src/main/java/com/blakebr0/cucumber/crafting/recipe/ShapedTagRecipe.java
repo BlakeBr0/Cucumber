@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.crafting.OutputResolver;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -17,18 +18,18 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
     private final OutputResolver outputResolver;
     private ItemStack output;
 
-    public ShapedTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, OutputResolver.Item outputResolver) {
-        super(id, group, category, width, height, inputs, ItemStack.EMPTY);
+    public ShapedTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, OutputResolver.Item outputResolver, boolean showNotification) {
+        super(id, group, category, width, height, inputs, ItemStack.EMPTY, showNotification);
         this.outputResolver = outputResolver;
     }
 
-    public ShapedTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, String tag, int count) {
-        super(id, group, category, width, height, inputs, ItemStack.EMPTY);
+    public ShapedTagRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, String tag, int count, boolean showNotification) {
+        super(id, group, category, width, height, inputs, ItemStack.EMPTY, showNotification);
         this.outputResolver = new OutputResolver.Tag(tag, count);
     }
 
     @Override
-    public ItemStack getResultItem() {
+    public ItemStack getResultItem(RegistryAccess access) {
         if (this.output == null) {
             this.output = this.outputResolver.resolve();
         }
@@ -63,8 +64,9 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
             var result = GsonHelper.getAsJsonObject(json, "result");
             var tag = GsonHelper.getAsString(result, "tag");
             var count = GsonHelper.getAsInt(result, "count", 1);
+            var showNotification = GsonHelper.getAsBoolean(json, "show_notification", true);
 
-            return new ShapedTagRecipe(recipeId, group, category, width, height, ingredients, tag, count);
+            return new ShapedTagRecipe(recipeId, group, category, width, height, ingredients, tag, count, showNotification);
         }
 
         @Override
@@ -80,8 +82,9 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
             }
 
             var output = OutputResolver.create(buffer);
+            var showNotification = buffer.readBoolean();
 
-            return new ShapedTagRecipe(recipeId, group, category, width, height, ingredients, output);
+            return new ShapedTagRecipe(recipeId, group, category, width, height, ingredients, output, showNotification);
         }
 
         @Override
@@ -96,6 +99,7 @@ public class ShapedTagRecipe extends ShapedNoMirrorRecipe {
             }
 
             buffer.writeItemStack(recipe.outputResolver.resolve(), false);
+            buffer.writeBoolean(recipe.showNotification());
         }
     }
 }

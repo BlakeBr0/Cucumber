@@ -3,11 +3,13 @@ package com.blakebr0.cucumber.item.tool;
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.event.ScytheHarvestCropEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -118,16 +120,20 @@ public class BaseScytheItem extends SwordItem {
             var level = player.level;
             var range = (this.range >= 2 ? 1.0D + (this.range - 1) * 0.25D : 1.0D);
             var entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(range, 0.25D, range));
+            var damageType = player.level.registryAccess().lookup(Registries.DAMAGE_TYPE).map(r -> r.get(DamageTypes.PLAYER_ATTACK));
 
             for (var aoeEntity : entities) {
                 if (aoeEntity != player && aoeEntity != entity && !player.isAlliedTo(entity)) {
-                    var source = DamageSource.playerAttack(player);
-                    var attackDamage = this.getAttackDamage() * 0.67F;
-                    var success = ForgeHooks.onLivingAttack(aoeEntity, source, attackDamage);
 
-                    if (success) {
-                        aoeEntity.knockback(0.4F, Mth.sin(player.getYRot() * 0.017453292F), -Mth.cos(player.getYRot() * 0.017453292F));
-                        aoeEntity.hurt(source, attackDamage);
+                    if (damageType.isPresent() && damageType.get().isPresent()) {
+                        var source = new DamageSource(damageType.get().get(), player);
+                        var attackDamage = this.getAttackDamage() * 0.67F;
+                        var success = ForgeHooks.onLivingAttack(aoeEntity, source, attackDamage);
+
+                        if (success) {
+                            aoeEntity.knockback(0.4F, Mth.sin(player.getYRot() * 0.017453292F), -Mth.cos(player.getYRot() * 0.017453292F));
+                            aoeEntity.hurt(source, attackDamage);
+                        }
                     }
                 }
             }

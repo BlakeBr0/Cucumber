@@ -34,8 +34,8 @@ public class EnergyBarWidget extends AbstractWidget {
 
         int offset = this.getEnergyBarOffset();
 
-        this.blit(matrix, this.getX(), this.getY(), 0, 0, this.width, this.height);
-        this.blit(matrix, this.getX(), this.getY() + this.height - offset, 14, this.height - offset, this.width,  offset + 1);
+        blit(matrix, this.getX(), this.getY(), 0, 0, this.width, this.height);
+        blit(matrix, this.getX(), this.getY() + this.height - offset, 14, this.height - offset, this.width,  offset + 1);
 
         if (mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height) {
             var text = Component.literal(Formatting.number(this.energy.getEnergyStored()).getString() + " / " + Formatting.energy(this.energy.getMaxEnergyStored()).getString());
@@ -43,6 +43,9 @@ public class EnergyBarWidget extends AbstractWidget {
             this.screen.renderTooltip(matrix, text, mouseX, mouseY);
         }
     }
+
+    @Override
+    public void renderWidget(PoseStack matrix, int mouseX, int mouseY, float partialTicks) { }
 
     @Override
     protected void updateWidgetNarration(NarrationElementOutput narration) { }

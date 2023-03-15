@@ -31,7 +31,7 @@ public class IconButtonStatic extends Button {
 	}
 	
 	@Override
-	public void renderButton(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
+	public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, this.texture);
@@ -39,6 +39,6 @@ public class IconButtonStatic extends Button {
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();
 
-		this.blit(stack, this.getX(), this.getY(), this.textureX, this.textureY, this.width, this.height);
+		blit(stack, this.getX(), this.getY(), this.textureX, this.textureY, this.width, this.height);
 	}
 }

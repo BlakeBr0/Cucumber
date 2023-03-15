@@ -15,8 +15,11 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 
 public class ShapedNoMirrorRecipe extends ShapedRecipe {
-    public ShapedNoMirrorRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, ItemStack output) {
-        super(id, group, category, width, height, inputs, output);
+    private final ItemStack output;
+
+    public ShapedNoMirrorRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, ItemStack output, boolean showNotification) {
+        super(id, group, category, width, height, inputs, output, showNotification);
+        this.output = output;
     }
 
     @Override
@@ -68,8 +71,9 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
             var height = pattern.length;
             var ingredients = ShapedRecipe.dissolvePattern(pattern, key, width, height);
             var output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
+            var showNotification = GsonHelper.getAsBoolean(json, "show_notification", true);
 
-            return new ShapedNoMirrorRecipe(recipeId, group, category, width, height, ingredients, output);
+            return new ShapedNoMirrorRecipe(recipeId, group, category, width, height, ingredients, output, showNotification);
         }
 
         @Override
@@ -85,8 +89,9 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
             }
 
             var output = buffer.readItem();
+            var showNotification = buffer.readBoolean();
 
-            return new ShapedNoMirrorRecipe(recipeId, group, category, width, height, ingredients, output);
+            return new ShapedNoMirrorRecipe(recipeId, group, category, width, height, ingredients, output, showNotification);
         }
 
         @Override
@@ -100,7 +105,8 @@ public class ShapedNoMirrorRecipe extends ShapedRecipe {
                 ingredient.toNetwork(buffer);
             }
 
-            buffer.writeItem(recipe.getResultItem());
+            buffer.writeItem(recipe.output);
+            buffer.writeBoolean(recipe.showNotification());
         }
     }
 }

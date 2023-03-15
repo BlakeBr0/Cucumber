@@ -33,7 +33,7 @@ public class IconButton extends Button {
 	}
 	
 	@Override
-	public void renderButton(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
+	public void renderWidget(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
 		RenderSystem.setShader(GameRenderer::getPositionTexShader);
 		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 		RenderSystem.setShaderTexture(0, this.texture);
@@ -41,13 +41,24 @@ public class IconButton extends Button {
 		RenderSystem.defaultBlendFunc();
 		RenderSystem.enableDepthTest();
 
-		int i = this.getYImage(this.isHovered);
+		int i = this.getYImage();
 
-		this.blit(matrix, this.getX(), this.getY(), this.textureX, this.textureY + i * this.height, this.width, this.height);
+		blit(matrix, this.getX(), this.getY(), this.textureX, this.textureY + i * this.height, this.width, this.height);
 
 		if (this.tooltip != null && this.isHoveredOrFocused()) {
 			this.tooltip.render(this, matrix, mouseX, mouseY);
 		}
+	}
+
+	private int getYImage() {
+		int i = 1;
+		if (!this.active) {
+			i = 0;
+		} else if (this.isHoveredOrFocused()) {
+			i = 2;
+		}
+
+		return i;
 	}
 
 	@FunctionalInterface

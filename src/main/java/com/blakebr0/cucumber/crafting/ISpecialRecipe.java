@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber.crafting;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -9,20 +10,20 @@ import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public interface ISpecialRecipe extends Recipe<Container> {
+public interface ISpecialRecipe<C extends Container> extends Recipe<C> {
     @Override
-    default ItemStack assemble(Container inv) {
-        return this.assemble(new InvWrapper(inv));
+    default ItemStack assemble(C inventory, RegistryAccess access) {
+        return this.assemble(new InvWrapper(inventory));
     }
 
     @Override
-    default boolean matches(Container inv, Level level) {
-        return this.matches(new InvWrapper(inv));
+    default boolean matches(C inventory, Level level) {
+        return this.matches(new InvWrapper(inventory));
     }
 
     @Override
-    default NonNullList<ItemStack> getRemainingItems(Container inv) {
-        return this.getRemainingItems(new InvWrapper(inv));
+    default NonNullList<ItemStack> getRemainingItems(C inventory) {
+        return this.getRemainingItems(new InvWrapper(inventory));
     }
 
     ItemStack assemble(IItemHandler inventory);
