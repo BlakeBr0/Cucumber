@@ -50,7 +50,7 @@ public class IconButton extends Button {
 		}
 	}
 
-	private int getYImage() {
+	protected int getYImage() {
 		int i = 1;
 		if (!this.active) {
 			i = 0;

@@ -10,23 +10,23 @@ import net.minecraftforge.common.util.RecipeMatcher;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public interface ISpecialRecipe<C extends Container> extends Recipe<C> {
+public interface ISpecialRecipe extends Recipe<Container> {
     @Override
-    default ItemStack assemble(C inventory, RegistryAccess access) {
-        return this.assemble(new InvWrapper(inventory));
+    default ItemStack assemble(Container inventory, RegistryAccess access) {
+        return this.assemble(new InvWrapper(inventory), access);
     }
 
     @Override
-    default boolean matches(C inventory, Level level) {
+    default boolean matches(Container inventory, Level level) {
         return this.matches(new InvWrapper(inventory));
     }
 
     @Override
-    default NonNullList<ItemStack> getRemainingItems(C inventory) {
+    default NonNullList<ItemStack> getRemainingItems(Container inventory) {
         return this.getRemainingItems(new InvWrapper(inventory));
     }
 
-    ItemStack assemble(IItemHandler inventory);
+    ItemStack assemble(IItemHandler inventory, RegistryAccess access);
 
     default boolean matches(IItemHandler inventory) {
         return this.matches(inventory, 0, inventory.getSlots());
