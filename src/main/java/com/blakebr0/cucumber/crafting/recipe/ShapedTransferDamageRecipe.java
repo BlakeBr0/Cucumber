@@ -16,10 +16,12 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public class ShapedTransferDamageRecipe extends ShapedRecipe {
     private final ItemStack result;
+    private final boolean transferNBT;
 
-    public ShapedTransferDamageRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, ItemStack result, boolean showNotification) {
+    public ShapedTransferDamageRecipe(ResourceLocation id, String group, CraftingBookCategory category, int width, int height, NonNullList<Ingredient> inputs, ItemStack result, boolean showNotification, boolean transferNBT) {
         super(id, group, category, width, height, inputs, result, showNotification);
         this.result = result;
+        this.transferNBT = transferNBT;
     }
 
     @Override
@@ -40,7 +42,15 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
 
         var result = this.getResultItem(access).copy();
 
-        result.setDamageValue(damageable.getDamageValue());
+        if (this.transferNBT) {
+            var tag = damageable.getTag();
+
+            if (tag != null) {
+                result.setTag(tag.copy());
+            }
+        } else {
+            result.setDamageValue(damageable.getDamageValue());
+        }
 
         return result;
     }
@@ -62,8 +72,9 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
             var ingredients = ShapedRecipe.dissolvePattern(pattern, key, width, height);
             var result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             var showNotification = GsonHelper.getAsBoolean(json, "show_notification", true);
+            var transferNBT = GsonHelper.getAsBoolean(json, "transfer_nbt", false);
 
-            return new ShapedTransferDamageRecipe(recipeId, group, category, width, height, ingredients, result, showNotification);
+            return new ShapedTransferDamageRecipe(recipeId, group, category, width, height, ingredients, result, showNotification, transferNBT);
         }
 
         @Override
@@ -80,8 +91,9 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
 
             var result = buffer.readItem();
             var showNotification = buffer.readBoolean();
+            var transferNBT = buffer.readBoolean();
 
-            return new ShapedTransferDamageRecipe(recipeId, group, category, width, height, ingredients, result, showNotification);
+            return new ShapedTransferDamageRecipe(recipeId, group, category, width, height, ingredients, result, showNotification, transferNBT);
         }
 
         @Override
@@ -97,6 +109,7 @@ public class ShapedTransferDamageRecipe extends ShapedRecipe {
 
             buffer.writeItem(recipe.result);
             buffer.writeBoolean(recipe.showNotification());
+            buffer.writeBoolean(recipe.transferNBT);
         }
     }
 }
