@@ -117,10 +117,10 @@ public class BaseScytheItem extends SwordItem {
     @Override
     public boolean onLeftClickEntity(ItemStack stack, Player player, Entity entity) {
         if (player.getAttackStrengthScale(0.5F) >= 0.95F) {
-            var level = player.level;
+            var level = player.level();
             var range = (this.range >= 2 ? 1.0D + (this.range - 1) * 0.25D : 1.0D);
             var entities = level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(range, 0.25D, range));
-            var damageType = player.level.registryAccess().lookup(Registries.DAMAGE_TYPE).map(r -> r.get(DamageTypes.PLAYER_ATTACK));
+            var damageType = level.registryAccess().lookup(Registries.DAMAGE_TYPE).map(r -> r.get(DamageTypes.PLAYER_ATTACK));
 
             for (var aoeEntity : entities) {
                 if (aoeEntity != player && aoeEntity != entity && !player.isAlliedTo(entity)) {

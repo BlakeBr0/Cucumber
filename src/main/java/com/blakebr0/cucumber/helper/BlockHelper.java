@@ -20,7 +20,7 @@ public final class BlockHelper {
     }
 
     public static BlockHitResult rayTraceBlocks(Level level, Player player, ClipContext.Fluid fluidMode) {
-        var attribute = player.getAttribute(ForgeMod.REACH_DISTANCE.get());
+        var attribute = player.getAttribute(ForgeMod.BLOCK_REACH.get());
         var reach = attribute != null ? attribute.getValue() : 4.5D;
 
         return rayTraceBlocks(level, player, reach, fluidMode);
@@ -78,7 +78,7 @@ public final class BlockHelper {
         }
 
         if (destroyed && exp > 0) {
-            block.popExperience(player.getLevel(), pos, exp);
+            block.popExperience(player.serverLevel(), pos, exp);
         }
 
         return true;

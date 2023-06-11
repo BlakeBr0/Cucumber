@@ -9,7 +9,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShearsItem;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.IForgeShearable;
@@ -24,7 +24,7 @@ public class BaseShearsItem extends ShearsItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        var level = player.level;
+        var level = player.level();
         if (level.isClientSide())
             return false;
 
@@ -33,13 +33,13 @@ public class BaseShearsItem extends ShearsItem {
 
         if (block instanceof IForgeShearable) {
             var tile = level.getBlockEntity(pos);
-            var context = (new LootContext.Builder((ServerLevel) level))
-                    .withRandom(level.getRandom())
+            var params = new LootParams.Builder((ServerLevel) level)
                     .withParameter(LootContextParams.ORIGIN, new Vec3(pos.getX(), pos.getY(), pos.getZ()))
                     .withParameter(LootContextParams.TOOL, new ItemStack(Items.SHEARS))
                     .withOptionalParameter(LootContextParams.THIS_ENTITY, player)
                     .withOptionalParameter(LootContextParams.BLOCK_ENTITY, tile);
-            var drops = state.getDrops(context);
+
+            var drops = state.getDrops(params);
             var rand = new Random();
 
             for (var drop : drops) {

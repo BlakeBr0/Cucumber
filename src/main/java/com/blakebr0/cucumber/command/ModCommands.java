@@ -37,7 +37,7 @@ public final class ModCommands {
 
                                 var message = Localizable.of("message.cucumber.filled_energy").args("block").build();
 
-                                source.sendSuccess(message, false);
+                                source.sendSuccess(() -> message, false);
                             }
                         } else {
                             var message = Localizable.of("message.cucumber.filled_energy_error").args("block").build();
@@ -68,7 +68,7 @@ public final class ModCommands {
 
                                 var message = Localizable.of("message.cucumber.filled_energy").args("item").build();
 
-                                source.sendSuccess(message, false);
+                                source.sendSuccess(() -> message, false);
                             }
                         } else {
                             var message = Localizable.of("message.cucumber.filled_energy_error").args("item").build();

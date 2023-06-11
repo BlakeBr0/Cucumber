@@ -1,9 +1,7 @@
 package com.blakebr0.cucumber.client.screen.button;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -31,14 +29,7 @@ public class IconButtonStatic extends Button {
 	}
 	
 	@Override
-	public void renderWidget(PoseStack stack, int mouseX, int mouseY, float partialTicks) {
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, this.texture);
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		RenderSystem.enableDepthTest();
-
-		blit(stack, this.getX(), this.getY(), this.textureX, this.textureY, this.width, this.height);
+	public void renderWidget(GuiGraphics gfx, int mouseX, int mouseY, float partialTicks) {
+		gfx.blit(this.texture, this.getX(), this.getY(), this.textureX, this.textureY, this.width, this.height);
 	}
 }

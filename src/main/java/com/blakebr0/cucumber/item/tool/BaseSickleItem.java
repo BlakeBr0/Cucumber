@@ -10,7 +10,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 import java.util.function.Function;
 
@@ -42,7 +41,7 @@ public class BaseSickleItem extends DiggerItem {
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        return this.harvest(stack, player.level, pos, player);
+        return this.harvest(stack, player.level(), pos, player);
     }
 
     public float getAttackDamage() {
@@ -92,8 +91,8 @@ public class BaseSickleItem extends DiggerItem {
         return true;
     }
 
+    // TODO: 1.20 - check replacement for `material == Material.LEAVES || material == Material.PLANT || material == Material.REPLACEABLE_PLANT`
     private static boolean isValidMaterial(BlockState state) {
-        var material = state.getMaterial();
-        return state.is(ModTags.MINEABLE_WITH_SICKLE) || material == Material.LEAVES || material == Material.PLANT || material == Material.REPLACEABLE_PLANT;
+        return state.is(ModTags.MINEABLE_WITH_SICKLE);
     }
 }

@@ -6,13 +6,12 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Material;
 
 import java.util.function.Function;
 
 public class BaseGlassBlock extends GlassBlock {
-    public BaseGlassBlock(Material material, Function<Properties, Properties> properties) {
-        super(properties.apply(Properties.of(material))
+    public BaseGlassBlock(Function<Properties, Properties> properties) {
+        super(properties.apply(Properties.of())
                 .noOcclusion()
                 .isValidSpawn(BaseGlassBlock::never)
                 .isRedstoneConductor(BaseGlassBlock::never)
@@ -21,8 +20,8 @@ public class BaseGlassBlock extends GlassBlock {
         );
     }
 
-    public BaseGlassBlock(Material material, SoundType sound, float hardness, float resistance) {
-        super(Properties.of(material)
+    public BaseGlassBlock(SoundType sound, float hardness, float resistance) {
+        super(Properties.of()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .noOcclusion()
@@ -33,8 +32,8 @@ public class BaseGlassBlock extends GlassBlock {
         );
     }
 
-    public BaseGlassBlock(Material material, SoundType sound, float hardness, float resistance, boolean tool) {
-        super(Properties.of(material)
+    public BaseGlassBlock(SoundType sound, float hardness, float resistance, boolean tool) {
+        super(Properties.of()
                 .sound(sound)
                 .strength(hardness, resistance)
                 .requiresCorrectToolForDrops()

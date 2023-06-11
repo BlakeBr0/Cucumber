@@ -1,9 +1,8 @@
 package com.blakebr0.cucumber.client.screen.button;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
@@ -33,20 +32,13 @@ public class IconButton extends Button {
 	}
 	
 	@Override
-	public void renderWidget(PoseStack matrix, int mouseX, int mouseY, float partialTicks) {
-		RenderSystem.setShader(GameRenderer::getPositionTexShader);
-		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-		RenderSystem.setShaderTexture(0, this.texture);
-		RenderSystem.enableBlend();
-		RenderSystem.defaultBlendFunc();
-		RenderSystem.enableDepthTest();
-
+	public void renderWidget(GuiGraphics gfx, int mouseX, int mouseY, float partialTicks) {
 		int i = this.getYImage();
 
-		blit(matrix, this.getX(), this.getY(), this.textureX, this.textureY + i * this.height, this.width, this.height);
+		gfx.blit(this.texture, this.getX(), this.getY(), this.textureX, this.textureY + i * this.height, this.width, this.height);
 
 		if (this.tooltip != null && this.isHoveredOrFocused()) {
-			this.tooltip.render(this, matrix, mouseX, mouseY);
+			this.tooltip.render(this, gfx.pose(), mouseX, mouseY);
 		}
 	}
 
