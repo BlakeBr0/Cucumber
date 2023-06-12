@@ -1,6 +1,5 @@
 package com.blakebr0.cucumber.client.screen.button;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.network.chat.Component;
@@ -38,7 +37,7 @@ public class IconButton extends Button {
 		gfx.blit(this.texture, this.getX(), this.getY(), this.textureX, this.textureY + i * this.height, this.width, this.height);
 
 		if (this.tooltip != null && this.isHoveredOrFocused()) {
-			this.tooltip.render(this, gfx.pose(), mouseX, mouseY);
+			this.tooltip.render(this, gfx, mouseX, mouseY);
 		}
 	}
 
@@ -55,6 +54,6 @@ public class IconButton extends Button {
 
 	@FunctionalInterface
 	public interface OnTooltip {
-		void render(Button button, PoseStack matrix, int mouseX, int mouseY);
+		void render(Button button, GuiGraphics gfx, int mouseX, int mouseY);
 	}
 }
