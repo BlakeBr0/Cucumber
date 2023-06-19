@@ -31,17 +31,18 @@ public class BaseSickleItem extends DiggerItem {
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return isValidMaterial(state) ? this.getTier().getSpeed() / 2 : super.getDestroySpeed(stack, state);
-    }
-
-    @Override
-    public boolean isCorrectToolForDrops(ItemStack stack, BlockState state) {
-        return isValidMaterial(state);
+        return state.is(ModTags.MINEABLE_WITH_SICKLE) ? this.getTier().getSpeed() / 2 : super.getDestroySpeed(stack, state);
     }
 
     @Override
     public boolean onBlockStartBreak(ItemStack stack, BlockPos pos, Player player) {
-        return this.harvest(stack, player.level(), pos, player);
+        var level = player.level();
+        if (level.isClientSide())
+            return false;
+
+        this.harvestAOEBlocks(stack, level, pos, player);
+
+        return false;
     }
 
     public float getAttackDamage() {
@@ -52,16 +53,12 @@ public class BaseSickleItem extends DiggerItem {
         return this.attackSpeed;
     }
 
-    private boolean harvest(ItemStack stack, Level level, BlockPos pos, Player player) {
-        if (level.isClientSide())
-            return true;
-
+    private void harvestAOEBlocks(ItemStack stack, Level level, BlockPos pos, Player player) {
         var state = level.getBlockState(pos);
-        var hardness = state.getDestroySpeed(level, pos);
 
-        BlockHelper.harvestBlock(stack, level, (ServerPlayer) player, pos);
+        if (this.range > 0 && this.isCorrectToolForDrops(stack, state)) {
+            var hardness = state.getDestroySpeed(level, pos);
 
-        if (this.range > 0 && isValidMaterial(state)) {
             BlockPos.betweenClosed(pos.offset(-this.range, -this.range, -this.range), pos.offset(this.range, this.range, this.range)).forEach(aoePos -> {
                 if (stack.isEmpty())
                     return;
@@ -69,7 +66,7 @@ public class BaseSickleItem extends DiggerItem {
                 if (aoePos != pos) {
                     var aoeState = level.getBlockState(aoePos);
 
-                    if (!isValidMaterial(aoeState))
+                    if (!this.isCorrectToolForDrops(stack, aoeState))
                         return;
 
                     var aoeHardness = aoeState.getDestroySpeed(level, aoePos);
@@ -87,12 +84,5 @@ public class BaseSickleItem extends DiggerItem {
                 }
             });
         }
-
-        return true;
-    }
-
-    // TODO: 1.20 - check replacement for `material == Material.LEAVES || material == Material.PLANT || material == Material.REPLACEABLE_PLANT`
-    private static boolean isValidMaterial(BlockState state) {
-        return state.is(ModTags.MINEABLE_WITH_SICKLE);
     }
 }
