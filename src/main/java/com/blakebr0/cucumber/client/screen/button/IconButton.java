@@ -36,7 +36,7 @@ public class IconButton extends Button {
 
 		gfx.blit(this.texture, this.getX(), this.getY(), this.textureX, this.textureY + i * this.height, this.width, this.height);
 
-		if (this.tooltip != null && this.isHoveredOrFocused()) {
+		if (this.tooltip != null && this.isHovered()) {
 			this.tooltip.render(this, gfx, mouseX, mouseY);
 		}
 	}
