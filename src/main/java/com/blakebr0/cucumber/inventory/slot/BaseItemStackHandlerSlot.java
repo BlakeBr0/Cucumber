@@ -24,4 +24,20 @@ public class BaseItemStackHandlerSlot extends SlotItemHandler {
     public ItemStack remove(int amount) {
         return this.inventory.extractItem(this.index, amount, false, true);
     }
+
+    @Override
+    public int getMaxStackSize(ItemStack stack) {
+        var slotLimit = this.inventory.getSlotLimit(this.index);
+        if (slotLimit > 64) {
+            // if the max size for the stack is less than 64 then we should decrease the max stack size to the
+            // same ratio
+            if (stack.getMaxStackSize() < 64) {
+                return (int) (slotLimit * (float) stack.getMaxStackSize() / 64);
+            }
+
+            return slotLimit;
+        }
+
+        return super.getMaxStackSize(stack);
+    }
 }

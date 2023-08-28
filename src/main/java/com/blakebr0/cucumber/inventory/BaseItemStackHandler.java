@@ -1,6 +1,8 @@
 package com.blakebr0.cucumber.inventory;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
@@ -72,6 +74,61 @@ public class BaseItemStackHandler extends ItemStackHandler {
             this.onContentsChanged.run();
     }
 
+    @Override // copied from ItemStackHandler#serializeNBT
+    public CompoundTag serializeNBT() {
+        var items = new ListTag();
+
+        for (int i = 0; i < this.stacks.size(); i++) {
+            var stack = this.stacks.get(i);
+
+            if (!stack.isEmpty()) {
+                var item = new CompoundTag();
+
+                item.putInt("Slot", i);
+
+                // change: store additional ExtendedCount value for stack sizes larger than normal
+                if (stack.getCount() > 64) {
+                    item.putInt("ExtendedCount", stack.getCount());
+                }
+
+                stack.save(item);
+                items.add(item);
+            }
+        }
+
+        var nbt = new CompoundTag();
+
+        nbt.put("Items", items);
+        nbt.putInt("Size", this.stacks.size());
+
+        return nbt;
+    }
+
+    @Override // copied from ItemStackHandler#deserializeNBT
+    public void deserializeNBT(CompoundTag nbt) {
+        this.setSize(nbt.contains("Size", 3) ? nbt.getInt("Size") : this.stacks.size());
+
+        var items = nbt.getList("Items", 10);
+
+        for (int i = 0; i < items.size(); ++i) {
+            var item = items.getCompound(i);
+            int slot = item.getInt("Slot");
+
+            if (slot >= 0 && slot < this.stacks.size()) {
+                var stack = ItemStack.of(item);
+
+                // change: use the ExtendedCount value instead if it exists
+                if (item.contains("ExtendedCount")) {
+                    stack.setCount(item.getInt("ExtendedCount"));
+                }
+
+                this.stacks.set(slot, stack);
+            }
+        }
+
+        this.onLoad();
+    }
+
     public NonNullList<ItemStack> getStacks() {
         return this.stacks;
     }
@@ -84,7 +141,16 @@ public class BaseItemStackHandler extends ItemStackHandler {
         this.maxStackSize = size;
     }
 
+    /**
+     * Adds a new slot limit for the specified slot
+     * <br>
+     * If the size is above 64, it must be a multiple of 64
+     */
     public void addSlotLimit(int slot, int size) {
+        if (size > 64 && size % 64 != 0) {
+            throw new IllegalArgumentException("Slot limits above 64 must be a multiple of 64");
+        }
+
         this.slotSizeMap.put(slot, size);
     }
 
