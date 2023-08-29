@@ -27,10 +27,10 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
+            arg '-mixin.config=cucumber.mixins.json'
+
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             ideaModule rootProject.name != project.name ? "${rootProject.name}.${project.name}.main" : "${project.name}.main"
 
@@ -44,10 +44,10 @@ minecraft {
         server {
             workingDirectory project.file('run')
 
+            arg '-mixin.config=cucumber.mixins.json'
+
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
 
             ideaModule rootProject.name != project.name ? "${rootProject.name}.${project.name}.main" : "${project.name}.main"
 
@@ -78,8 +78,8 @@ dependencies {
 }
 
 mixin {
-    add sourceSets.main, 'mixins.cucumber.refmap.json'
-    config 'mixins.cucumber.json'
+    add sourceSets.main, 'cucumber.refmap.json'
+    config 'cucumber.mixins.json'
 
     debug.verbose = true
     debug.export = true

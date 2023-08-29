@@ -6,12 +6,11 @@ import net.minecraftforge.eventbus.api.Event;
 
 import java.util.List;
 
-@Deprecated(forRemoval = true)
-public class RegisterRecipesEvent extends Event {
+public class RecipeManagerLoadingEvent extends Event {
     private final RecipeManager manager;
     private final List<Recipe<?>> recipes;
 
-    public RegisterRecipesEvent(RecipeManager manager, List<Recipe<?>> recipes) {
+    public RecipeManagerLoadingEvent(RecipeManager manager, List<Recipe<?>> recipes) {
         this.manager = manager;
         this.recipes = recipes;
     }
@@ -20,7 +19,7 @@ public class RegisterRecipesEvent extends Event {
         return this.manager;
     }
 
-    public void register(Recipe<?> recipe) {
+    public void addRecipe(Recipe<?> recipe) {
         this.recipes.add(recipe);
     }
 }

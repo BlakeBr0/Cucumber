@@ -32,15 +32,6 @@ public final class RecipeHelper {
     }
 
     public static RecipeManager getRecipeManager() {
-        if (recipeManager.recipes instanceof ImmutableMap) {
-            recipeManager.recipes = new HashMap<>(recipeManager.recipes);
-            recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
-        }
-
-        if (recipeManager.byName instanceof ImmutableMap) {
-            recipeManager.byName = new HashMap<>(recipeManager.byName);
-        }
-
         return recipeManager;
     }
 
@@ -54,6 +45,15 @@ public final class RecipeHelper {
 
     @Deprecated(forRemoval = true)
     public static void addRecipe(Recipe<?> recipe) {
+        if (recipeManager.recipes instanceof ImmutableMap) {
+            recipeManager.recipes = new HashMap<>(recipeManager.recipes);
+            recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
+        }
+
+        if (recipeManager.byName instanceof ImmutableMap) {
+            recipeManager.byName = new HashMap<>(recipeManager.byName);
+        }
+
         getRecipeManager().recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
         getRecipeManager().byName.put(recipe.getId(), recipe);
     }

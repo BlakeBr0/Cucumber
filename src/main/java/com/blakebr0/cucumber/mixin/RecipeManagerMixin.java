@@ -1,7 +1,7 @@
 package com.blakebr0.cucumber.mixin;
 
 import com.blakebr0.cucumber.Cucumber;
-import com.blakebr0.cucumber.event.RegisterRecipesEvent;
+import com.blakebr0.cucumber.event.RecipeManagerLoadingEvent;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonElement;
@@ -48,13 +48,17 @@ public class RecipeManagerMixin {
         var manager = (RecipeManager) (Object) this;
         var recipes = new ArrayList<Recipe<?>>();
 
-        MinecraftForge.EVENT_BUS.post(new RegisterRecipesEvent(manager, recipes));
+        try {
+            MinecraftForge.EVENT_BUS.post(new RecipeManagerLoadingEvent(manager, recipes));
+        } catch (Exception e) {
+            Cucumber.LOGGER.error("An error occurred while firing RecipeManagerLoadingEvent", e);
+        }
 
         for (var recipe : recipes) {
             map.computeIfAbsent(recipe.getType(), t -> ImmutableMap.builder()).put(recipe.getId(), recipe);
             builder.put(recipe.getId(), recipe);
         }
 
-        Cucumber.LOGGER.info("Registered {} recipes in {} ms", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
+        Cucumber.LOGGER.info("Cucumber registered {} recipes in {} ms", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
     }
 }
