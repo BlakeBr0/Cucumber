@@ -8,6 +8,7 @@ import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.crafting.TagMapper;
 import com.blakebr0.cucumber.helper.RecipeHelper;
 import com.blakebr0.cucumber.init.ModRecipeSerializers;
+import com.blakebr0.cucumber.init.ModReloadListeners;
 import com.blakebr0.cucumber.util.FeatureFlagInitializer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -43,6 +44,7 @@ public final class Cucumber {
 	@SubscribeEvent
 	public void onCommonSetup(FMLCommonSetupEvent event) {
 		MinecraftForge.EVENT_BUS.register(new ModCommands());
+		MinecraftForge.EVENT_BUS.register(new ModReloadListeners());
 		MinecraftForge.EVENT_BUS.register(new RecipeHelper());
 		MinecraftForge.EVENT_BUS.register(new TagMapper());
 	}
