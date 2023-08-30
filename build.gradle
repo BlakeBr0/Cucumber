@@ -1,15 +1,18 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public' }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply plugin: 'org.spongepowered.mixin'
 
 version = '1.19.4-6.2.2'
 group = 'com.blakebr0.cucumber'
@@ -28,6 +31,8 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
+            arg '-mixin.config=cucumber.mixins.json'
+
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
 
@@ -42,6 +47,8 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+
+            arg '-mixin.config=cucumber.mixins.json'
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
@@ -69,7 +76,17 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
 
+    annotationProcessor "org.spongepowered:mixin:${mixin_processor_version}:processor"
+
     compileOnly fg.deobf("com.almostreliable.mods:almostunified-forge:${almostunified_version}")
+}
+
+mixin {
+    add sourceSets.main, 'cucumber.refmap.json'
+    config 'cucumber.mixins.json'
+
+    debug.verbose = true
+    debug.export = true
 }
 
 jar {
