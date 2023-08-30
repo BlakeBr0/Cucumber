@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "package": "com.blakebr0.cucumber.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "cucumber.refmap.json",
+  "mixins": [
+    "RecipeManagerMixin"
+  ],
+  "client": [],
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
