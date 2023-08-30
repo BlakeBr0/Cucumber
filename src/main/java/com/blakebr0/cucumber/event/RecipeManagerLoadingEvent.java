@@ -1,23 +1,25 @@
 package com.blakebr0.cucumber.event;
 
-import com.blakebr0.cucumber.helper.RecipeHelper;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraftforge.eventbus.api.Event;
 
-@Deprecated(forRemoval = true)
-public class RegisterRecipesEvent extends Event {
-    private final RecipeManager manager;
+import java.util.List;
 
-    public RegisterRecipesEvent(RecipeManager manager) {
+public class RecipeManagerLoadingEvent extends Event {
+    private final RecipeManager manager;
+    private final List<Recipe<?>> recipes;
+
+    public RecipeManagerLoadingEvent(RecipeManager manager, List<Recipe<?>> recipes) {
         this.manager = manager;
+        this.recipes = recipes;
     }
 
     public RecipeManager getRecipeManager() {
         return this.manager;
     }
 
-    public void register(Recipe<?> recipe) {
-        RecipeHelper.addRecipe(recipe);
+    public void addRecipe(Recipe<?> recipe) {
+        this.recipes.add(recipe);
     }
 }

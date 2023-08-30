@@ -3,6 +3,7 @@ plugins {
     id 'idea'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
 }
 
 version = '1.20.1-7.0.0'
@@ -26,6 +27,8 @@ minecraft {
         client {
             workingDirectory project.file('run')
 
+            arg '-mixin.config=cucumber.mixins.json'
+
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
 
@@ -40,6 +43,8 @@ minecraft {
 
         server {
             workingDirectory project.file('run')
+
+            arg '-mixin.config=cucumber.mixins.json'
 
             property 'forge.logging.markers', 'REGISTRIES'
             property 'forge.logging.console.level', 'debug'
@@ -67,7 +72,17 @@ repositories {
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
 
+    annotationProcessor "org.spongepowered:mixin:${mixin_processor_version}:processor"
+
     compileOnly fg.deobf("com.almostreliable.mods:almostunified-forge:${almostunified_version}")
+}
+
+mixin {
+    add sourceSets.main, 'cucumber.refmap.json'
+    config 'cucumber.mixins.json'
+
+    debug.verbose = true
+    debug.export = true
 }
 
 jar {
