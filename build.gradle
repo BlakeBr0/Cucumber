@@ -14,7 +14,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.19.2-6.0.7'
+version = '1.19.2-6.0.8'
 group = 'com.blakebr0.cucumber'
 archivesBaseName = 'Cucumber'
 
