@@ -67,12 +67,30 @@ repositories {
             includeGroup "com.almostreliable.mods"
         }
     }
+
+    maven {
+        url = "https://maven.architectury.dev"
+        content {
+            includeGroup "dev.architectury"
+        }
+    }
+
+    maven {
+        url = "https://maven.saps.dev/releases"
+        content {
+            includeGroup "dev.latvian.mods"
+        }
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${forge_version}"
 
     annotationProcessor "org.spongepowered:mixin:${mixin_processor_version}:processor"
+
+    implementation fg.deobf("dev.latvian.mods:kubejs-forge:${kubejs_version}")
+    implementation fg.deobf("dev.latvian.mods:rhino-forge:${rhino_version}")
+    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_version}")
 
     compileOnly fg.deobf("com.almostreliable.mods:almostunified-forge:${almostunified_version}")
 }

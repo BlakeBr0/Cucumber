@@ -4,6 +4,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "cucumber.refmap.json",
   "mixins": [
+    "RecipeEventJSMixin",
     "RecipeManagerMixin"
   ],
   "client": [],
