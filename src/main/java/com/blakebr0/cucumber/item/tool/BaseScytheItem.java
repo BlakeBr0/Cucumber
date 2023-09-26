@@ -26,9 +26,12 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
 import java.lang.reflect.Method;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Function;
 
 public class BaseScytheItem extends SwordItem {
+    private static final Set<Block> ERRORED_BLOCKS = new HashSet<>();
     private static final Method GET_SEED;
 
     private final float attackDamage;
@@ -161,7 +164,9 @@ public class BaseScytheItem extends SwordItem {
         try {
             return (Item) GET_SEED.invoke(block);
         } catch (Exception e) {
-            Cucumber.LOGGER.error("Unable to get seed from crop {}", e.getLocalizedMessage());
+            if (ERRORED_BLOCKS.add(block)) {
+                Cucumber.LOGGER.error("Unable to get seed from crop {}", e.getLocalizedMessage());
+            }
         }
 
         return null;
