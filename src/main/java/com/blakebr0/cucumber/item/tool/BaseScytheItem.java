@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.common.ForgeHooks;
@@ -159,7 +160,7 @@ public class BaseScytheItem extends SwordItem {
 
     private static Item getSeed(Block block) {
         try {
-            return (Item) GET_SEED.invoke(block);
+            return ((ItemLike) GET_SEED.invoke(block)).asItem();
         } catch (Exception e) {
             if (ERRORED_BLOCKS.add(block)) {
                 Cucumber.LOGGER.error("Unable to get seed from crop {}", e.getLocalizedMessage());
