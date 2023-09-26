@@ -1,7 +1,7 @@
 package com.blakebr0.cucumber.item.tool;
 
-import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.event.ScytheHarvestCropEvent;
+import com.blakebr0.cucumber.helper.CropHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -22,21 +22,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 
-import java.lang.reflect.Method;
 import java.util.function.Function;
 
 public class BaseScytheItem extends SwordItem {
-    private static final Method GET_SEED;
-
     private final float attackDamage;
     private final float attackSpeed;
     private final int range;
-
-    static {
-        GET_SEED = ObfuscationReflectionHelper.findMethod(CropBlock.class, "m_6404_");
-    }
 
     public BaseScytheItem(Tier tier, int range) {
         this(tier, range, p -> p);
@@ -82,7 +74,7 @@ public class BaseScytheItem extends SwordItem {
             var block = state.getBlock();
 
             if (block instanceof CropBlock crop) {
-                Item seed = getSeed(crop);
+                Item seed = CropHelper.getSeedsItem(crop);
 
                 if (crop.isMaxAge(state) && seed != null) {
                     var drops = Block.getDrops(state, (ServerLevel) level, aoePos, level.getBlockEntity(aoePos));
@@ -152,15 +144,5 @@ public class BaseScytheItem extends SwordItem {
 
     public float getAttackSpeed() {
         return this.attackSpeed;
-    }
-
-    private static Item getSeed(Block block) {
-        try {
-            return (Item) GET_SEED.invoke(block);
-        } catch (Exception e) {
-            Cucumber.LOGGER.error("Unable to get seed from crop {}", e.getLocalizedMessage());
-        }
-
-        return null;
     }
 }
