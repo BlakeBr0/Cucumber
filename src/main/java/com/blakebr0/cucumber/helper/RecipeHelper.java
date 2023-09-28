@@ -89,8 +89,16 @@ public final class RecipeHelper {
         }
 
         for (var recipe : recipes) {
-            manager.recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
-            manager.byName.put(recipe.getId(), recipe);
+            try {
+                addRecipe(recipe);
+            } catch (UnsupportedOperationException e) {
+                recipeManager.recipes = new HashMap<>(recipeManager.recipes);
+                recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
+                recipeManager.byName = new HashMap<>(recipeManager.byName);
+
+                manager.recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
+                manager.byName.put(recipe.getId(), recipe);
+            }
         }
 
         Cucumber.LOGGER.info("Cucumber registered {} recipes in {} ms (KUBEJS MODE)", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
