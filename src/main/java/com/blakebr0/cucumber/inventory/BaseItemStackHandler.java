@@ -7,6 +7,7 @@ import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.RecipeWrapper;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import java.util.function.Function;
 public class BaseItemStackHandler extends ItemStackHandler {
     private final Runnable onContentsChanged;
     private final Map<Integer, Integer> slotSizeMap;
+    private final RecipeWrapper recipeWrapper;
     private BiFunction<Integer, ItemStack, Boolean> canInsert = null;
     private Function<Integer, Boolean> canExtract = null;
     private int maxStackSize = 64;
@@ -27,6 +29,7 @@ public class BaseItemStackHandler extends ItemStackHandler {
         super(size);
         this.onContentsChanged = onContentsChanged;
         this.slotSizeMap = new HashMap<>();
+        this.recipeWrapper = new RecipeWrapper(this);
     }
 
     @Override
@@ -168,6 +171,10 @@ public class BaseItemStackHandler extends ItemStackHandler {
 
     public Container toIInventory() {
         return new SimpleContainer(this.stacks.toArray(new ItemStack[0]));
+    }
+
+    public RecipeWrapper asRecipeWrapper() {
+        return this.recipeWrapper;
     }
 
     /**
