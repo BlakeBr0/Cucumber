@@ -14,7 +14,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,10 +61,6 @@ public final class RecipeHelper {
     }
 
     public static void fireRecipeManagerLoadedEvent(RecipeManager manager, Map<RecipeType<?>, ImmutableMap.Builder<ResourceLocation, Recipe<?>>> map, ImmutableMap.Builder<ResourceLocation, Recipe<?>> builder) {
-        if (ModList.get().isLoaded("kubejs")) {
-            return;
-        }
-
         var stopwatch = Stopwatch.createStarted();
         var recipes = new ArrayList<Recipe<?>>();
 
@@ -80,7 +75,7 @@ public final class RecipeHelper {
             builder.put(recipe.getId(), recipe);
         }
 
-        Cucumber.LOGGER.info("Cucumber registered {} recipes in {} ms", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
+        Cucumber.LOGGER.info("Registered {} recipes in {} ms", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
     }
 
     public static void fireRecipeManagerLoadedEventKubeJSEdition(RecipeManager manager, Map<ResourceLocation, Recipe<?>> recipesByName) {
@@ -97,6 +92,6 @@ public final class RecipeHelper {
             recipesByName.put(recipe.getId(), recipe);
         }
 
-        Cucumber.LOGGER.info("Cucumber registered {} recipes in {} ms (KUBEJS MODE)", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
+        Cucumber.LOGGER.info("Registered {} recipes in {} ms (KubeJS mode)", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
     }
 }
