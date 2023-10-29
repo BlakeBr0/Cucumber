@@ -173,8 +173,24 @@ public class BaseItemStackHandler extends ItemStackHandler {
         return new SimpleContainer(this.stacks.toArray(new ItemStack[0]));
     }
 
+    /**
+     * Returns the RecipeWrapper for use in recipe matching
+     * @return the RecipeWrapper
+     */
     public RecipeWrapper asRecipeWrapper() {
         return this.recipeWrapper;
+    }
+
+    /**
+     * Creates a RecipeInventory for use in recipe matching with only a specific range of slots
+     * <br>
+     * This implementation will NOT copy the items in the inventory so don't modify them
+     * @param start the first index of the recipe inputs in the inventory
+     * @param size the amount of recipe input slots
+     * @return a new RecipeInventory
+     */
+    public RecipeInventory toRecipeInventory(int start, int size) {
+        return new RecipeInventory(this, start, size);
     }
 
     /**
