@@ -49,7 +49,16 @@ public final class RecipeHelper {
     }
 
     public static void addRecipe(Recipe<?> recipe) {
-        getRecipeManager().recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
-        getRecipeManager().byName.put(recipe.getId(), recipe);
+        try {
+            getRecipeManager().recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
+            getRecipeManager().byName.put(recipe.getId(), recipe);
+        } catch (UnsupportedOperationException e) {
+            recipeManager.recipes = new HashMap<>(recipeManager.recipes);
+            recipeManager.recipes.replaceAll((t, v) -> new HashMap<>(recipeManager.recipes.get(t)));
+            recipeManager.byName = new HashMap<>(recipeManager.byName);
+
+            recipeManager.recipes.computeIfAbsent(recipe.getType(), t -> new HashMap<>()).put(recipe.getId(), recipe);
+            recipeManager.byName.put(recipe.getId(), recipe);
+        }
     }
 }
