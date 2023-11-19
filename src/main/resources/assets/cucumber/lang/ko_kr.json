@@ -3,6 +3,8 @@
   "tooltip.cucumber.uses_left": "%s은(는) 왼쪽을 사용합니다.",
   "tooltip.cucumber.one_use_left": "1은 왼쪽을 사용합니다.",
   "tooltip.cucumber.unlimited_uses": "무제한 사용합니다.",
+  "tooltip.cucumber.empty": "비어있음",
+  "tooltip.cucumber.filled": "가득참",
   "tooltip.cucumber.hold_ctrl_for_tags": "태그를 보려면 CTRL를 누르세요.",
   "tooltip.cucumber.block_tags": "블록 태그:",
   "tooltip.cucumber.item_tags": "아이템 태그:",

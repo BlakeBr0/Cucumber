@@ -7,9 +7,6 @@
   "tooltip.cucumber.block_tags": "Tags de Bloco:",
   "tooltip.cucumber.item_tags": "Tags de Item:",
   "tooltip.cucumber.not_yet_implemented": "Ainda Não Implementado",
-  "tooltip.cucumber.close": "Fechar",
-  "tooltip.cucumber.back": "Costas",
-  "tooltip.cucumber.forward": "Frente",
 
   "message.cucumber.filled_energy": "Este bloco pegou sua energia!",
   "message.cucumber.filled_energy_error": "Este bloco é incapaz de pegar a sua energia."
