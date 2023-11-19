@@ -23,12 +23,13 @@ public class BaseBowItem extends BowItem implements ICustomBow {
         super(properties.apply(new Properties()));
     }
 
-    @Override // copied from BowItem with the initial declaration of 'i' changed
+    @Override // copied from BowItem#releaseUsing
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (entity instanceof Player player) {
             boolean flag = player.getAbilities().instabuild || EnchantmentHelper.getItemEnchantmentLevel(Enchantments.INFINITY_ARROWS, stack) > 0;
             ItemStack itemstack = player.getProjectile(stack);
 
+            // change: account for draw speed multiplier
             int i = (int) ((this.getUseDuration(stack) - timeLeft) * this.getDrawSpeedMulti(stack));
             i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, level, player, i, !itemstack.isEmpty() || flag);
             if (i < 0) return;
@@ -49,6 +50,9 @@ public class BaseBowItem extends BowItem implements ICustomBow {
                         if (f == 1.0F) {
                             abstractarrow.setCritArrow(true);
                         }
+
+                        // change: account for bonus damage
+                        abstractarrow.setBaseDamage(abstractarrow.getBaseDamage() + this.getBonusDamage(stack));
 
                         int j = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.POWER_ARROWS, stack);
                         if (j > 0) {
