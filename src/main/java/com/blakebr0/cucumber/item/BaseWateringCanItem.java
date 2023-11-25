@@ -13,6 +13,7 @@ import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -44,6 +45,11 @@ public class BaseWateringCanItem extends BaseItem {
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.NONE;
+    }
+
+    @Override
+    public int getUseDuration(ItemStack stack) {
+        return 200;
     }
 
     @Override
@@ -79,12 +85,13 @@ public class BaseWateringCanItem extends BaseItem {
     }
 
     @Override
-    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+    public InteractionResult useOn(UseOnContext context) {
         var player = context.getPlayer();
         if (player == null)
             return InteractionResult.FAIL;
 
-        var world = context.getLevel();
+        var hand = context.getHand();
+        var stack = player.getItemInHand(hand);
         var pos = context.getClickedPos();
         var direction = context.getClickedFace();
 
@@ -94,7 +101,24 @@ public class BaseWateringCanItem extends BaseItem {
         if (!NBTHelper.getBoolean(stack, "Water"))
             return InteractionResult.PASS;
 
-        return this.doWater(stack, world, player, pos, direction);
+        player.startUsingItem(hand);
+
+        return InteractionResult.PASS;
+    }
+
+    @Override
+    public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingTicks) {
+        if (remainingTicks >= 0 && entity instanceof Player player) {
+            var trace = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
+
+            if (trace.getType() == HitResult.Type.BLOCK) {
+                this.doWater(stack, level, player, trace.getBlockPos(), trace.getDirection());
+            } else {
+                entity.releaseUsingItem();
+            }
+        } else {
+            entity.releaseUsingItem();
+        }
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -143,11 +167,13 @@ public class BaseWateringCanItem extends BaseItem {
             }
         });
 
+        var random = Utils.RANDOM;
+
         for (int x = -range; x <= range; x++) {
             for (int z = -range; z <= range; z++) {
-                double d0 = pos.offset(x, 0, z).getX() + level.getRandom().nextFloat();
+                double d0 = pos.offset(x, 0, z).getX() + random.nextFloat();
                 double d1 = pos.offset(x, 0, z).getY() + 1.0D;
-                double d2 = pos.offset(x, 0, z).getZ() + level.getRandom().nextFloat();
+                double d2 = pos.offset(x, 0, z).getZ() + random.nextFloat();
 
                 var state = level.getBlockState(pos);
                 if (state.canOcclude() || state.getBlock() instanceof FarmBlock)
@@ -164,7 +190,7 @@ public class BaseWateringCanItem extends BaseItem {
                     var plantBlock = state.getBlock();
 
                     if (plantBlock instanceof BonemealableBlock || plantBlock instanceof IPlantable || plantBlock == Blocks.MYCELIUM || plantBlock == Blocks.CHORUS_FLOWER) {
-                        state.randomTick((ServerLevel) level, aoePos, Utils.RANDOM);
+                        state.randomTick((ServerLevel) level, aoePos, random);
                     }
                 });
 
