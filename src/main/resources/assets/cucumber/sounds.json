@@ -1,0 +1,6 @@
+{
+  "watering_can": {
+    "sounds": ["cucumber:watering_can"],
+    "subtitle": "subtitle.cucumber.watering_can"
+  }
+}

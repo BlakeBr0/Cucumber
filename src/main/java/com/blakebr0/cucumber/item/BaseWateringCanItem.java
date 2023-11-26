@@ -1,8 +1,13 @@
 package com.blakebr0.cucumber.item;
 
+import com.blakebr0.cucumber.client.sound.WateringCanSound;
 import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.cucumber.lib.Tooltips;
 import com.blakebr0.cucumber.util.Utils;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -10,14 +15,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
@@ -27,10 +33,12 @@ import net.minecraft.world.level.block.FarmBlock;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.FakePlayer;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BaseWateringCanItem extends BaseItem {
     protected final int range;
@@ -40,11 +48,6 @@ public class BaseWateringCanItem extends BaseItem {
         super(p -> p.stacksTo(1));
         this.range = range;
         this.chance = chance;
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.NONE;
     }
 
     @Override
@@ -131,6 +134,11 @@ public class BaseWateringCanItem extends BaseItem {
         }
     }
 
+    @Override
+    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+        consumer.accept(ItemRenderProperties.INSTANCE);
+    }
+
     protected InteractionResult doWater(ItemStack stack, Level level, Player player, BlockPos pos, Direction direction) {
         if (player == null)
             return InteractionResult.FAIL;
@@ -183,6 +191,8 @@ public class BaseWateringCanItem extends BaseItem {
             }
         }
 
+        startPlayingSound(player);
+
         if (!level.isClientSide()) {
             if (Math.random() <= this.chance) {
                 BlockPos.betweenClosedStream(pos.offset(-range, -range, -range), pos.offset(range, range, range)).forEach(aoePos -> {
@@ -205,7 +215,45 @@ public class BaseWateringCanItem extends BaseItem {
         return true;
     }
 
+    /**
+     * Starts playing the watering can sound for the given player on the client side
+     * @param player the player
+     */
+    public static void startPlayingSound(Player player) {
+        if (player.level().isClientSide() && !WateringCanSound.playing(player.getId())) {
+            Minecraft.getInstance().getSoundManager().play(new WateringCanSound(player));
+        }
+    }
+
+    /**
+     * Stops playing the watering can sound for the given player on the client side
+     * @param player the player
+     */
+    public static void stopPlayingSound(Player player) {
+        if (player.level().isClientSide() && WateringCanSound.playing(player.getId())) {
+            WateringCanSound.stop(player.getId());
+        }
+    }
+
     private static int getThrottleTicks(Player player) {
         return player instanceof FakePlayer ? 10 : 5;
+    }
+
+    static class ItemRenderProperties implements IClientItemExtensions {
+        public static final IClientItemExtensions INSTANCE = new ItemRenderProperties();
+
+        @Override
+        public boolean applyForgeHandTransform(PoseStack matrix, LocalPlayer player, HumanoidArm arm, ItemStack stack, float partialTick, float equipProcess, float swingProcess) {
+            if (player.isUsingItem() && player.getUseItemRemainingTicks() > 0) {
+                float f = (float) (player.getUseItemRemainingTicks() % 20);
+                float f1 = f - partialTick + 1.0F;
+                float f2 = 1.0F - f1 / 20.0F;
+                float f7 = -10.0F + 10.0F * Mth.cos(f2 * 2.0F * (float) Math.PI);
+
+                matrix.mulPose(Axis.XP.rotationDegrees(f7));
+            }
+
+            return false;
+        }
     }
 }
