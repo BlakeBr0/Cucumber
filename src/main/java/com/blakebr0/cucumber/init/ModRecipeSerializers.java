@@ -5,6 +5,7 @@ import com.blakebr0.cucumber.crafting.conditions.FeatureFlagCondition;
 import com.blakebr0.cucumber.crafting.recipe.ShapedNoMirrorRecipe;
 import com.blakebr0.cucumber.crafting.recipe.ShapedTagRecipe;
 import com.blakebr0.cucumber.crafting.recipe.ShapedTransferDamageRecipe;
+import com.blakebr0.cucumber.crafting.recipe.ShapedTransferNBTRecipe;
 import com.blakebr0.cucumber.crafting.recipe.ShapelessTagRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraftforge.common.crafting.CraftingHelper;
@@ -21,6 +22,7 @@ public final class ModRecipeSerializers {
 
     public static final RegistryObject<RecipeSerializer<?>> CRAFTING_SHAPED_NO_MIRROR = register("shaped_no_mirror", ShapedNoMirrorRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> CRAFTING_SHAPED_TRANSFER_DAMAGE = register("shaped_transfer_damage", ShapedTransferDamageRecipe.Serializer::new);
+    public static final RegistryObject<RecipeSerializer<?>> CRAFTING_SHAPED_TRANSFER_NBT = register("shaped_transfer_nbt", ShapedTransferNBTRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> CRAFTING_SHAPED_TAG = register("shaped_tag", ShapedTagRecipe.Serializer::new);
     public static final RegistryObject<RecipeSerializer<?>> CRAFTING_SHAPELESS_TAG = register("shapeless_tag", ShapelessTagRecipe.Serializer::new);
 
