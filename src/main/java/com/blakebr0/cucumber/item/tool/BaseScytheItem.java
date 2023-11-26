@@ -15,11 +15,16 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.NetherWartBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 
@@ -74,25 +79,10 @@ public class BaseScytheItem extends SwordItem {
             var block = state.getBlock();
 
             if (block instanceof CropBlock crop) {
-                Item seed = CropHelper.getSeedsItem(crop);
+                var seed = CropHelper.getSeedsItem(crop);
 
                 if (crop.isMaxAge(state) && seed != null) {
-                    var drops = Block.getDrops(state, (ServerLevel) level, aoePos, level.getBlockEntity(aoePos));
-
-                    for (var drop : drops) {
-                        var item = drop.getItem();
-
-                        if (!drop.isEmpty() && item == seed) {
-                            drop.shrink(1);
-                            break;
-                        }
-                    }
-
-                    for (var drop : drops) {
-                        if (!drop.isEmpty()) {
-                            Block.popResource(level, aoePos, drop);
-                        }
-                    }
+                    handleDrops(state, level, aoePos, seed);
 
                     stack.hurtAndBreak(1, player, entity -> {
                         entity.broadcastBreakEvent(player.getUsedItemHand());
@@ -100,6 +90,16 @@ public class BaseScytheItem extends SwordItem {
 
                     level.setBlockAndUpdate(aoePos, crop.getStateForAge(0));
                 }
+            }
+
+            if (block instanceof NetherWartBlock && state.getValue(NetherWartBlock.AGE) == 3) {
+                handleDrops(state, level, aoePos, Items.NETHER_WART);
+
+                stack.hurtAndBreak(1, player, entity -> {
+                    entity.broadcastBreakEvent(player.getUsedItemHand());
+                });
+
+                level.setBlockAndUpdate(aoePos, state.setValue(NetherWartBlock.AGE, 0));
             }
         });
 
@@ -144,5 +144,24 @@ public class BaseScytheItem extends SwordItem {
 
     public float getAttackSpeed() {
         return this.attackSpeed;
+    }
+
+    private static void handleDrops(BlockState state, Level level, BlockPos pos, ItemLike seed) {
+        var drops = Block.getDrops(state, (ServerLevel) level, pos, level.getBlockEntity(pos));
+
+        for (var drop : drops) {
+            var item = drop.getItem();
+
+            if (!drop.isEmpty() && item == seed) {
+                drop.shrink(1);
+                break;
+            }
+        }
+
+        for (var drop : drops) {
+            if (!drop.isEmpty()) {
+                Block.popResource(level, pos, drop);
+            }
+        }
     }
 }
