@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -28,6 +29,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.MinecraftForge;
 
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
 public class BaseScytheItem extends SwordItem {
@@ -66,6 +68,8 @@ public class BaseScytheItem extends SwordItem {
         if (level.isClientSide())
             return InteractionResult.SUCCESS;
 
+        var harvested = new AtomicBoolean();
+
         BlockPos.betweenClosed(pos.offset(-this.range, 0, -this.range), pos.offset(this.range, 0, this.range)).forEach(aoePos -> {
             if (stack.isEmpty())
                 return;
@@ -89,6 +93,8 @@ public class BaseScytheItem extends SwordItem {
                     });
 
                     level.setBlockAndUpdate(aoePos, crop.getStateForAge(0));
+
+                    harvested.set(true);
                 }
             }
 
@@ -100,8 +106,14 @@ public class BaseScytheItem extends SwordItem {
                 });
 
                 level.setBlockAndUpdate(aoePos, state.setValue(NetherWartBlock.AGE, 0));
+
+                harvested.set(true);
             }
         });
+
+        if (harvested.get()) {
+            level.playSound(null, pos, SoundEvents.CROP_BREAK, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
 
         return InteractionResult.SUCCESS;
     }
@@ -116,7 +128,6 @@ public class BaseScytheItem extends SwordItem {
 
             for (var aoeEntity : entities) {
                 if (aoeEntity != player && aoeEntity != entity && !player.isAlliedTo(entity)) {
-
                     if (damageType.isPresent() && damageType.get().isPresent()) {
                         var source = new DamageSource(damageType.get().get(), player);
                         var attackDamage = this.getAttackDamage() * 0.67F;
