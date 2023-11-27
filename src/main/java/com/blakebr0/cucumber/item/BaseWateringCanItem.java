@@ -1,12 +1,11 @@
 package com.blakebr0.cucumber.item;
 
-import com.blakebr0.cucumber.client.sound.WateringCanSound;
 import com.blakebr0.cucumber.helper.NBTHelper;
 import com.blakebr0.cucumber.lib.Tooltips;
 import com.blakebr0.cucumber.util.Utils;
+import com.blakebr0.cucumber.util.WateringCanUtil;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -220,8 +219,8 @@ public class BaseWateringCanItem extends BaseItem {
      * @param player the player
      */
     public static void startPlayingSound(Player player) {
-        if (player.level().isClientSide() && !WateringCanSound.playing(player.getId())) {
-            Minecraft.getInstance().getSoundManager().play(new WateringCanSound(player));
+        if (player.level().isClientSide()) {
+            WateringCanUtil.startPlayingSound(player);
         }
     }
 
@@ -230,8 +229,8 @@ public class BaseWateringCanItem extends BaseItem {
      * @param player the player
      */
     public static void stopPlayingSound(Player player) {
-        if (player.level().isClientSide() && WateringCanSound.playing(player.getId())) {
-            WateringCanSound.stop(player.getId());
+        if (player.level().isClientSide()) {
+            WateringCanUtil.stopPlayingSound(player);
         }
     }
 
