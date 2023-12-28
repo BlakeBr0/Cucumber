@@ -40,6 +40,12 @@ public class WateringCanSound extends AbstractTickableSoundInstance {
     }
 
     @Override
+    public boolean canPlaySound() {
+        var instance = PLAYING_FOR.get(this.player.getId());
+        return instance == null || instance == this;
+    }
+
+    @Override
     public void tick() {
         // in the normal case of holding right-click to use a Watering Can, we can check when the
         // useItem changes to know if the sound should stop
