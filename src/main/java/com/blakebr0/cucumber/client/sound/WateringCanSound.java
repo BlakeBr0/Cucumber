@@ -14,11 +14,13 @@ public class WateringCanSound extends AbstractTickableSoundInstance {
     private static final Map<Integer, WateringCanSound> PLAYING_FOR = Collections.synchronizedMap(new HashMap<>());
     private final Player player;
     private final ItemStack useItem;
+    private final ItemStack selectedItem;
 
     public WateringCanSound(Player player) {
         super(ModSounds.WATERING_CAN.get(), SoundSource.PLAYERS, player.getRandom());
         this.player = player;
         this.useItem = player.getUseItem();
+        this.selectedItem = player.getInventory().getSelected();
         this.looping = true;
         this.volume = 0.5F;
 
@@ -41,7 +43,15 @@ public class WateringCanSound extends AbstractTickableSoundInstance {
     public void tick() {
         // in the normal case of holding right-click to use a Watering Can, we can check when the
         // useItem changes to know if the sound should stop
-        if (this.player.getUseItem() != this.useItem) {
+        if (!this.useItem.isEmpty() && this.player.getUseItem() != this.useItem) {
+            synchronized (PLAYING_FOR) {
+                PLAYING_FOR.remove(this.player.getId());
+                this.stop();
+            }
+        }
+
+        // in the case of auto-watering, we can check when the selected item changes to know if the sound should stop
+        if (this.player.getInventory().getSelected() != this.selectedItem) {
             synchronized (PLAYING_FOR) {
                 PLAYING_FOR.remove(this.player.getId());
                 this.stop();
