@@ -109,6 +109,21 @@ public class BaseWateringCanItem extends BaseItem {
     }
 
     @Override
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
+        var player = context.getPlayer();
+
+        if (player instanceof FakePlayer) {
+            var level = context.getLevel();
+            var pos = context.getClickedPos();
+            var direction = context.getClickedFace();
+
+            return this.doWater(stack, level, player, pos, direction);
+        }
+
+        return InteractionResult.PASS;
+    }
+
+    @Override
     public void onUseTick(Level level, LivingEntity entity, ItemStack stack, int remainingTicks) {
         if (remainingTicks >= 0 && entity instanceof Player player) {
             var trace = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
@@ -146,10 +161,10 @@ public class BaseWateringCanItem extends BaseItem {
             return InteractionResult.FAIL;
 
         if (!NBTHelper.getBoolean(stack, "Water"))
-            return InteractionResult.PASS;
+            return InteractionResult.FAIL;
 
         if (!this.allowFakePlayerWatering() && player instanceof FakePlayer)
-            return InteractionResult.PASS;
+            return InteractionResult.FAIL;
 
         if (!level.isClientSide()) {
             var cooldowns = player.getCooldowns();
@@ -158,7 +173,7 @@ public class BaseWateringCanItem extends BaseItem {
             if (!cooldowns.isOnCooldown(item)) {
                 cooldowns.addCooldown(item, getThrottleTicks(player));
             } else {
-                return InteractionResult.PASS;
+                return InteractionResult.FAIL;
             }
         }
 
@@ -203,11 +218,11 @@ public class BaseWateringCanItem extends BaseItem {
                     }
                 });
 
-                return InteractionResult.PASS;
+                return InteractionResult.FAIL;
             }
         }
 
-        return InteractionResult.PASS;
+        return InteractionResult.FAIL;
     }
 
     protected boolean allowFakePlayerWatering() {
