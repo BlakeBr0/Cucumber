@@ -1,0 +1,19 @@
+{
+  "subtitle.cucumber.watering_can": "ジョウロ",
+
+  "tooltip.cucumber.hold_shift_for_info": "§e§oSHIFT§r§7を押して詳細を表示",
+  "tooltip.cucumber.uses_left": "%s回 使用可能",
+  "tooltip.cucumber.one_use_left": "1回 使用可能",
+  "tooltip.cucumber.unlimited_uses": "∞回 使用可能",
+  "tooltip.cucumber.empty": "空",
+  "tooltip.cucumber.filled": "満杯",
+  "tooltip.cucumber.hold_ctrl_for_tags": "CTRLを押してタグを表示",
+  "tooltip.cucumber.hold_alt_for_nbt": "ALTを押してNBTを表示",
+  "tooltip.cucumber.failed_to_load_nbt": "NBTの読み込みに失敗しました",
+  "tooltip.cucumber.block_tags": "ブロックのタグ：",
+  "tooltip.cucumber.item_tags": "アイテムのタグ：",
+  "tooltip.cucumber.not_yet_implemented": "未実装",
+
+  "message.cucumber.filled_energy": "This %s has taken your energy!",
+  "message.cucumber.filled_energy_error": "This %s is unable to take your energy."
+}
