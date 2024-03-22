@@ -14,6 +14,6 @@
   "tooltip.cucumber.item_tags": "アイテムのタグ：",
   "tooltip.cucumber.not_yet_implemented": "未実装",
 
-  "message.cucumber.filled_energy": "This %s has taken your energy!",
-  "message.cucumber.filled_energy_error": "This %s is unable to take your energy."
+  "message.cucumber.filled_energy": "この%sに電力を与えました！",
+  "message.cucumber.filled_energy_error": "この%sに電力を与えることができませんでした"
 }
