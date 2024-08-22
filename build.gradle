@@ -90,7 +90,7 @@ dependencies {
     implementation "dev.latvian.mods:rhino-neoforge:${rhino_version}"
     implementation "dev.architectury:architectury-neoforge:${architectury_version}"
 
-    compileOnly "com.almostreliable.mods:almostunified-forge:${almostunified_version}"
+    compileOnly "com.almostreliable.mods:almostunified-neoforge:${almostunified_version}:api"
 }
 
 tasks.withType(ProcessResources).configureEach {

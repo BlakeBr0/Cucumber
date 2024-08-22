@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.compat.almostunified;
 
-import com.almostreliable.unified.api.AlmostUnifiedLookup;
+import com.almostreliable.unified.api.AlmostUnified;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -22,7 +22,7 @@ public class AlmostUnifiedAdapter {
 
     private static class Adapter {
         private static Item getPreferredItemForTag(TagKey<Item> tag) {
-            return AlmostUnifiedLookup.INSTANCE.getPreferredItemForTag(tag);
+            return AlmostUnified.INSTANCE.getTagTargetItem(tag);
         }
     }
 }
