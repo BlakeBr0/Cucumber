@@ -6,7 +6,7 @@ plugins {
     id 'net.neoforged.moddev' version '1.0.14'
 }
 
-version = '1.21.1-8.0.6'
+version = '1.21.1-8.0.7'
 group = 'com.blakebr0.cucumber'
 
 base {
