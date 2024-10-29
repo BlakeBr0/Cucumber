@@ -10,10 +10,10 @@
   "tooltip.cucumber.hold_ctrl_for_tags": "CTRLを押してタグを表示",
   "tooltip.cucumber.hold_alt_for_nbt": "ALTを押してNBTを表示",
   "tooltip.cucumber.failed_to_load_nbt": "NBTの読み込みに失敗しました",
-  "tooltip.cucumber.block_tags": "ブロックのタグ：",
-  "tooltip.cucumber.item_tags": "アイテムのタグ：",
+  "tooltip.cucumber.block_tags": "ブロックタグ：",
+  "tooltip.cucumber.item_tags": "アイテムタグ：",
   "tooltip.cucumber.not_yet_implemented": "未実装",
 
-  "message.cucumber.filled_energy": "この%sに電力を与えました！",
-  "message.cucumber.filled_energy_error": "この%sに電力を与えることができませんでした"
+  "message.cucumber.filled_energy": "この%sにエネルギーを与えました！",
+  "message.cucumber.filled_energy_error": "この%sにエネルギーを与えることができませんでした"
 }
