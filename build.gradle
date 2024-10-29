@@ -69,27 +69,9 @@ repositories {
             includeGroup "com.almostreliable.mods"
         }
     }
-
-    maven {
-        url = "https://maven.architectury.dev"
-        content {
-            includeGroup "dev.architectury"
-        }
-    }
-
-    maven {
-        url = "https://maven.latvian.dev/releases"
-        content {
-            includeGroup "dev.latvian.mods"
-        }
-    }
 }
 
 dependencies {
-    implementation "dev.latvian.mods:kubejs-neoforge:${kubejs_version}"
-    implementation "dev.latvian.mods:rhino-neoforge:${rhino_version}"
-    implementation "dev.architectury:architectury-neoforge:${architectury_version}"
-
     compileOnly "com.almostreliable.mods:almostunified-neoforge:${almostunified_version}:api"
 }
 

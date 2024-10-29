@@ -1,1 +1,0 @@
-com.blakebr0.cucumber.compat.kubejs.CucumberKubeJSPlugin

@@ -19,7 +19,6 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public final class RecipeHelper {
@@ -51,6 +50,7 @@ public final class RecipeHelper {
         return getRecipeManager().getRecipes();
     }
 
+    @ApiStatus.Internal
     public static void fireRecipeManagerLoadingEvent(RecipeManager manager, ImmutableMultimap.Builder<RecipeType<?>, RecipeHolder<?>> map,
                                                      ImmutableMap.Builder<ResourceLocation, RecipeHolder<?>> builder) {
         var stopwatch = Stopwatch.createStarted();
@@ -68,22 +68,5 @@ public final class RecipeHelper {
         }
 
         Cucumber.LOGGER.info("Registered {} recipes in {} ms", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
-    }
-
-    public static void fireRecipeManagerLoadedEventKubeJSEdition(RecipeManager manager, Map<ResourceLocation, RecipeHolder<?>> recipesByName) {
-        var stopwatch = Stopwatch.createStarted();
-        var recipes = new ArrayList<RecipeHolder<?>>();
-
-        try {
-            NeoForge.EVENT_BUS.post(new RecipeManagerLoadingEvent(manager, recipes));
-        } catch (Exception e) {
-            Cucumber.LOGGER.error("An error occurred while firing RecipeManagerLoadingEvent", e);
-        }
-
-        for (var recipe : recipes) {
-            recipesByName.put(recipe.id(), recipe);
-        }
-
-        Cucumber.LOGGER.info("Registered {} recipes in {} ms (KubeJS mode)", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
     }
 }
