@@ -32,6 +32,9 @@ public class SidedInventoryWrapper implements IItemHandler {
 
     @Override
     public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+        if (this.canInsert != null && !this.canInsert.apply(slot, stack, this.direction))
+            return stack;
+
         return this.inventory.insertItem(slot, stack, simulate);
     }
 
