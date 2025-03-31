@@ -39,11 +39,19 @@ public final class RecipeHelper {
     }
 
     public static <I extends RecipeInput, T extends Recipe<I>> Collection<RecipeHolder<T>> byType(RecipeType<T> type) {
-        return getRecipeManager().byType(type);
+        return byType(getRecipeManager(), type);
+    }
+
+    public static <I extends RecipeInput, T extends Recipe<I>> Collection<RecipeHolder<T>> byType(RecipeManager manager, RecipeType<T> type) {
+        return manager.byType(type);
     }
 
     public static <I extends RecipeInput, T extends Recipe<I>> List<T> byTypeValues(RecipeType<T> type) {
-        return byType(type).stream().map(RecipeHolder::value).toList();
+        return byTypeValues(getRecipeManager(), type);
+    }
+
+    public static <I extends RecipeInput, T extends Recipe<I>> List<T> byTypeValues(RecipeManager manager, RecipeType<T> type) {
+        return byType(manager, type).stream().map(RecipeHolder::value).toList();
     }
 
     public static Collection<RecipeHolder<?>> getAllRecipes() {
