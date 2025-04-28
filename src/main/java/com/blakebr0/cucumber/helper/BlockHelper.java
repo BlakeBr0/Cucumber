@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.helper;
 
+import com.blakebr0.cucumber.tileentity.BaseInventoryTileEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,9 +11,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.CommonHooks;
+import org.jetbrains.annotations.Nullable;
 
 public final class BlockHelper {
     public static BlockHitResult rayTraceBlocks(Level level, Player player) {
@@ -103,5 +106,27 @@ public final class BlockHelper {
         }
 
         return destroyed;
+    }
+
+    /**
+     * based on {@link net.minecraft.world.inventory.AbstractContainerMenu#getRedstoneSignalFromContainer(net.minecraft.world.Container)}
+     */
+    public static int getRedstoneSignalFromInventory(@Nullable BlockEntity entity) {
+        if (entity instanceof BaseInventoryTileEntity tile) {
+            var inventory = tile.getInventory();
+            float f = 0.0F;
+
+            for (int i = 0; i < inventory.getSlots(); ++i) {
+                var stack = inventory.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    f += (float) stack.getCount() / (float) inventory.getStackLimit(i, stack);
+                }
+            }
+
+            f /= (float) inventory.getSlots();
+            return Mth.lerpDiscrete(f, 0, 15);
+        }
+
+        return 0;
     }
 }

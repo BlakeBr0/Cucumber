@@ -78,6 +78,11 @@ public class BaseItemStackHandler extends ItemStackHandler {
     }
 
     @Override
+    public int getStackLimit(int slot, ItemStack stack) {
+        return super.getStackLimit(slot, stack);
+    }
+
+    @Override
     public boolean isItemValid(int slot, ItemStack stack) {
         return this.canInsert == null || this.canInsert.apply(slot, stack);
     }
