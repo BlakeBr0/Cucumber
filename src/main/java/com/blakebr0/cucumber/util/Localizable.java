@@ -62,6 +62,7 @@ public class Localizable {
         private Object[] args = new Object[0];
         private ChatFormatting color;
         private String prependText = "";
+        private String appendText = "";
 
         public LocalizableBuilder(String key) {
             this.key = key;
@@ -82,11 +83,20 @@ public class Localizable {
             return this;
         }
 
+        public LocalizableBuilder append(String text) {
+            this.appendText = text;
+            return this;
+        }
+
         public MutableComponent build() {
             var component = Component.translatable(this.key, this.args);
 
-            if (!this.prependText.equals("")) {
+            if (!this.prependText.isEmpty()) {
                 component = Component.literal(this.prependText).append(component);
+            }
+
+            if (!this.appendText.isEmpty()) {
+                component.append(this.appendText);
             }
 
             if (this.color != null) {
