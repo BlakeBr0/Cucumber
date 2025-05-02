@@ -3,7 +3,7 @@ plugins {
     id 'eclipse'
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '1.0.14'
+    id 'net.neoforged.moddev' version '2.0.83'
 }
 
 version = '1.21.1-8.0.12'
@@ -48,6 +48,7 @@ neoForge {
             systemProperty 'forge.logging.markers', 'REGISTRIES'
             jvmArgument '-Dmixin.debug.export=true'
             logLevel = org.slf4j.event.Level.DEBUG
+            ideName = "Cucumber - ${it.ideName.get()}"
         }
     }
 
