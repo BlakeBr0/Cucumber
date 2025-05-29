@@ -44,6 +44,6 @@ public class FuelWidget extends AbstractWidget {
     private int getBurnLeftScaled() {
         int i = this.fuelLeft.getAsInt();
         int j = this.fuelValue.getAsInt();
-        return (int) (j != 0 && i != 0 ? (long) i * 13 / j : 0);
+        return (int) (j != 0 && i != 0 ? (long) i * this.height / j : 0);
     }
 }
