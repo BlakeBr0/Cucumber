@@ -10,13 +10,23 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.energy.IEnergyStorage;
 
+import java.util.function.IntSupplier;
+
 public class EnergyBarWidget extends AbstractWidget {
     private static final ResourceLocation WIDGETS_TEXTURE = Cucumber.resource("textures/gui/widgets.png");
-    private final IEnergyStorage energy;
 
+    private final IntSupplier energy;
+    private final IntSupplier capacity;
+
+    @Deprecated(forRemoval = true)
     public EnergyBarWidget(int x, int y, IEnergyStorage energy) {
+        this(x, y, energy::getEnergyStored, energy::getMaxEnergyStored);
+    }
+
+    public EnergyBarWidget(int x, int y, IntSupplier energy, IntSupplier capacity) {
         super(x, y, 14, 78, Component.literal("Energy Bar"));
         this.energy = energy;
+        this.capacity = capacity;
     }
 
     @Override
@@ -28,7 +38,7 @@ public class EnergyBarWidget extends AbstractWidget {
 
         if (mouseX >= this.getX() && mouseY >= this.getY() && mouseX < this.getX() + this.width && mouseY < this.getY() + this.height) {
             var font = Minecraft.getInstance().font;
-            var text = Component.literal(Formatting.number(this.energy.getEnergyStored()).getString() + " / " + Formatting.energy(this.energy.getMaxEnergyStored()).getString());
+            var text = Formatting.number(this.energy.getAsInt()).append(" / ").append(Formatting.energy(this.capacity.getAsInt()));
 
             gfx.renderTooltip(font, text, mouseX, mouseY);
         }
@@ -38,8 +48,8 @@ public class EnergyBarWidget extends AbstractWidget {
     protected void updateWidgetNarration(NarrationElementOutput narration) { }
 
     private int getEnergyBarOffset() {
-        int i = this.energy.getEnergyStored();
-        int j = this.energy.getMaxEnergyStored();
+        int i = this.energy.getAsInt();
+        int j = this.capacity.getAsInt();
         return (int) (j != 0 && i != 0 ? i * (long) this.height / j : 0);
     }
 }
