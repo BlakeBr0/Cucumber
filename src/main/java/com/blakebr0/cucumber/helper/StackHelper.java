@@ -41,10 +41,10 @@ public final class StackHelper {
 	}
 
 	/**
-	 * Checks if stack2 can be added to stack1
-	 * @param stack1 the current stack
-	 * @param stack2 the additional stack
-	 * @return can these stacks be combined
+	 * Checks if stack1 can be added to stack2
+	 * @param stack1 the new stack to add
+	 * @param stack2 the current stack to add to
+	 * @return can combine stacks
 	 */
 	public static boolean canCombineStacks(ItemStack stack1, ItemStack stack2) {
 		if (!stack1.isEmpty() && stack2.isEmpty())
