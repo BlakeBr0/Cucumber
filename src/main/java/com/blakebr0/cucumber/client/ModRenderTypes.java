@@ -24,10 +24,10 @@ public final class ModRenderTypes extends RenderType {
         "cucumber:ghost",
         DefaultVertexFormat.BLOCK, VertexFormat.Mode.QUADS, 2097152, true, false,
         RenderType.CompositeState.builder()
-                .setLightmapState(LIGHTMAP)
-                .setShaderState(RENDERTYPE_SOLID_SHADER)
+                .setShaderState(POSITION_COLOR_TEX_LIGHTMAP_SHADER)
                 .setTextureState(BLOCK_SHEET)
                 .setTransparencyState(GHOST_TRANSPARENCY)
+                .setDepthTestState(NO_DEPTH_TEST)
                 .createCompositeState(false)
     );
 
