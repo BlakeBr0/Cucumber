@@ -35,6 +35,6 @@ public class ProgressArrowWidget extends AbstractWidget {
     private int getProgressScaled() {
         int i = this.progress.getAsInt();
         int j = this.total.getAsInt();
-        return j != 0 ? i * this.width / j : this.width;
+        return j != 0 && i != 0 ? i * this.width / j : 0;
     }
 }
