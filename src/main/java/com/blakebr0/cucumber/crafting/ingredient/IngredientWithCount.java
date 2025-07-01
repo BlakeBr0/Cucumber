@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.init.ModIngredientTypes;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -20,32 +21,48 @@ public class IngredientWithCount implements ICustomIngredient, Predicate<ItemSta
     public static final IngredientWithCount EMPTY = new IngredientWithCount(new Ingredient.ItemValue(ItemStack.EMPTY), 0);
     public static final MapCodec<IngredientWithCount> MAP_CODEC = RecordCodecBuilder.mapCodec(builder ->
             builder.group(
-                    Ingredient.Value.MAP_CODEC.forGetter(ingredient -> ingredient.value),
+                    Ingredient.Value.MAP_CODEC.xmap(v -> new Ingredient.Value[] { v }, v -> v[0]).forGetter(ingredient -> ingredient.values),
                     Codec.INT.fieldOf("count").forGetter(ingredient -> ingredient.count)
             ).apply(builder, IngredientWithCount::new)
     );
     public static final Codec<IngredientWithCount> CODEC = MAP_CODEC.codec();
     public static final StreamCodec<RegistryFriendlyByteBuf, IngredientWithCount> STREAM_CODEC = StreamCodec.of(
             (buffer, ingredient) -> {
-                var stack = ingredient.getItems().findFirst().orElseThrow();
-                ItemStack.STREAM_CODEC.encode(buffer, stack);
-                buffer.writeInt(ingredient.count);
+                var items = ingredient.getItems().toList();
+
+                buffer.writeVarInt(items.size());
+
+                for (var item : items) {
+                    ItemStack.STREAM_CODEC.encode(buffer, item);
+                }
+
+                buffer.writeVarInt(ingredient.count);
             },
             buffer -> {
-                var stack = ItemStack.STREAM_CODEC.decode(buffer);
-                var count = buffer.readInt();
+                var size = buffer.readVarInt();
+                var items = NonNullList.withSize(size, ItemStack.EMPTY);
 
-                return new IngredientWithCount(new Ingredient.ItemValue(stack), count);
+                for (var i = 0; i < size; i++) {
+                    items.set(i, ItemStack.STREAM_CODEC.decode(buffer));
+                }
+
+                var count = buffer.readVarInt();
+
+                return new IngredientWithCount(items.stream().map(Ingredient.ItemValue::new).toArray(Ingredient.Value[]::new), count);
             }
     );
 
-    private final Ingredient.Value value;
+    private final Ingredient.Value[] values;
     private final int count;
 
     private ItemStack[] stacks;
 
     public IngredientWithCount(Ingredient.Value value, int count) {
-        this.value = value;
+        this(new Ingredient.Value[] { value }, count);
+    }
+
+    public IngredientWithCount(Ingredient.Value[] values, int count) {
+        this.values = values;
         this.count = count;
     }
 
@@ -55,7 +72,7 @@ public class IngredientWithCount implements ICustomIngredient, Predicate<ItemSta
             return false;
 
         if (this.stacks == null) {
-            this.stacks = this.value.getItems().toArray(new ItemStack[0]);
+            this.stacks = Arrays.stream(this.values).flatMap(v -> v.getItems().stream()).toArray(ItemStack[]::new);
         }
 
         return stack.getCount() >= this.count && Arrays.stream(this.stacks).anyMatch(s -> s.is(stack.getItem()));
@@ -64,7 +81,7 @@ public class IngredientWithCount implements ICustomIngredient, Predicate<ItemSta
     @Override
     public Stream<ItemStack> getItems() {
         if (this.stacks == null) {
-            this.stacks = this.value.getItems().toArray(new ItemStack[0]);
+            this.stacks = Arrays.stream(this.values).flatMap(v -> v.getItems().stream()).toArray(ItemStack[]::new);
         }
 
         return Stream.of(this.stacks);
