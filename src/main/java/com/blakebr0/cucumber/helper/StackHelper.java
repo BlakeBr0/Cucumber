@@ -29,6 +29,26 @@ public final class StackHelper {
 		return withSize(stack, stack.getCount() - amount, container);
 	}
 
+	/**
+	 * Shrinks the provided ItemStack and tries to add any container item to the result if possible
+	 * @param stack the initial ItemStack
+	 * @param amount the amount to shrink
+	 * @return the shrunk ItemStack
+	 */
+	public static ItemStack shrinkAndRetainContainer(ItemStack stack, int amount) {
+		if (stack.isEmpty())
+			return ItemStack.EMPTY;
+
+		var remaining = stack.getCraftingRemainingItem();
+		var result = shrink(stack, amount, false);
+
+		if (!remaining.isEmpty() && areStacksEqual(remaining, result)) {
+			result.grow(Math.min(remaining.getCount(), result.getMaxStackSize()));
+		}
+
+		return result;
+	}
+
 	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2) {
 		if (stack1.isEmpty() && stack2.isEmpty())
 			return true;
