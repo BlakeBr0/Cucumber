@@ -27,6 +27,7 @@ public class EnergyBarWidget extends AbstractWidget {
         super(x, y, 14, 78, Component.literal("Energy Bar"));
         this.energy = energy;
         this.capacity = capacity;
+        this.active = false; // not a clickable element
     }
 
     @Override

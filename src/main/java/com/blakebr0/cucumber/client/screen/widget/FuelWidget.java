@@ -21,6 +21,7 @@ public class FuelWidget extends AbstractWidget {
         super(x, y, 14, 14, Component.literal("Fuel"));
         this.fuelValue = fuelValue;
         this.fuelLeft = fuelLeft;
+        this.active = false; // not a clickable element
     }
 
     @Override

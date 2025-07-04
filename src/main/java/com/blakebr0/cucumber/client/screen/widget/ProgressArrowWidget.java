@@ -19,6 +19,7 @@ public class ProgressArrowWidget extends AbstractWidget {
         super(x, y, 24, 16, Component.literal("Progress Arrow"));
         this.progress = progress;
         this.total = total;
+        this.active = false; // not a clickable element
     }
 
     @Override
