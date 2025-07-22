@@ -49,6 +49,24 @@ public final class StackHelper {
 		return result;
 	}
 
+	/**
+	 * Inserts the maximum amount of stack2 into stack1 and returns the remaining item
+	 * @param stack1 the current ItemStack
+	 * @param stack2 the ItemStack to insert
+	 * @return an {@link InsertResult} with the result ItemStack and the remaining ItemStack
+	 */
+	public static InsertResult insert(ItemStack stack1, ItemStack stack2) {
+		if (stack1.isEmpty())
+			return new InsertResult(stack2, ItemStack.EMPTY);
+
+		if (!areStacksEqual(stack1, stack2))
+			return new InsertResult(stack1, stack2);
+
+		var amount = Math.min(stack2.getCount(), stack1.getMaxStackSize() - stack1.getCount());
+
+		return new InsertResult(grow(stack1, amount), shrink(stack2, amount, false));
+	}
+
 	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2) {
 		if (stack1.isEmpty() && stack2.isEmpty())
 			return true;
@@ -85,4 +103,6 @@ public final class StackHelper {
 
 		return grow(stack1, stack2.getCount());
 	}
+
+	public record InsertResult(ItemStack result, ItemStack remainder) {}
 }
