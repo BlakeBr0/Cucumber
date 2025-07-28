@@ -27,4 +27,12 @@ public class ReloadableServerResourcesMixin {
     ) {
         RecipeHelper.setRecipeManager(this.recipes);
     }
+
+    /**
+     * At this point recipes should be loaded in a finalized state and should be usable for accessing recipes.
+     */
+    @Inject(at = @At("RETURN"), method = "updateRegistryTags()V")
+    public void cucumber$updateRegistryTags(CallbackInfo ci) {
+        RecipeHelper.fireRecipeManagerLoadedEvent(this.recipes);
+    }
 }
