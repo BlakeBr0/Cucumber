@@ -8,10 +8,9 @@ license="MIT"
     version="${file.jarVersion}"
     # logoFile="examplemod.png"
     displayURL="https://blakesmods.com/cucumber"
-    # credits="Thanks for this example mod goes to Java"
-    authors="BlakeBr0"
     displayName="Cucumber Library"
-    # updateJSONURL="http://myurl.me/"
+    updateJSONURL="https://api.blakesmods.com/v2/mods/cucumber/1.20/updates"
+    authors="BlakeBr0"
     description='''
     A library of shared code that all of my mods depend on.
     '''
