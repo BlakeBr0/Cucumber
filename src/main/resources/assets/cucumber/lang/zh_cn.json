@@ -10,6 +10,7 @@
   "tooltip.cucumber.failed_to_load_nbt": "NBT加载失败",
   "tooltip.cucumber.block_tags": "方块标签:",
   "tooltip.cucumber.item_tags": "物品标签:",
+  "tooltip.cucumber.fluid_tags": "流体标签:",
   "tooltip.cucumber.not_yet_implemented": "尚未实现",
 
   "message.cucumber.filled_energy": "这个 %s 已经取走了你的能量！",
