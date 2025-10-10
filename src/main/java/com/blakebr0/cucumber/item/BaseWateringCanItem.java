@@ -214,7 +214,7 @@ public class BaseWateringCanItem extends BaseItem {
                     var plantBlock = state.getBlock();
 
                     if (plantBlock instanceof BonemealableBlock || plantBlock instanceof IPlantable || plantBlock == Blocks.MYCELIUM || plantBlock == Blocks.CHORUS_FLOWER) {
-                        state.randomTick((ServerLevel) level, aoePos, random);
+                        state.randomTick((ServerLevel) level, aoePos.immutable(), random);
                     }
                 });
 
