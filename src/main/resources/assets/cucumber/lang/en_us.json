@@ -12,6 +12,7 @@
   "tooltip.cucumber.hold_alt_for_data_components": "Hold ALT to see Data Components",
   "tooltip.cucumber.block_tags": "Block Tags:",
   "tooltip.cucumber.item_tags": "Item Tags:",
+  "tooltip.cucumber.fluid_tags": "Fluid Tags:",
   "tooltip.cucumber.not_yet_implemented": "Not Yet Implemented",
 
   "message.cucumber.filled_energy": "This %s has taken your energy!",
