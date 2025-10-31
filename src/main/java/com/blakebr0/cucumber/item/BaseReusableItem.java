@@ -14,7 +14,7 @@ import java.util.function.Function;
 public class BaseReusableItem extends BaseItem {
 	private static final DeferredHolder<Enchantment, Enchantment> UNBREAKING_ENCHANTMENT = DeferredHolder.create(Enchantments.UNBREAKING);
 
-	private final boolean damage;
+	private final boolean unbreakable;
 	private final boolean tooltip;
 
 	public BaseReusableItem(int uses) {
@@ -35,7 +35,7 @@ public class BaseReusableItem extends BaseItem {
 
 	public BaseReusableItem(int uses, boolean tooltip, Function<Properties, Properties> properties) {
 		super(properties.compose(p -> p.durability(Math.max(uses - 1, 0)).setNoRepair()));
-		this.damage = uses > 0;
+		this.unbreakable = uses < 1;
 		this.tooltip = tooltip;
 	}
 	
@@ -48,17 +48,18 @@ public class BaseReusableItem extends BaseItem {
 	public ItemStack getCraftingRemainingItem(ItemStack stack) {
 		var copy = stack.copyWithCount(1);
 
-		if (!this.damage)
+		if (this.unbreakable)
 			return copy;
 
 		var unbreaking = stack.getEnchantmentLevel(UNBREAKING_ENCHANTMENT);
 		if (Math.random() > (1.0F / (unbreaking + 1)))
 			return copy;
 
-		copy.setDamageValue(stack.getDamageValue() + 1);
+        var newDamage = stack.getDamageValue() + 1;
+        if (newDamage > stack.getMaxDamage())
+            return ItemStack.EMPTY;
 
-		if (copy.getDamageValue() >= stack.getMaxDamage())
-			return ItemStack.EMPTY;
+		copy.setDamageValue(newDamage);
 
 		return copy;
 	}
@@ -66,7 +67,7 @@ public class BaseReusableItem extends BaseItem {
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		if (this.tooltip) {
-			if (this.damage) {
+			if (!this.unbreakable) {
 				var damage = stack.getMaxDamage() - stack.getDamageValue() + 1;
 
 				if (damage == 1) {
