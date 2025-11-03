@@ -38,7 +38,7 @@ public final class TagTooltipHandler {
             var fluidTags = FluidHelper.getFluidTags(stack).values().stream()
                     .flatMap(List::stream)
                     .distinct()
-                    .sorted(Comparator.comparing(ResourceLocation::toString)) // 排序
+                    .sorted(Comparator.comparing(ResourceLocation::toString))
                     .toList();
 
             if (!blockTags.isEmpty() || !itemTags.isEmpty() || !fluidTags.isEmpty()) {
