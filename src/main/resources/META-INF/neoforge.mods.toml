@@ -1,5 +1,3 @@
-modLoader="javafml"
-loaderVersion="[4,)"
 license="MIT"
 
 [[mods]]
@@ -11,7 +9,7 @@ license="MIT"
     # credits="Thanks for this example mod goes to Java"
     authors="BlakeBr0"
     displayName="Cucumber Library"
-    updateJSONURL="https://api.blakesmods.com/v2/mods/cucumber/1.21/updates"
+    updateJSONURL="https://api.blakesmods.com/v2/mods/cucumber/26.1/updates"
     description='''
     A library of shared code that all of my mods depend on.
     '''
@@ -22,12 +20,12 @@ license="MIT"
     [[dependencies.cucumber]]
         modId="neoforge"
         mandatory=true
-        versionRange="[21.0.0-beta,)"
+        versionRange="[26.1.0.0-beta,)"
         ordering="NONE"
         side="BOTH"
     [[dependencies.cucumber]]
         modId="minecraft"
         mandatory=true
-        versionRange="[1.21,1.21.1)"
+        versionRange="[26.1)"
         ordering="NONE"
         side="BOTH"
