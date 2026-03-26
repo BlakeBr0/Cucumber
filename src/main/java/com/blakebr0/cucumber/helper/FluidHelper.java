@@ -40,8 +40,9 @@ public final class FluidHelper {
 
 			var tank = ItemAccess.forStack(filledBucket).getCapability(Capabilities.Fluid.ITEM);
 			if (tank != null) {
-				try (var transaction = Transaction.openRoot()) {
-					tank.insert(FluidResource.of(fluid), capacity, transaction);
+				try (var tx = Transaction.openRoot()) {
+					tank.insert(FluidResource.of(fluid), capacity, tx);
+					tx.commit();
 				}
 			}
 

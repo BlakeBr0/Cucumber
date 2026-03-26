@@ -31,8 +31,9 @@ public final class ModCommands {
 
                     var energy = level.getCapability(Capabilities.Energy.BLOCK, pos, trace.getDirection());
                     if (energy != null) {
-                        try (var transaction = Transaction.openRoot()) {
-                            energy.insert(Integer.MAX_VALUE, transaction);
+                        try (var tx = Transaction.openRoot()) {
+                            energy.insert(Integer.MAX_VALUE, tx);
+                            tx.commit();
                             source.sendSuccess(() -> Component.translatable("message.cucumber.filled_energy", "block"), false);
                         }
                     } else {
@@ -50,8 +51,9 @@ public final class ModCommands {
                         var energy = ItemAccess.forStack(stack).getCapability(Capabilities.Energy.ITEM);
 
                         if (energy != null) {
-                            try (var transaction = Transaction.openRoot()) {
-                                energy.insert(Integer.MAX_VALUE, transaction);
+                            try (var tx = Transaction.openRoot()) {
+                                energy.insert(Integer.MAX_VALUE, tx);
+                                tx.commit();
                                 source.sendSuccess(() -> Component.translatable("message.cucumber.filled_energy", "item"), false);
                             }
                         } else {
