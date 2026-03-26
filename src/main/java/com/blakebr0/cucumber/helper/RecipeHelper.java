@@ -11,49 +11,19 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.neoforge.common.NeoForge;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public final class RecipeHelper {
-    @Nullable
-    private static WeakReference<RecipeManager> recipeManager;
-
-    public static RecipeManager getRecipeManager() throws IllegalStateException {
-        if (recipeManager == null || recipeManager.get() == null) {
-            throw new IllegalStateException("Recipe Manager is not available");
-        }
-
-        return recipeManager.get();
-    }
-
-    @ApiStatus.Internal
-    public static void setRecipeManager(RecipeManager manager) {
-        recipeManager = new WeakReference<>(manager);
-    }
-
-    public static <I extends RecipeInput, T extends Recipe<I>> Collection<RecipeHolder<T>> byType(RecipeType<T> type) {
-        return byType(getRecipeManager(), type);
-    }
-
     public static <I extends RecipeInput, T extends Recipe<I>> Collection<RecipeHolder<T>> byType(RecipeManager manager, RecipeType<T> type) {
         return manager.recipeMap().byType(type);
     }
 
-    public static <I extends RecipeInput, T extends Recipe<I>> List<T> byTypeValues(RecipeType<T> type) {
-        return byTypeValues(getRecipeManager(), type);
-    }
-
     public static <I extends RecipeInput, T extends Recipe<I>> List<T> byTypeValues(RecipeManager manager, RecipeType<T> type) {
         return byType(manager, type).stream().map(RecipeHolder::value).toList();
-    }
-
-    public static Collection<RecipeHolder<?>> getAllRecipes() {
-        return getRecipeManager().getRecipes();
     }
 
     @ApiStatus.Internal
