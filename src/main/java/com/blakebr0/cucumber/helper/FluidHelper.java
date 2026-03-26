@@ -1,14 +1,16 @@
 package com.blakebr0.cucumber.helper;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.fluid.FluidResource;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -17,8 +19,14 @@ import java.util.Map;
 
 public final class FluidHelper {
 	public static FluidStack getFluidFromStack(ItemStack stack) {
-		var handler = stack.getCapability(Capabilities.FluidHandler.ITEM);
-		return handler == null ? FluidStack.EMPTY : handler.getFluidInTank(0);
+		var handler = ItemAccess.forStack(stack).getCapability(Capabilities.Fluid.ITEM);
+		if (handler == null) {
+			return FluidStack.EMPTY;
+		}
+
+		var amount = handler.getAmountAsInt(0);
+
+		return handler.getResource(0).toStack(amount);
 	}
 
 	public static int getFluidAmount(ItemStack stack) {
@@ -29,11 +37,12 @@ public final class FluidHelper {
 	public static ItemStack getFilledBucket(FluidStack fluid, Item bucket, int capacity) {
 		if (BuiltInRegistries.FLUID.containsValue(fluid.getFluid())) {
 			var filledBucket = new ItemStack(bucket);
-			var fluidContents = fluid.copyWithAmount(capacity);
 
-			var tank = filledBucket.getCapability(Capabilities.FluidHandler.ITEM);
+			var tank = ItemAccess.forStack(filledBucket).getCapability(Capabilities.Fluid.ITEM);
 			if (tank != null) {
-				tank.fill(fluidContents, IFluidHandler.FluidAction.EXECUTE);
+				try (var transaction = Transaction.openRoot()) {
+					tank.insert(FluidResource.of(fluid), capacity, transaction);
+				}
 			}
 
 			return filledBucket;
@@ -46,26 +55,26 @@ public final class FluidHelper {
 		return i - (i % 1000);
 	}
 
-	public static Map<Fluid, List<ResourceLocation>> getFluidTags(ItemStack stack) {
-		var fluidHandler = stack.getCapability(Capabilities.FluidHandler.ITEM);
+	public static Map<Fluid, List<Identifier>> getFluidTags(ItemStack stack) {
+		var fluidHandler = ItemAccess.forStack(stack).getCapability(Capabilities.Fluid.ITEM);
 		if (fluidHandler == null) {
 			return Map.of();
 		}
 
-		var fluidTagsMap = new LinkedHashMap<Fluid, List<ResourceLocation>>();
-		int tanks = fluidHandler.getTanks();
+		var fluidTagsMap = new LinkedHashMap<Fluid, List<Identifier>>();
+		int tanks = fluidHandler.size();
 
 		for (int i = 0; i < tanks; i++) {
-			var fluidStack = fluidHandler.getFluidInTank(i);
+			var fluidStack = fluidHandler.getResource(i);
 			if (!fluidStack.isEmpty()) {
 				var fluid = fluidStack.getFluid();
 
 				fluidTagsMap.computeIfAbsent(fluid, f ->
 						BuiltInRegistries.FLUID.getResourceKey(f)
-						.flatMap(BuiltInRegistries.FLUID::getHolder)
+						.flatMap(BuiltInRegistries.FLUID::get)
 						.map(holder -> holder.tags()
 								.map(TagKey::location)
-								.sorted(Comparator.comparing(ResourceLocation::toString))
+								.sorted(Comparator.comparing(Identifier::toString))
 								.toList())
 						.orElse(List.of())
 				);

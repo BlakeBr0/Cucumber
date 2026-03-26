@@ -67,7 +67,7 @@ public final class BlockHelper {
             level.levelEvent(2001, pos, Block.getId(state));
         }
 
-        var destroyed = destroyBlock(state, level, player, pos);
+        var destroyed = destroyBlock(state, level, player, stack, pos);
 
         if (player.isCreative())
             return true;
@@ -82,7 +82,7 @@ public final class BlockHelper {
         var exp = state.getExpDrop(level, pos, tile, player, stack);
 
         if (destroyed && exp > 0) {
-            block.popExperience(player.serverLevel(), pos, exp);
+            block.popExperience(player.level(), pos, exp);
         }
 
         return true;
@@ -97,9 +97,9 @@ public final class BlockHelper {
         return false;
     }
 
-    public static boolean destroyBlock(BlockState state, Level level, Player player, BlockPos pos) {
+    public static boolean destroyBlock(BlockState state, Level level, Player player, ItemStack stack, BlockPos pos) {
         var canHarvest = !player.isCreative() && state.canHarvestBlock(level, pos, player);
-        var destroyed = state.onDestroyedByPlayer(level, pos, player, canHarvest, level.getFluidState(pos));
+        var destroyed = state.onDestroyedByPlayer(level, pos, player, stack, canHarvest, level.getFluidState(pos));
 
         if (destroyed) {
             state.getBlock().destroy(level, pos, state);
@@ -116,14 +116,14 @@ public final class BlockHelper {
             var inventory = tile.getInventory();
             float f = 0.0F;
 
-            for (int i = 0; i < inventory.getSlots(); ++i) {
-                var stack = inventory.getStackInSlot(i);
+            for (int i = 0; i < inventory.size(); ++i) {
+                var stack = inventory.getResource(i).toStack();
                 if (!stack.isEmpty()) {
                     f += (float) stack.getCount() / (float) inventory.getStackLimit(i, stack);
                 }
             }
 
-            f /= (float) inventory.getSlots();
+            f /= (float) inventory.size();
             return Mth.lerpDiscrete(f, 0, 15);
         }
 

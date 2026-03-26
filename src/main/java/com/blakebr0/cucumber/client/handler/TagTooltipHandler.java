@@ -5,9 +5,8 @@ import com.blakebr0.cucumber.helper.FluidHelper;
 import com.blakebr0.cucumber.lib.Tooltips;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -28,23 +27,24 @@ public final class TagTooltipHandler {
             var stack = event.getItemStack();
             var block = Block.byItem(stack.getItem());
 
-            var blockTags = block == Blocks.AIR ? List.of() : block.defaultBlockState().getTags()
+            var blockTags = block == Blocks.AIR ? List.of() : block.defaultBlockState().tags()
                     .map(TagKey::location)
                     .toList();
-            var itemTags = stack.getTags()
+            var itemTags = stack.tags()
                     .map(TagKey::location)
                     .toList();
 
             var fluidTags = FluidHelper.getFluidTags(stack).values().stream()
                     .flatMap(List::stream)
                     .distinct()
-                    .sorted(Comparator.comparing(ResourceLocation::toString))
+                    .sorted(Comparator.comparing(Identifier::toString))
                     .toList();
 
             if (!blockTags.isEmpty() || !itemTags.isEmpty() || !fluidTags.isEmpty()) {
                 var tooltip = event.getToolTip();
+                var flags = event.getFlags();
 
-                if (Screen.hasControlDown()) {
+                if (flags.hasControlDown()) {
                     if (!blockTags.isEmpty()) {
                         tooltip.add(Tooltips.BLOCK_TAGS.build());
 

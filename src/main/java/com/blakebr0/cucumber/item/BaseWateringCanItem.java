@@ -13,21 +13,21 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.FarmBlock;
+import net.minecraft.world.level.block.FarmlandBlock;
 import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.common.util.FakePlayer;
 
-import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class BaseWateringCanItem extends BaseItem {
@@ -50,17 +50,17 @@ public class BaseWateringCanItem extends BaseItem {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         var stack = player.getItemInHand(hand);
 
         if (isFilled(stack)) {
-            return new InteractionResultHolder<>(InteractionResult.PASS, stack);
+            return InteractionResult.PASS;
         }
 
         var trace = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
 
         if (trace.getType() != HitResult.Type.BLOCK) {
-            return new InteractionResultHolder<>(InteractionResult.PASS, stack);
+            return InteractionResult.PASS;
         }
 
         var pos = trace.getBlockPos();
@@ -74,11 +74,11 @@ public class BaseWateringCanItem extends BaseItem {
 
                 player.playSound(SoundEvents.BUCKET_FILL, 1.0F, 1.0F);
 
-                return new InteractionResultHolder<>(InteractionResult.SUCCESS, stack);
+                return InteractionResult.SUCCESS;
             }
         }
 
-        return new InteractionResultHolder<>(InteractionResult.PASS, stack);
+        return InteractionResult.PASS;
     }
 
     @Override
@@ -134,11 +134,11 @@ public class BaseWateringCanItem extends BaseItem {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
         if (isFilled(stack)) {
-            tooltip.add(Tooltips.FILLED.build());
+            builder.accept(Tooltips.FILLED.build());
         } else {
-            tooltip.add(Tooltips.EMPTY.build());
+            builder.accept(Tooltips.EMPTY.build());
         }
     }
 
@@ -165,10 +165,9 @@ public class BaseWateringCanItem extends BaseItem {
 
         if (!level.isClientSide()) {
             var cooldowns = player.getCooldowns();
-            var item = stack.getItem();
 
-            if (!cooldowns.isOnCooldown(item)) {
-                cooldowns.addCooldown(item, getThrottleTicks(player));
+            if (!cooldowns.isOnCooldown(stack)) {
+                cooldowns.addCooldown(stack, getThrottleTicks(player));
             } else {
                 return InteractionResult.FAIL;
             }
@@ -178,10 +177,10 @@ public class BaseWateringCanItem extends BaseItem {
 
         BlockPos.betweenClosedStream(pos.offset(-range, -range, -range), pos.offset(range, range, range)).forEach(aoePos -> {
             var aoeState = level.getBlockState(aoePos);
-            if (aoeState.getBlock() instanceof FarmBlock) {
-                int moisture = aoeState.getValue(FarmBlock.MOISTURE);
+            if (aoeState.getBlock() instanceof FarmlandBlock) {
+                int moisture = aoeState.getValue(FarmlandBlock.MOISTURE);
                 if (moisture < 7) {
-                    level.setBlock(aoePos, aoeState.setValue(FarmBlock.MOISTURE, 7), 3);
+                    level.setBlock(aoePos, aoeState.setValue(FarmlandBlock.MOISTURE, 7), 3);
                 }
             }
         });
@@ -195,7 +194,7 @@ public class BaseWateringCanItem extends BaseItem {
                 double d2 = pos.offset(x, 0, z).getZ() + random.nextFloat();
 
                 var state = level.getBlockState(pos);
-                if (state.canOcclude() || state.getBlock() instanceof FarmBlock)
+                if (state.canOcclude() || state.getBlock() instanceof FarmlandBlock)
                     d1 += 0.3D;
 
                 level.addParticle(ParticleTypes.RAIN, d0, d1, d2, 0.0D, 0.0D, 0.0D);

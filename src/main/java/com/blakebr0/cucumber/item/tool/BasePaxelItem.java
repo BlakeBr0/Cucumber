@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.item.tool;
 
+import com.blakebr0.cucumber.item.BaseItem;
 import com.blakebr0.cucumber.lib.ModTags;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;
@@ -7,9 +8,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.DiggerItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ItemInstance;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -19,23 +19,21 @@ import net.neoforged.neoforge.common.ItemAbility;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class BasePaxelItem extends DiggerItem {
-    public BasePaxelItem(Tier tier) {
-        this(tier, p -> p);
+public class BasePaxelItem extends BaseItem {
+    public BasePaxelItem(ToolMaterial material) {
+        this(material, Function.identity());
     }
 
-    public BasePaxelItem(Tier tier, Function<Properties, Properties> properties) {
-        super(tier, ModTags.MINEABLE_WITH_PAXEL, properties.apply(new Properties()
-                .attributes(createAttributes(tier, 4.0F, -3.2F))
-                .durability((int) (tier.getUses() * 1.5))
+    public BasePaxelItem(ToolMaterial material, Function<Properties, Properties> properties) {
+        super(properties.compose(p -> p
+                .tool(material, ModTags.MINEABLE_WITH_PAXEL, 4.0F, -3.2F, 5.0F)
+                .durability((int) (material.durability() * 1.5))
         ));
     }
 
     @Override
-    public boolean canPerformAction(ItemStack stack, ItemAbility ability) {
-        return ItemAbilities.DEFAULT_AXE_ACTIONS.contains(ability)
-                || ItemAbilities.DEFAULT_PICKAXE_ACTIONS.contains(ability)
-                || ItemAbilities.DEFAULT_SHOVEL_ACTIONS.contains(ability);
+    public boolean canPerformAction(ItemInstance stack, ItemAbility ability) {
+        return ItemAbilities.DEFAULT_AXE_ACTIONS.contains(ability) || ItemAbilities.DEFAULT_SHOVEL_ACTIONS.contains(ability);
     }
 
     @Override
@@ -89,7 +87,7 @@ public class BasePaxelItem extends DiggerItem {
                 stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
             }
 
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;
@@ -127,7 +125,7 @@ public class BasePaxelItem extends DiggerItem {
                 }
             }
 
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;

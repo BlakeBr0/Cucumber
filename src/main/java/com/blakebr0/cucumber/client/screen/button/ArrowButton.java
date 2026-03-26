@@ -3,10 +3,10 @@ package com.blakebr0.cucumber.client.screen.button;
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.util.Localizable;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class ArrowButton extends IconButton {
-	private static final ResourceLocation TEXTURE = Cucumber.resource("textures/gui/icons.png");
+	private static final Identifier TEXTURE = Cucumber.resource("textures/gui/icons.png");
 	
 	public ArrowButton(int x, int y, OnPress onPress) {
 		this(x, y, Localizable.of("tooltip.cucumber.back").build(), true, onPress);

@@ -43,7 +43,7 @@ public final class ShapedRecipePatternCodecs {
     // copy of ShapedRecipePattern.Data#MAP_CODEC that uses the modified PATTERN_CODEC
     private static final MapCodec<ShapedRecipePattern.Data> DATA_MAP_CODEC = RecordCodecBuilder.mapCodec((builder) ->
             builder.group(
-                    ExtraCodecs.strictUnboundedMap(SYMBOL_CODEC, Ingredient.CODEC_NONEMPTY).fieldOf("key").forGetter(ShapedRecipePattern.Data::key),
+                    ExtraCodecs.strictUnboundedMap(SYMBOL_CODEC, Ingredient.CODEC).fieldOf("key").forGetter(ShapedRecipePattern.Data::key),
                     PATTERN_CODEC.fieldOf("pattern").forGetter(ShapedRecipePattern.Data::pattern)
             ).apply(builder, ShapedRecipePattern.Data::new)
     );

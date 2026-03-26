@@ -20,7 +20,7 @@ public class WateringCanSound extends AbstractTickableSoundInstance {
         super(ModSounds.WATERING_CAN.get(), SoundSource.PLAYERS, player.getRandom());
         this.player = player;
         this.useItem = player.getUseItem();
-        this.selectedItem = player.getInventory().getSelected();
+        this.selectedItem = player.getInventory().getSelectedItem();
         this.looping = true;
         this.volume = 0.5F;
 
@@ -63,7 +63,7 @@ public class WateringCanSound extends AbstractTickableSoundInstance {
         }
 
         // in the case of auto-watering, we can check when the selected item changes to know if the sound should stop
-        if (this.player.getInventory().getSelected() != this.selectedItem) {
+        if (this.player.getInventory().getSelectedItem() != this.selectedItem) {
             synchronized (PLAYING_FOR) {
                 PLAYING_FOR.remove(this.player.getId());
                 this.stop();

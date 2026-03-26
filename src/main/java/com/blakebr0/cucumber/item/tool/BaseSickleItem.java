@@ -1,39 +1,41 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.helper.BlockHelper;
+import com.blakebr0.cucumber.item.BaseItem;
 import com.blakebr0.cucumber.lib.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DiggerItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Function;
 
-public class BaseSickleItem extends DiggerItem {
+public class BaseSickleItem extends BaseItem {
     private final float attackDamage;
     private final float attackSpeed;
+    private final float miningSpeed;
     private final int range;
 
-    public BaseSickleItem(Tier tier, int range) {
-        this(tier, range, p -> p);
+    public BaseSickleItem(ToolMaterial material, int range) {
+        this(material, range, Function.identity());
     }
 
-    public BaseSickleItem(Tier tier, int range, Function<Properties, Properties> properties) {
-        super(tier, ModTags.MINEABLE_WITH_SICKLE, properties.apply(new Properties().attributes(createAttributes(tier, 4.0F, -3.0F))));
+    public BaseSickleItem(ToolMaterial material, int range, Function<Properties, Properties> properties) {
+        super(properties.compose(p -> p.tool(material, ModTags.MINEABLE_WITH_SICKLE, 4.0F, -3.0F, 0F)));
         this.attackDamage = 4.0F;
         this.attackSpeed = -3.0F;
+        this.miningSpeed = material.speed();
         this.range = range;
     }
 
     @Override
     public float getDestroySpeed(ItemStack stack, BlockState state) {
-        return state.is(ModTags.MINEABLE_WITH_SICKLE) ? this.getTier().getSpeed() / 2 : super.getDestroySpeed(stack, state);
+        return state.is(ModTags.MINEABLE_WITH_SICKLE) ? this.miningSpeed / 2 : super.getDestroySpeed(stack, state);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class BaseSickleItem extends DiggerItem {
     }
 
     public float getAttackDamage() {
-        return this.attackDamage + this.getTier().getAttackDamageBonus();
+        return this.attackDamage;
     }
 
     public float getAttackSpeed() {

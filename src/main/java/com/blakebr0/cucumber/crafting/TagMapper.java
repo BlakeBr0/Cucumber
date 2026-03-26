@@ -8,8 +8,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +27,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.StreamSupport;
 
 public class TagMapper {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
@@ -63,12 +65,12 @@ public class TagMapper {
 
                         TAG_TO_ITEM_MAP.put(tagId, itemId);
 
-                        // if auto refresh tag entries is enabled, we check any entries that contain an item ID to see
-                        // if they are still present. if not we just refresh the entry
+                        // if 'auto refresh tag entries' is enabled, we check any entries that contain an item ID to see
+                        // if they are still present. if not, we just refresh the entry
                         if (ModConfigs.AUTO_REFRESH_TAG_ENTRIES.get()) {
                             if (!itemId.isEmpty() && !"null".equalsIgnoreCase(itemId)) {
-                                var item = BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemId));
-                                if (item == null || item == Items.AIR) {
+                                var item = BuiltInRegistries.ITEM.get(Identifier.parse(itemId));
+                                if (item.isEmpty() || !item.get().isBound()) {
                                     addTagToFile(tagId, json, file, false);
                                 }
                             }
@@ -103,7 +105,7 @@ public class TagMapper {
 
         if (TAG_TO_ITEM_MAP.containsKey(tagId)) {
             var id = TAG_TO_ITEM_MAP.get(tagId);
-            return BuiltInRegistries.ITEM.get(ResourceLocation.parse(id));
+            return BuiltInRegistries.ITEM.get(Identifier.parse(id)).map(Holder.Reference::value).orElse(Items.AIR);
         } else {
             var file = FMLPaths.CONFIGDIR.get().resolve("cucumber-tags.json").toFile();
             if (!file.exists()) {
@@ -131,7 +133,7 @@ public class TagMapper {
 
                         TAG_TO_ITEM_MAP.put(tagId, itemId);
 
-                        return BuiltInRegistries.ITEM.get(ResourceLocation.parse(itemId));
+                        return BuiltInRegistries.ITEM.get(Identifier.parse(itemId)).map(Holder.Reference::value).orElse(Items.AIR);
                     }
 
                     return addTagToFile(tagId, json, file);
@@ -153,20 +155,20 @@ public class TagMapper {
 
     private static Item addTagToFile(String tagId, JsonObject json, File file, boolean save) {
         var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
-        var key = ItemTags.create(ResourceLocation.parse(tagId));
+        var key = ItemTags.create(Identifier.parse(tagId));
 
-        var item = BuiltInRegistries.ITEM.getTag(key).stream().filter(t -> t.size() > 0).min((item1, item2) -> {
-            var id1 = BuiltInRegistries.ITEM.getKey(item1.get(0).value());
+        var item = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(key).spliterator(), false).filter(Holder::isBound).min((item1, item2) -> {
+            var id1 = BuiltInRegistries.ITEM.getKey(item1.value());
             var index1 = mods.indexOf(id1.getNamespace());
 
-            var id2 = BuiltInRegistries.ITEM.getKey(item2.get(0).value());
+            var id2 = BuiltInRegistries.ITEM.getKey(item2.value());
             var index2 = mods.indexOf(id2.getNamespace());
 
             return index1 > index2 ? 1 : index1 == -1 ? 0 : -1;
-        }).map(v -> v.get(0).value()).orElse(Items.AIR);
+        }).map(Holder::value).orElse(Items.AIR);
 
         var itemId = "null";
-        if (item != Items.AIR && BuiltInRegistries.ITEM.containsValue(item)) {
+        if (BuiltInRegistries.ITEM.containsValue(item)) {
             itemId = BuiltInRegistries.ITEM.getKey(item).toString();
         }
 

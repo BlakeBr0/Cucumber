@@ -2,6 +2,7 @@ package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.event.ScytheHarvestCropEvent;
 import com.blakebr0.cucumber.helper.CropHelper;
+import com.blakebr0.cucumber.item.BaseItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -18,8 +19,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
@@ -35,18 +35,18 @@ import net.neoforged.neoforge.event.level.BlockEvent;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
 
-public class BaseScytheItem extends SwordItem {
+public class BaseScytheItem extends BaseItem {
     private final float attackDamage;
     private final float attackSpeed;
     private final int range;
 
-    public BaseScytheItem(Tier tier, int range) {
-        this(tier, range, p -> p);
+    public BaseScytheItem(ToolMaterial material, int range) {
+        this(material, range, p -> p);
     }
 
-    public BaseScytheItem(Tier tier, int range, Function<Properties, Properties> properties) {
-        super(tier, properties.apply(new Properties().attributes(createAttributes(tier, 4, -2.8F))));
-        this.attackDamage = 4F;
+    public BaseScytheItem(ToolMaterial material, int range, Function<Properties, Properties> properties) {
+        super(properties.compose(p -> p.sword(material, 4, -2.8F)));
+        this.attackDamage = 4F + material.attackDamageBonus();
         this.attackSpeed = -2.8F;
         this.range = range;
     }
@@ -127,14 +127,15 @@ public class BaseScytheItem extends SwordItem {
 
             level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.PLAYER_ATTACK_SWEEP, player.getSoundSource(), 1.0F, 1.0F);
 
-            player.sweepAttack();
+            // TODO
+//            player.sweepAttack();
         }
 
         return super.onLeftClickEntity(stack, player, entity);
     }
 
     public float getAttackDamage() {
-        return this.attackDamage + this.getTier().getAttackDamageBonus();
+        return this.attackDamage;
     }
 
     public float getAttackSpeed() {

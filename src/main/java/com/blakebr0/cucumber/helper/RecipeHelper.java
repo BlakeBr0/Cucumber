@@ -4,9 +4,6 @@ import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.event.RecipeManagerLoadedEvent;
 import com.blakebr0.cucumber.event.RecipeManagerLoadingEvent;
 import com.google.common.base.Stopwatch;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableMultimap;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
@@ -44,7 +41,7 @@ public final class RecipeHelper {
     }
 
     public static <I extends RecipeInput, T extends Recipe<I>> Collection<RecipeHolder<T>> byType(RecipeManager manager, RecipeType<T> type) {
-        return manager.byType(type);
+        return manager.recipeMap().byType(type);
     }
 
     public static <I extends RecipeInput, T extends Recipe<I>> List<T> byTypeValues(RecipeType<T> type) {
@@ -60,8 +57,7 @@ public final class RecipeHelper {
     }
 
     @ApiStatus.Internal
-    public static void fireRecipeManagerLoadingEvent(RecipeManager manager, ImmutableMultimap.Builder<RecipeType<?>, RecipeHolder<?>> map,
-                                                     ImmutableMap.Builder<ResourceLocation, RecipeHolder<?>> builder) {
+    public static void fireRecipeManagerLoadingEvent(RecipeManager manager, List<RecipeHolder<?>> output) {
         var stopwatch = Stopwatch.createStarted();
         var recipes = new ArrayList<RecipeHolder<?>>();
 
@@ -71,10 +67,7 @@ public final class RecipeHelper {
             Cucumber.LOGGER.error("An error occurred while firing RecipeManagerLoadingEvent", e);
         }
 
-        for (var recipe : recipes) {
-            map.put(recipe.value().getType(), recipe);
-            builder.put(recipe.id(), recipe);
-        }
+        output.addAll(recipes);
 
         Cucumber.LOGGER.info("Registered {} recipes in {} ms", recipes.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
     }

@@ -1,30 +1,30 @@
 package com.blakebr0.cucumber.item.tool;
 
-import net.minecraft.world.item.SwordItem;
-import net.minecraft.world.item.Tier;
+import com.blakebr0.cucumber.item.BaseItem;
+import net.minecraft.world.item.ToolMaterial;
 
 import java.util.function.Function;
 
-public class BaseSwordItem extends SwordItem {
+public class BaseSwordItem extends BaseItem {
     private final float attackDamage;
     private final float attackSpeed;
 
-    public BaseSwordItem(Tier tier) {
-        this(tier, 3, -2.4F, p -> p);
+    public BaseSwordItem(ToolMaterial material) {
+        this(material, 3, -2.4F, p -> p);
     }
 
-    public BaseSwordItem(Tier tier, Function<Properties, Properties> properties) {
-        this(tier, 3, -2.4F, properties);
+    public BaseSwordItem(ToolMaterial material, Function<Properties, Properties> properties) {
+        this(material, 3, -2.4F, properties);
     }
 
-    public BaseSwordItem(Tier tier, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
-        super(tier, properties.apply(new Properties().attributes(createAttributes(tier, attackDamage, attackSpeed))));
-        this.attackDamage = attackDamage;
+    public BaseSwordItem(ToolMaterial material, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
+        super(properties.compose(p -> p.sword(material, attackDamage, attackSpeed)));
+        this.attackDamage = attackDamage + material.attackDamageBonus();
         this.attackSpeed = attackSpeed;
     }
 
     public float getAttackDamage() {
-        return this.attackDamage + this.getTier().getAttackDamageBonus();
+        return this.attackDamage;
     }
 
     public float getAttackSpeed() {

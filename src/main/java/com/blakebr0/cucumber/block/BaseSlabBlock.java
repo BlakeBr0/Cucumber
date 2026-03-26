@@ -16,17 +16,16 @@ public class BaseSlabBlock extends SlabBlock {
     }
 
     public BaseSlabBlock(SoundType sound, float hardness, float resistance) {
-        this(Properties.of()
-                .sound(sound)
-                .strength(hardness, resistance)
-        );
+        this(sound, hardness, resistance, false);
     }
 
     public BaseSlabBlock(SoundType sound, float hardness, float resistance, boolean tool) {
-        this(Properties.of()
-                .sound(sound)
-                .strength(hardness, resistance)
-                .requiresCorrectToolForDrops()
-        );
+        var properties = Properties.of().sound(sound).strength(hardness, resistance);
+
+        if (tool) {
+            properties.requiresCorrectToolForDrops();
+        }
+
+        this(properties);
     }
 }

@@ -2,14 +2,17 @@ package com.blakebr0.cucumber.command;
 
 import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.helper.BlockHelper;
-import com.blakebr0.cucumber.util.Localizable;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.InteractionHand;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.transfer.access.ItemAccess;
+import net.neoforged.neoforge.transfer.transaction.Transaction;
 
 public final class ModCommands {
     public static final LiteralArgumentBuilder<CommandSourceStack> ROOT = Commands.literal(Cucumber.MOD_ID);
@@ -18,7 +21,7 @@ public final class ModCommands {
     public void onRegisterCommands(RegisterCommandsEvent event) {
         var dispatcher = event.getDispatcher();
 
-        dispatcher.register(ROOT.then(Commands.literal("fillenergy").requires(source -> source.hasPermission(4))
+        dispatcher.register(ROOT.then(Commands.literal("fillenergy").requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_ADMIN))
                 .then(Commands.literal("block").executes(context -> {
                     var source = context.getSource();
                     var level = source.getLevel();
@@ -26,19 +29,14 @@ public final class ModCommands {
                     var trace = BlockHelper.rayTraceBlocks(level, player);
                     var pos = trace.getBlockPos();
 
-                    var energy = level.getCapability(Capabilities.EnergyStorage.BLOCK, pos, trace.getDirection());
+                    var energy = level.getCapability(Capabilities.Energy.BLOCK, pos, trace.getDirection());
                     if (energy != null) {
-                        if (energy.canReceive()) {
-                            energy.receiveEnergy(Integer.MAX_VALUE, false);
-
-                            var message = Localizable.of("message.cucumber.filled_energy").args("block").build();
-
-                            source.sendSuccess(() -> message, false);
+                        try (var transaction = Transaction.openRoot()) {
+                            energy.insert(Integer.MAX_VALUE, transaction);
+                            source.sendSuccess(() -> Component.translatable("message.cucumber.filled_energy", "block"), false);
                         }
                     } else {
-                        var message = Localizable.of("message.cucumber.filled_energy_error").args("block").build();
-
-                        source.sendFailure(message);
+                        source.sendFailure(Component.translatable("message.cucumber.filled_energy_error", "block"));
                     }
 
                     return 0;
@@ -49,25 +47,18 @@ public final class ModCommands {
                     var stack = player.getItemInHand(InteractionHand.MAIN_HAND);
 
                     if (!stack.isEmpty()) {
-                        var energy = stack.getCapability(Capabilities.EnergyStorage.ITEM);
+                        var energy = ItemAccess.forStack(stack).getCapability(Capabilities.Energy.ITEM);
 
                         if (energy != null) {
-                            if (energy.canReceive()) {
-                                energy.receiveEnergy(Integer.MAX_VALUE, false);
-
-                                var message = Localizable.of("message.cucumber.filled_energy").args("item").build();
-
-                                source.sendSuccess(() -> message, false);
+                            try (var transaction = Transaction.openRoot()) {
+                                energy.insert(Integer.MAX_VALUE, transaction);
+                                source.sendSuccess(() -> Component.translatable("message.cucumber.filled_energy", "item"), false);
                             }
                         } else {
-                            var message = Localizable.of("message.cucumber.filled_energy_error").args("item").build();
-
-                            source.sendFailure(message);
+                            source.sendFailure(Component.translatable("message.cucumber.filled_energy_error", "item"));
                         }
                     } else {
-                        var message = Localizable.of("message.cucumber.filled_energy_error").args("item").build();
-
-                        source.sendFailure(message);
+                        source.sendFailure(Component.translatable("message.cucumber.filled_energy_error", "item"));
                     }
 
                     return 0;

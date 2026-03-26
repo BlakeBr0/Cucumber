@@ -11,17 +11,16 @@ public class BaseBlock extends Block {
 	}
 
 	public BaseBlock(SoundType sound, float hardness, float resistance) {
-		super(Properties.of()
-				.sound(sound)
-				.strength(hardness, resistance)
-		);
+		this(sound, hardness, resistance, false);
 	}
 
 	public BaseBlock(SoundType sound, float hardness, float resistance, boolean tool) {
-		super(Properties.of()
-				.sound(sound)
-				.strength(hardness, resistance)
-				.requiresCorrectToolForDrops()
-		);
+		var properties = Properties.of().sound(sound).strength(hardness, resistance);
+
+		if (tool) {
+			properties.requiresCorrectToolForDrops();
+		}
+
+		super(properties);
 	}
 }

@@ -1,6 +1,6 @@
 package com.blakebr0.cucumber.container;
 
-import com.blakebr0.cucumber.inventory.slot.BaseItemStackHandlerSlot;
+import com.blakebr0.cucumber.inventory.slot.CSlot;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
@@ -36,7 +36,7 @@ public class ExtendedContainerMenu extends BaseContainerMenu {
                 int maxSize = Math.min(slot.getMaxStackSize(), stack.getMaxStackSize());
 
                 // change: account for BaseItemStackHandlerSlot potentially having a larger max stack size
-                if (slot instanceof BaseItemStackHandlerSlot) {
+                if (slot instanceof CSlot) {
                     maxSize = slot.getMaxStackSize(stack);
                 }
 

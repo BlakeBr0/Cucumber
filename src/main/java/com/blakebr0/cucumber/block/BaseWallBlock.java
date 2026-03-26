@@ -16,17 +16,18 @@ public class BaseWallBlock extends WallBlock {
     }
 
     public BaseWallBlock(SoundType sound, float hardness, float resistance) {
-        this(Properties.of()
-                .sound(sound)
-                .strength(hardness, resistance)
-        );
+        this(sound, hardness, resistance, false);
     }
 
     public BaseWallBlock(SoundType sound, float hardness, float resistance, boolean tool) {
-        this(Properties.of()
+        var properties = Properties.of()
                 .sound(sound)
-                .strength(hardness, resistance)
-                .requiresCorrectToolForDrops()
-        );
+                .strength(hardness, resistance);
+
+        if (tool) {
+            properties.requiresCorrectToolForDrops();
+        }
+
+        this(properties);
     }
 }

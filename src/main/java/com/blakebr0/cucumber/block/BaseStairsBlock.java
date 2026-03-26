@@ -20,17 +20,18 @@ public class BaseStairsBlock extends StairBlock {
     }
 
     public BaseStairsBlock(BlockState state, SoundType sound, float hardness, float resistance) {
-        this(state, Properties.of()
-                .sound(sound)
-                .strength(hardness, resistance)
-        );
+        this(state, sound, hardness, resistance, false);
     }
 
     public BaseStairsBlock(BlockState state, SoundType sound, float hardness, float resistance, boolean tool) {
-        this(state, Properties.of()
+        var properties = Properties.of()
                 .sound(sound)
-                .strength(hardness, resistance)
-                .requiresCorrectToolForDrops()
-        );
+                .strength(hardness, resistance);
+
+        if (tool) {
+            properties.requiresCorrectToolForDrops();
+        }
+
+        this(state, properties);
     }
 }

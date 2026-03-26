@@ -1,87 +1,111 @@
 package com.blakebr0.cucumber.crafting.recipe;
 
-import com.blakebr0.cucumber.init.ModRecipeSerializers;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.ItemStackTemplate;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.NormalCraftingRecipe;
+import net.minecraft.world.item.crafting.PlacementInfo;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
+import net.minecraft.world.level.Level;
 
-public class ShapedTransferComponentsRecipe extends ShapedRecipe {
-    private final ItemStack result;
+import java.util.List;
+
+public class ShapedTransferComponentsRecipe extends NormalCraftingRecipe {
+    public static final MapCodec<ShapedTransferComponentsRecipe> MAP_CODEC = RecordCodecBuilder.mapCodec(builder ->
+            builder.group(
+                    Recipe.CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
+                    CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(o -> o.bookInfo),
+                    ShapedRecipePattern.MAP_CODEC.forGetter(o -> o.pattern),
+                    ItemStackTemplate.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+                    Codec.INT.fieldOf("transfer_slot").forGetter(recipe -> recipe.transferSlot)
+            ).apply(builder, ShapedTransferComponentsRecipe::new)
+    );
+    public static final StreamCodec<RegistryFriendlyByteBuf, ShapedTransferComponentsRecipe> STREAM_CODEC = StreamCodec.of(
+            ShapedTransferComponentsRecipe::toNetwork, ShapedTransferComponentsRecipe::fromNetwork
+    );
+    public static final RecipeSerializer<ShapedTransferComponentsRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
+
+    private final ShapedRecipePattern pattern;
+    private final ItemStackTemplate result;
     private final int transferSlot;
 
-    public ShapedTransferComponentsRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification, int transferSlot) {
-        super(group, category, pattern, result, showNotification);
+    public ShapedTransferComponentsRecipe(CommonInfo commonInfo, CraftingBookInfo craftingBookInfo, ShapedRecipePattern pattern, ItemStackTemplate result, int transferSlot) {
+        super(commonInfo, craftingBookInfo);
+        this.pattern = pattern;
         this.result = result;
         this.transferSlot = transferSlot;
     }
 
     @Override
-    public ItemStack assemble(CraftingInput inventory, HolderLookup.Provider lookup) {
-        var stack = inventory.getItem(this.transferSlot);
-        var result = this.getResultItem(lookup).copy();
-
-        result.applyComponents(stack.getComponentsPatch());
-
-        return result;
+    public ItemStack assemble(CraftingInput input) {
+        var stack = input.getItem(this.transferSlot);
+        return this.result.apply(stack.getComponentsPatch());
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return ModRecipeSerializers.CRAFTING_SHAPED_TRANSFER_COMPONENTS.get();
+    public boolean matches(CraftingInput input, Level level) {
+        return this.pattern.matches(input);
     }
 
-    public static class Serializer implements RecipeSerializer<ShapedTransferComponentsRecipe> {
-        public static final MapCodec<ShapedTransferComponentsRecipe> CODEC = RecordCodecBuilder.mapCodec(builder ->
-                builder.group(
-                        Codec.STRING.optionalFieldOf("group", "").forGetter(ShapedRecipe::getGroup),
-                        CraftingBookCategory.CODEC.fieldOf("category").orElse(CraftingBookCategory.MISC).forGetter(ShapedRecipe::category),
-                        ShapedRecipePattern.MAP_CODEC.forGetter(recipe -> recipe.pattern),
-                        ItemStack.STRICT_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
-                        Codec.BOOL.optionalFieldOf("show_notification", Boolean.TRUE).forGetter(ShapedRecipe::showNotification),
-                        Codec.INT.fieldOf("transfer_slot").forGetter(recipe -> recipe.transferSlot)
-                ).apply(builder, ShapedTransferComponentsRecipe::new)
+    @Override
+    public RecipeSerializer<ShapedTransferComponentsRecipe> getSerializer() {
+        return SERIALIZER;
+    }
+
+    @Override
+    public List<RecipeDisplay> display() {
+        return List.of(
+                new ShapedCraftingRecipeDisplay(
+                        this.pattern.width(),
+                        this.pattern.height(),
+                        this.pattern.ingredients().stream().map(e -> e.map(Ingredient::display).orElse(SlotDisplay.Empty.INSTANCE)).toList(),
+                        new SlotDisplay.ItemStackSlotDisplay(this.result),
+                        new SlotDisplay.ItemSlotDisplay(Items.CRAFTING_TABLE)
+                )
         );
-        public static final StreamCodec<RegistryFriendlyByteBuf, ShapedTransferComponentsRecipe> STREAM_CODEC = StreamCodec.of(
-                ShapedTransferComponentsRecipe.Serializer::toNetwork, ShapedTransferComponentsRecipe.Serializer::fromNetwork
-        );
+    }
 
-        @Override
-        public MapCodec<ShapedTransferComponentsRecipe> codec() {
-            return CODEC;
-        }
+    @Override
+    public PlacementInfo createPlacementInfo() {
+        return PlacementInfo.createFromOptionals(this.pattern.ingredients());
+    }
 
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, ShapedTransferComponentsRecipe> streamCodec() {
-            return STREAM_CODEC;
-        }
+    public int getWidth() {
+        return this.pattern.width();
+    }
 
-        private static ShapedTransferComponentsRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
-            var group = buffer.readUtf();
-            var category = buffer.readEnum(CraftingBookCategory.class);
-            var pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
-            var result = ItemStack.STREAM_CODEC.decode(buffer);
-            var showNotification = buffer.readBoolean();
-            var transferSlot = buffer.readVarInt();
+    public int getHeight() {
+        return this.pattern.height();
+    }
 
-            return new ShapedTransferComponentsRecipe(group, category, pattern, result, showNotification, transferSlot);
-        }
+    private static ShapedTransferComponentsRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
+        var commonInfo = CommonInfo.STREAM_CODEC.decode(buffer);
+        var craftingBookInfo = CraftingBookInfo.STREAM_CODEC.decode(buffer);
+        var pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
+        var result = ItemStackTemplate.STREAM_CODEC.decode(buffer);
+        var transferSlot = buffer.readVarInt();
 
-        private static void toNetwork(RegistryFriendlyByteBuf buffer, ShapedTransferComponentsRecipe recipe) {
-            buffer.writeUtf(recipe.getGroup());
-            buffer.writeEnum(recipe.category());
-            ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
-            ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
-            buffer.writeBoolean(recipe.showNotification());
-            buffer.writeVarInt(recipe.transferSlot);
-        }
+        return new ShapedTransferComponentsRecipe(commonInfo, craftingBookInfo, pattern, result, transferSlot);
+    }
+
+    private static void toNetwork(RegistryFriendlyByteBuf buffer, ShapedTransferComponentsRecipe recipe) {
+        CommonInfo.STREAM_CODEC.encode(buffer, recipe.commonInfo);
+        CraftingBookInfo.STREAM_CODEC.encode(buffer, recipe.bookInfo);
+        ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.result);
+        buffer.writeVarInt(recipe.transferSlot);
     }
 }

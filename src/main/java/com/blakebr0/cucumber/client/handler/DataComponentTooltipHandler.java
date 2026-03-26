@@ -4,7 +4,6 @@ import com.blakebr0.cucumber.config.ModConfigs;
 import com.blakebr0.cucumber.lib.Tooltips;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.StringUtil;
@@ -22,8 +21,9 @@ public final class DataComponentTooltipHandler {
             var stack = event.getItemStack();
             var components = stack.getComponents();
             var tooltip = event.getToolTip();
+            var flags = event.getFlags();
 
-            if (Screen.hasAltDown()) {
+            if (flags.hasAltDown()) {
                 tooltip.add(Tooltips.DATA_COMPONENTS.build());
 
                 for (TypedDataComponent<?> component : components) {

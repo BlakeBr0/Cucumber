@@ -2,13 +2,17 @@ package com.blakebr0.cucumber.item;
 
 import com.blakebr0.cucumber.lib.Tooltips;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jspecify.annotations.Nullable;
 
-import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class BaseReusableItem extends BaseItem {
@@ -34,49 +38,46 @@ public class BaseReusableItem extends BaseItem {
 	}
 
 	public BaseReusableItem(int uses, boolean tooltip, Function<Properties, Properties> properties) {
-		super(properties.compose(p -> p.durability(Math.max(uses - 1, 0)).setNoRepair()));
+		super(properties.compose(p -> p.durability(Math.max(uses - 1, 0)).setNoCombineRepair()));
 		this.unbreakable = uses < 1;
 		this.tooltip = tooltip;
 	}
 	
 	@Override
-	public boolean hasCraftingRemainingItem(ItemStack stack) {
-		return true;
-	}
-	
-	@Override
-	public ItemStack getCraftingRemainingItem(ItemStack stack) {
-		var copy = stack.copyWithCount(1);
+	public @Nullable ItemStackTemplate getCraftingRemainder(ItemInstance instance) {
+		var template = new ItemStackTemplate(instance.typeHolder(), 1);
 
 		if (this.unbreakable)
-			return copy;
+			return template;
 
-		var unbreaking = stack.getEnchantmentLevel(UNBREAKING_ENCHANTMENT);
+		var unbreaking = template.getEnchantmentLevel(UNBREAKING_ENCHANTMENT);
 		if (Math.random() > (1.0F / (unbreaking + 1)))
-			return copy;
+			return template;
 
-        var newDamage = stack.getDamageValue() + 1;
-        if (newDamage > stack.getMaxDamage())
-            return ItemStack.EMPTY;
+		var stack = template.create();
 
-		copy.setDamageValue(newDamage);
+		var newDamage = stack.getDamageValue() + 1;
+		if (newDamage > stack.getMaxDamage())
+			return null;
 
-		return copy;
+		stack.setDamageValue(newDamage);
+
+		return ItemStackTemplate.fromNonEmptyStack(stack);
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
 		if (this.tooltip) {
 			if (!this.unbreakable) {
 				var damage = stack.getMaxDamage() - stack.getDamageValue() + 1;
 
 				if (damage == 1) {
-					tooltip.add(Tooltips.ONE_USE_LEFT.build());
+					builder.accept(Tooltips.ONE_USE_LEFT.build());
 				} else {
-					tooltip.add(Tooltips.USES_LEFT.args(damage).build());
+					builder.accept(Tooltips.USES_LEFT.args(damage).build());
 				}
 			} else {
-				tooltip.add(Tooltips.UNLIMITED_USES.build());
+				builder.accept(Tooltips.UNLIMITED_USES.build());
 			}
 		}
 	}

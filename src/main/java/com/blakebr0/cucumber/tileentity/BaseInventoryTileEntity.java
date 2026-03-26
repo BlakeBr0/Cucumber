@@ -1,29 +1,30 @@
 package com.blakebr0.cucumber.tileentity;
 
-import com.blakebr0.cucumber.inventory.BaseItemStackHandler;
+import com.blakebr0.cucumber.inventory.CItemStacksHandler;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 
 public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     public BaseInventoryTileEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
-    public abstract BaseItemStackHandler getInventory();
+    public abstract CItemStacksHandler getInventory();
 
     @Override
-    public void loadAdditional(CompoundTag tag, HolderLookup.Provider lookup) {
-        super.loadAdditional(tag, lookup);
-        this.getInventory().deserializeNBT(lookup, tag);
+    public void loadAdditional(ValueInput input) {
+        super.loadAdditional(input);
+        this.getInventory().deserialize(input);
     }
 
     @Override
-    public void saveAdditional(CompoundTag tag, HolderLookup.Provider lookup) {
-        tag.merge(this.getInventory().serializeNBT(lookup));
+    public void saveAdditional(ValueOutput output) {
+        super.saveAdditional(output);
+        this.getInventory().serialize(output);
     }
 
     public boolean isUsableByPlayer(Player player) {

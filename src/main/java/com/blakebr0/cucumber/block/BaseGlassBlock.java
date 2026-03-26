@@ -21,28 +21,24 @@ public class BaseGlassBlock extends TransparentBlock {
     }
 
     public BaseGlassBlock(SoundType sound, float hardness, float resistance) {
-        super(Properties.of()
-                .sound(sound)
-                .strength(hardness, resistance)
-                .noOcclusion()
-                .isValidSpawn(BaseGlassBlock::never)
-                .isRedstoneConductor(BaseGlassBlock::never)
-                .isSuffocating(BaseGlassBlock::never)
-                .isViewBlocking(BaseGlassBlock::never)
-        );
+        this(sound, hardness, resistance, false);
     }
 
     public BaseGlassBlock(SoundType sound, float hardness, float resistance, boolean tool) {
-        super(Properties.of()
+        var properties = Properties.of()
                 .sound(sound)
                 .strength(hardness, resistance)
-                .requiresCorrectToolForDrops()
                 .noOcclusion()
                 .isValidSpawn(BaseGlassBlock::never)
                 .isRedstoneConductor(BaseGlassBlock::never)
                 .isSuffocating(BaseGlassBlock::never)
-                .isViewBlocking(BaseGlassBlock::never)
-        );
+                .isViewBlocking(BaseGlassBlock::never);
+
+        if (tool) {
+            properties.requiresCorrectToolForDrops();
+        }
+
+        super(properties);
     }
 
     private static boolean never(BlockState state, BlockGetter level, BlockPos pos, EntityType<?> entity) {

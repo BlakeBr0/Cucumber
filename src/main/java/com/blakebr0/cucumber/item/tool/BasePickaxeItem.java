@@ -1,30 +1,30 @@
 package com.blakebr0.cucumber.item.tool;
 
-import net.minecraft.world.item.PickaxeItem;
-import net.minecraft.world.item.Tier;
+import com.blakebr0.cucumber.item.BaseItem;
+import net.minecraft.world.item.ToolMaterial;
 
 import java.util.function.Function;
 
-public class BasePickaxeItem extends PickaxeItem {
+public class BasePickaxeItem extends BaseItem {
     private final float attackDamage;
     private final float attackSpeed;
 
-    public BasePickaxeItem(Tier tier) {
-        this(tier, 1, -2.8F, p -> p);
+    public BasePickaxeItem(ToolMaterial material) {
+        this(material, 1, -2.8F, p -> p);
     }
 
-    public BasePickaxeItem(Tier tier, Function<Properties, Properties> properties) {
-        this(tier, 1, -2.8F, properties);
+    public BasePickaxeItem(ToolMaterial material, Function<Properties, Properties> properties) {
+        this(material, 1, -2.8F, properties);
     }
 
-    public BasePickaxeItem(Tier tier, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
-        super(tier, properties.apply(new Properties().attributes(createAttributes(tier, attackDamage, attackSpeed))));
-        this.attackDamage = attackDamage;
+    public BasePickaxeItem(ToolMaterial material, int attackDamage, float attackSpeed, Function<Properties, Properties> properties) {
+        super(properties.compose(p -> p.pickaxe(material, attackDamage, attackSpeed)));
+        this.attackDamage = attackDamage + material.attackDamageBonus();
         this.attackSpeed = attackSpeed;
     }
 
     public float getAttackDamage() {
-        return this.attackDamage + this.getTier().getAttackDamageBonus();
+        return this.attackDamage;
     }
 
     public float getAttackSpeed() {

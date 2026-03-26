@@ -5,11 +5,14 @@ import net.minecraft.world.item.ItemStack;
 public final class StackHelper {
 	public static ItemStack withSize(ItemStack stack, int size, boolean container) {
 		if (size <= 0) {
-			if (container && stack.hasCraftingRemainingItem()) {
-				return stack.getCraftingRemainingItem();
-			} else {
-				return ItemStack.EMPTY;
+			if (container) {
+				var remainder = stack.getCraftingRemainder();
+				if (remainder != null) {
+					return remainder.create();
+				}
 			}
+
+			return ItemStack.EMPTY;
 		}
 
 		stack = stack.copy();
@@ -39,11 +42,11 @@ public final class StackHelper {
 		if (stack.isEmpty())
 			return ItemStack.EMPTY;
 
-		var remaining = stack.getCraftingRemainingItem();
+		var remaining = stack.getCraftingRemainder();
 		var result = shrink(stack, amount, false);
 
-		if (!remaining.isEmpty() && areStacksEqual(remaining, result)) {
-			result.grow(Math.min(remaining.getCount(), result.getMaxStackSize()));
+		if (remaining != null && ItemStack.isSameItemSameComponents(stack, result)) {
+			result.grow(Math.min(remaining.count(), result.getMaxStackSize()));
 		}
 
 		return result;
@@ -59,23 +62,12 @@ public final class StackHelper {
 		if (stack1.isEmpty())
 			return new InsertResult(stack2, ItemStack.EMPTY);
 
-		if (!areStacksEqual(stack1, stack2))
+		if (!ItemStack.isSameItemSameComponents(stack1, stack2))
 			return new InsertResult(stack1, stack2);
 
 		var amount = Math.min(stack2.getCount(), stack1.getMaxStackSize() - stack1.getCount());
 
 		return new InsertResult(grow(stack1, amount), shrink(stack2, amount, false));
-	}
-
-	public static boolean areItemsEqual(ItemStack stack1, ItemStack stack2) {
-		if (stack1.isEmpty() && stack2.isEmpty())
-			return true;
-
-		return !stack1.isEmpty() && ItemStack.isSameItem(stack1, stack2);
-	}
-	
-	public static boolean areStacksEqual(ItemStack stack1, ItemStack stack2) {
-		return areItemsEqual(stack1, stack2) && ItemStack.isSameItemSameComponents(stack1, stack2);
 	}
 
 	/**
@@ -88,20 +80,20 @@ public final class StackHelper {
 		if (!stack1.isEmpty() && stack2.isEmpty())
 			return true;
 
-		return areStacksEqual(stack1, stack2) && (stack1.getCount() + stack2.getCount()) <= stack1.getMaxStackSize();
+		return ItemStack.isSameItemSameComponents(stack1, stack2) && (stack1.getCount() + stack2.getCount()) <= stack1.getMaxStackSize();
 	}
 
 	/**
 	 * Combines stack2 into stack1
-	 * @param stack1 the current stack
-	 * @param stack2 the additional stack
+	 * @param stack1 the new stack to add
+	 * @param stack2 the current stack to add to
 	 * @return the new combined stack
 	 */
-	public static ItemStack combineStacks(ItemStack stack1, ItemStack stack2) {
-		if (stack1.isEmpty())
-			return stack2.copy();
+	public static ItemStack combine(ItemStack stack1, ItemStack stack2) {
+		if (stack2.isEmpty())
+			return stack1.copy();
 
-		return grow(stack1, stack2.getCount());
+		return grow(stack2, stack1.getCount());
 	}
 
 	public record InsertResult(ItemStack result, ItemStack remainder) {}

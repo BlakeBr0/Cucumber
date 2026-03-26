@@ -3,18 +3,19 @@ package com.blakebr0.cucumber.inventory;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import net.neoforged.neoforge.transfer.item.ItemStacksResourceHandler;
 
 public class RecipeInventory implements Container {
-    private final IItemHandlerModifiable inventory;
+    private final ItemStacksResourceHandler inventory;
     private final int start;
     private final int size;
 
-    public RecipeInventory(IItemHandlerModifiable inventory) {
-        this(inventory, 0, inventory.getSlots());
+    public RecipeInventory(ItemStacksResourceHandler inventory) {
+        this(inventory, 0, inventory.size());
     }
 
-    public RecipeInventory(IItemHandlerModifiable inventory, int start, int size) {
+    public RecipeInventory(ItemStacksResourceHandler inventory, int start, int size) {
         this.inventory = inventory;
         this.start = start;
         this.size = size;
@@ -27,18 +28,18 @@ public class RecipeInventory implements Container {
 
     @Override
     public ItemStack getItem(int slot) {
-        return this.inventory.getStackInSlot(slot + this.start);
+        return this.inventory.getResource(slot + this.start).toStack();
     }
 
     @Override
     public ItemStack removeItem(int slot, int count) {
-        var stack = this.inventory.getStackInSlot(slot + this.start);
-        return stack.isEmpty() ? ItemStack.EMPTY : stack.split(count);
+        var stack = this.inventory.getResource(slot + this.start);
+        return stack.isEmpty() ? ItemStack.EMPTY : stack.toStack().split(count);
     }
 
     @Override
     public void setItem(int slot, ItemStack stack) {
-        this.inventory.setStackInSlot(slot + this.start, stack);
+        this.inventory.set(slot + this.start, ItemResource.of(stack), stack.getCount());
     }
 
     @Override
@@ -52,7 +53,7 @@ public class RecipeInventory implements Container {
     @Override
     public boolean isEmpty() {
         for (int i = this.start; i < this.size; i++) {
-            if (!this.inventory.getStackInSlot(i).isEmpty())
+            if (!this.inventory.getResource(i).isEmpty())
                 return false;
         }
 
@@ -61,13 +62,13 @@ public class RecipeInventory implements Container {
 
     @Override
     public boolean canPlaceItem(int slot, ItemStack stack) {
-        return this.inventory.isItemValid(slot + this.start, stack);
+        return this.inventory.isValid(slot + this.start, ItemResource.of(stack));
     }
 
     @Override
     public void clearContent() {
         for (int i = this.start; i < this.size; i++) {
-            this.inventory.setStackInSlot(i, ItemStack.EMPTY);
+            this.inventory.set(i, ItemResource.EMPTY, 0);
         }
     }
 
@@ -77,8 +78,4 @@ public class RecipeInventory implements Container {
     public void setChanged() { }
     @Override
     public boolean stillValid(Player player) { return false; }
-    @Override
-    public void startOpen(Player player) { }
-    @Override
-    public void stopOpen(Player player) { }
 }

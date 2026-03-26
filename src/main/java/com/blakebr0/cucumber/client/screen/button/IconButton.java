@@ -1,28 +1,29 @@
 package com.blakebr0.cucumber.client.screen.button;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class IconButton extends Button {
-	private final ResourceLocation texture;
-	private final int textureX, textureY;
+	private final Identifier texture;
+	private final float textureX, textureY;
 	private final OnTooltip tooltip;
 
-	public IconButton(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, OnPress onPress) {
+	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Identifier texture, OnPress onPress) {
 		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress);
 	}
 
-	public IconButton(int x, int y, int width, int height, int textureX, int textureY, ResourceLocation texture, OnPress onPress, OnTooltip onTooltip) {
+	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Identifier texture, OnPress onPress, OnTooltip onTooltip) {
 		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress, onTooltip);
 	}
 
-	public IconButton(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress) {
+	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Component text, Identifier texture, OnPress onPress) {
 		this(x, y, width, height, textureX, textureY, text, texture, onPress, null);
 	}
 
-	public IconButton(int x, int y, int width, int height, int textureX, int textureY, Component text, ResourceLocation texture, OnPress onPress, OnTooltip onTooltip) {
+	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Component text, Identifier texture, OnPress onPress, OnTooltip onTooltip) {
 		super(x, y, width, height, text, onPress, DEFAULT_NARRATION);
 		this.textureX = textureX;
 		this.textureY = textureY;
@@ -31,13 +32,13 @@ public class IconButton extends Button {
 	}
 	
 	@Override
-	public void renderWidget(GuiGraphics gfx, int mouseX, int mouseY, float partialTicks) {
+	public void extractContents(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float partialTicks) {
 		int i = this.getYImage();
 
-		gfx.blit(this.texture, this.getX(), this.getY(), this.textureX, this.textureY + i * this.height, this.width, this.height);
+		gfx.blit(RenderPipelines.GUI_TEXTURED, this.texture, this.getX(), this.getY(), this.textureX, this.textureY + i * this.height, this.width, this.height, 256, 256);
 
 		if (this.tooltip != null && this.isHovered()) {
-			this.tooltip.render(this, gfx, mouseX, mouseY);
+			this.tooltip.extract(this, gfx, mouseX, mouseY);
 		}
 	}
 
@@ -54,6 +55,6 @@ public class IconButton extends Button {
 
 	@FunctionalInterface
 	public interface OnTooltip {
-		void render(Button button, GuiGraphics gfx, int mouseX, int mouseY);
+		void extract(Button button, GuiGraphicsExtractor gfx, int mouseX, int mouseY);
 	}
 }
