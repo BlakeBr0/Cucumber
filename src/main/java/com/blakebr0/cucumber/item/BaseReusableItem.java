@@ -72,12 +72,12 @@ public class BaseReusableItem extends BaseItem {
 				var damage = stack.getMaxDamage() - stack.getDamageValue() + 1;
 
 				if (damage == 1) {
-					builder.accept(Tooltips.ONE_USE_LEFT.build());
+					builder.accept(Tooltips.ONE_USE_LEFT.toComponent());
 				} else {
-					builder.accept(Tooltips.USES_LEFT.args(damage).build());
+					builder.accept(Tooltips.USES_LEFT.args(damage).toComponent());
 				}
 			} else {
-				builder.accept(Tooltips.UNLIMITED_USES.build());
+				builder.accept(Tooltips.UNLIMITED_USES.toComponent());
 			}
 		}
 	}

@@ -136,9 +136,9 @@ public class BaseWateringCanItem extends BaseItem {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag flag) {
         if (isFilled(stack)) {
-            builder.accept(Tooltips.FILLED.build());
+            builder.accept(Tooltips.FILLED.toComponent());
         } else {
-            builder.accept(Tooltips.EMPTY.build());
+            builder.accept(Tooltips.EMPTY.toComponent());
         }
     }
 

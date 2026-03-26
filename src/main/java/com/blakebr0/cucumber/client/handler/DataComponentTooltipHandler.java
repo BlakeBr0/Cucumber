@@ -24,13 +24,13 @@ public final class DataComponentTooltipHandler {
             var flags = event.getFlags();
 
             if (flags.hasAltDown()) {
-                tooltip.add(Tooltips.DATA_COMPONENTS.build());
+                tooltip.add(Tooltips.DATA_COMPONENTS.toComponent());
 
                 for (TypedDataComponent<?> component : components) {
                     tooltip.add(createTextComponent(component));
                 }
             } else {
-                tooltip.add(Tooltips.HOLD_ALT_FOR_DATA_COMPONENTS.build());
+                tooltip.add(Tooltips.HOLD_ALT_FOR_DATA_COMPONENTS.toComponent());
             }
         }
     }

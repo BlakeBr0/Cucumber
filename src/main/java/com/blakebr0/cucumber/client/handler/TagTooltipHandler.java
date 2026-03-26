@@ -46,7 +46,7 @@ public final class TagTooltipHandler {
 
                 if (flags.hasControlDown()) {
                     if (!blockTags.isEmpty()) {
-                        tooltip.add(Tooltips.BLOCK_TAGS.build());
+                        tooltip.add(Tooltips.BLOCK_TAGS.toComponent());
 
                         for (var tag : blockTags) {
                             tooltip.add(Component.literal("  " + tag).withStyle(ChatFormatting.DARK_GRAY));
@@ -54,7 +54,7 @@ public final class TagTooltipHandler {
                     }
 
                     if (!itemTags.isEmpty()) {
-                        tooltip.add(Tooltips.ITEM_TAGS.build());
+                        tooltip.add(Tooltips.ITEM_TAGS.toComponent());
 
                         for (var tag : itemTags) {
                             tooltip.add(Component.literal("  " + tag).withStyle(ChatFormatting.DARK_GRAY));
@@ -62,14 +62,14 @@ public final class TagTooltipHandler {
                     }
 
                     if (!fluidTags.isEmpty()) {
-                        tooltip.add(Tooltips.FLUID_TAGS.build());
+                        tooltip.add(Tooltips.FLUID_TAGS.toComponent());
 
                         for (var tag : fluidTags) {
                             tooltip.add(Component.literal("  " + tag).withStyle(ChatFormatting.DARK_GRAY));
                         }
                     }
                 } else {
-                    tooltip.add(Tooltips.HOLD_CTRL_FOR_TAGS.build());
+                    tooltip.add(Tooltips.HOLD_CTRL_FOR_TAGS.toComponent());
                 }
             }
         }

@@ -1,7 +1,6 @@
 package com.blakebr0.cucumber.client.screen.button;
 
 import com.blakebr0.cucumber.Cucumber;
-import com.blakebr0.cucumber.util.Localizable;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
@@ -9,7 +8,7 @@ public class ArrowButton extends IconButton {
 	private static final Identifier TEXTURE = Cucumber.resource("textures/gui/icons.png");
 	
 	public ArrowButton(int x, int y, OnPress onPress) {
-		this(x, y, Localizable.of("tooltip.cucumber.back").build(), true, onPress);
+		this(x, y, Component.translatable("tooltip.cucumber.back"), true, onPress);
 	}
 	
 	public ArrowButton(int x, int y, Component text, boolean invert, OnPress onPress) {

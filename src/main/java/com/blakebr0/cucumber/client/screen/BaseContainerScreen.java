@@ -1,6 +1,5 @@
 package com.blakebr0.cucumber.client.screen;
 
-import com.blakebr0.cucumber.util.Localizable;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -35,7 +34,7 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
     }
 
     protected static String text(String key, Object... args) {
-        return Localizable.of(key).args(args).buildString();
+        return Component.translatable(key, args).getString();
     }
 
     protected static String number(Object number) {
