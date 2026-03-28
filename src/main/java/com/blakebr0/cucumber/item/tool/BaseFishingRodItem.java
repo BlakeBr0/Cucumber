@@ -1,11 +1,14 @@
 package com.blakebr0.cucumber.item.tool;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.FishingRodItem;
 
 import java.util.function.Function;
 
 public class BaseFishingRodItem extends FishingRodItem {
-    public BaseFishingRodItem(Function<Properties, Properties> properties) {
-        super(properties.apply(new Properties()));
+    public BaseFishingRodItem(Identifier id, Function<Properties, Properties> properties) {
+        super(properties.apply(new Properties().setId(ResourceKey.create(Registries.ITEM, id))));
     }
 }

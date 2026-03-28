@@ -1,6 +1,9 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.ICustomBow;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.CrossbowItem;
@@ -10,8 +13,8 @@ import net.minecraft.world.level.Level;
 import java.util.function.Function;
 
 public class BaseCrossbowItem extends CrossbowItem implements ICustomBow {
-    public BaseCrossbowItem(Function<Properties, Properties> properties) {
-        super(properties.apply(new Properties()));
+    public BaseCrossbowItem(Identifier id, Function<Properties, Properties> properties) {
+        super(properties.apply(new Properties().setId(ResourceKey.create(Registries.ITEM, id))));
     }
 
     @Override // copied from CrossbowItem#releaseUsing

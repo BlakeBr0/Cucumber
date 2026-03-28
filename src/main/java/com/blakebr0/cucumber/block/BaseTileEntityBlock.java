@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber.block;
 
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -11,16 +12,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.function.Function;
 
 public abstract class BaseTileEntityBlock extends BaseBlock implements EntityBlock {
-    public BaseTileEntityBlock(Function<Properties, Properties> properties) {
-        super(properties);
+    public BaseTileEntityBlock(Identifier id, Function<Properties, Properties> properties) {
+        super(id, properties);
     }
 
-    public BaseTileEntityBlock(SoundType sound, float hardness, float resistance) {
-        super(sound, hardness, resistance);
+    public BaseTileEntityBlock(Identifier id, SoundType sound, float hardness, float resistance) {
+        super(id, sound, hardness, resistance);
     }
 
-    public BaseTileEntityBlock(SoundType sound, float hardness, float resistance, boolean tool) {
-        super(sound, hardness, resistance, tool);
+    public BaseTileEntityBlock(Identifier id, SoundType sound, float hardness, float resistance, boolean tool) {
+        super(id, sound, hardness, resistance, tool);
     }
 
     @Override

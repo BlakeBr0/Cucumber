@@ -3,6 +3,9 @@ package com.blakebr0.cucumber.item.tool;
 import com.blakebr0.cucumber.item.BaseItem;
 import com.blakebr0.cucumber.lib.ModTags;
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -20,12 +23,13 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public class BasePaxelItem extends BaseItem {
-    public BasePaxelItem(ToolMaterial material) {
-        this(material, Function.identity());
+    public BasePaxelItem(Identifier id, ToolMaterial material) {
+        this(id, material, Function.identity());
     }
 
-    public BasePaxelItem(ToolMaterial material, Function<Properties, Properties> properties) {
-        super(properties.compose(p -> p
+    public BasePaxelItem(Identifier id, ToolMaterial material, Function<Properties, Properties> properties) {
+        super(id, properties.compose(p -> p
+                .setId(ResourceKey.create(Registries.ITEM, id))
                 .tool(material, ModTags.MINEABLE_WITH_PAXEL, 4.0F, -3.2F, 5.0F)
                 .durability((int) (material.durability() * 1.5))
         ));

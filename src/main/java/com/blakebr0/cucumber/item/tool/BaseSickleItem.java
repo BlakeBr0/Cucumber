@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.helper.BlockHelper;
 import com.blakebr0.cucumber.item.BaseItem;
 import com.blakebr0.cucumber.lib.ModTags;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -21,12 +22,12 @@ public class BaseSickleItem extends BaseItem {
     private final float miningSpeed;
     private final int range;
 
-    public BaseSickleItem(ToolMaterial material, int range) {
-        this(material, range, Function.identity());
+    public BaseSickleItem(Identifier id, ToolMaterial material, int range) {
+        this(id, material, range, Function.identity());
     }
 
-    public BaseSickleItem(ToolMaterial material, int range, Function<Properties, Properties> properties) {
-        super(properties.compose(p -> p.tool(material, ModTags.MINEABLE_WITH_SICKLE, 4.0F, -3.0F, 0F)));
+    public BaseSickleItem(Identifier id, ToolMaterial material, int range, Function<Properties, Properties> properties) {
+        super(id, properties.compose(p -> p.tool(material, ModTags.MINEABLE_WITH_SICKLE, 4.0F, -3.0F, 0F)));
         this.attackDamage = 4.0F;
         this.attackSpeed = -3.0F;
         this.miningSpeed = material.speed();

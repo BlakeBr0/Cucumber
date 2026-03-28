@@ -2,6 +2,7 @@ package com.blakebr0.cucumber.item;
 
 import com.blakebr0.cucumber.lib.Tooltips;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -21,24 +22,24 @@ public class BaseReusableItem extends BaseItem {
 	private final boolean unbreakable;
 	private final boolean tooltip;
 
-	public BaseReusableItem(int uses) {
-		this(uses, p -> p);
+	public BaseReusableItem(Identifier id, int uses) {
+		this(id, uses, Function.identity());
 	}
 
-	public BaseReusableItem(Function<Properties, Properties> properties) {
-		this(true, properties);
+	public BaseReusableItem(Identifier id, Function<Properties, Properties> properties) {
+		this(id, true, properties);
 	}
 
-	public BaseReusableItem(boolean tooltip, Function<Properties, Properties> properties) {
-		this(0, tooltip, properties);
+	public BaseReusableItem(Identifier id, boolean tooltip, Function<Properties, Properties> properties) {
+		this(id, 0, tooltip, properties);
 	}
 
-	public BaseReusableItem(int uses, Function<Properties, Properties> properties) {
-		this(uses, true, properties);
+	public BaseReusableItem(Identifier id, int uses, Function<Properties, Properties> properties) {
+		this(id, uses, true, properties);
 	}
 
-	public BaseReusableItem(int uses, boolean tooltip, Function<Properties, Properties> properties) {
-		super(properties.compose(p -> p.durability(Math.max(uses - 1, 0)).setNoCombineRepair()));
+	public BaseReusableItem(Identifier id, int uses, boolean tooltip, Function<Properties, Properties> properties) {
+		super(id, properties.compose(p -> p.durability(Math.max(uses - 1, 0)).setNoCombineRepair()));
 		this.unbreakable = uses < 1;
 		this.tooltip = tooltip;
 	}

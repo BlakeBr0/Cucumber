@@ -2,6 +2,7 @@ package com.blakebr0.cucumber.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.Entity;
@@ -18,13 +19,13 @@ import java.util.function.Function;
 public class BaseOreBlock extends BaseBlock {
     private final IntProvider xpRange;
 
-    public BaseOreBlock(Function<Properties, Properties> properties, int minExp, int maxExp) {
-        super(properties.compose(Properties::requiresCorrectToolForDrops));
+    public BaseOreBlock(Identifier id, Function<Properties, Properties> properties, int minExp, int maxExp) {
+        super(id, properties.compose(Properties::requiresCorrectToolForDrops));
         this.xpRange = UniformInt.of(minExp, maxExp);
     }
 
-    public BaseOreBlock(SoundType sound, float hardness, float resistance, int minExp, int maxExp) {
-        this(p -> p.sound(sound).strength(hardness, resistance), minExp, maxExp);
+    public BaseOreBlock(Identifier id, SoundType sound, float hardness, float resistance, int minExp, int maxExp) {
+        this(id, p -> p.sound(sound).strength(hardness, resistance), minExp, maxExp);
     }
 
     @Override

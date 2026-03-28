@@ -1,6 +1,9 @@
 package com.blakebr0.cucumber.item.tool;
 
 import com.blakebr0.cucumber.iface.ICustomBow;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -16,8 +19,8 @@ import java.util.List;
 import java.util.function.Function;
 
 public class BaseBowItem extends BowItem implements ICustomBow {
-    public BaseBowItem(Function<Properties, Properties> properties) {
-        super(properties.apply(new Properties()));
+    public BaseBowItem(Identifier id, Function<Properties, Properties> properties) {
+        super(properties.apply(new Properties().setId(ResourceKey.create(Registries.ITEM, id))));
     }
 
     @Override // copied from BowItem#releaseUsing

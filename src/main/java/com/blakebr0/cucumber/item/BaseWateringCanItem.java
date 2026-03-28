@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.FluidTags;
@@ -34,12 +35,12 @@ public class BaseWateringCanItem extends BaseItem {
     protected final int range;
     protected final double chance;
 
-    public BaseWateringCanItem(int range, double chance) {
-        this(range, chance, p -> p);
+    public BaseWateringCanItem(Identifier id, int range, double chance) {
+        this(id, range, chance, p -> p);
     }
 
-    public BaseWateringCanItem(int range, double chance, Function<Properties, Properties> properties) {
-        super(properties.compose(p -> p.stacksTo(1).component(ModDataComponentTypes.WATERING_CAN_FILLED, false)));
+    public BaseWateringCanItem(Identifier id, int range, double chance, Function<Properties, Properties> properties) {
+        super(id, properties.compose(p -> p.stacksTo(1).component(ModDataComponentTypes.WATERING_CAN_FILLED, false)));
         this.range = range;
         this.chance = chance;
     }

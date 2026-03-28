@@ -5,6 +5,7 @@ import com.blakebr0.cucumber.helper.CropHelper;
 import com.blakebr0.cucumber.item.BaseItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -40,12 +41,12 @@ public class BaseScytheItem extends BaseItem {
     private final float attackSpeed;
     private final int range;
 
-    public BaseScytheItem(ToolMaterial material, int range) {
-        this(material, range, p -> p);
+    public BaseScytheItem(Identifier id, ToolMaterial material, int range) {
+        this(id, material, range, p -> p);
     }
 
-    public BaseScytheItem(ToolMaterial material, int range, Function<Properties, Properties> properties) {
-        super(properties.compose(p -> p.sword(material, 4, -2.8F)));
+    public BaseScytheItem(Identifier id, ToolMaterial material, int range, Function<Properties, Properties> properties) {
+        super(id, properties.compose(p -> p.sword(material, 4, -2.8F)));
         this.attackDamage = 4F + material.attackDamageBonus();
         this.attackSpeed = -2.8F;
         this.range = range;
