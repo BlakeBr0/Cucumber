@@ -11,20 +11,20 @@ public class IconButton extends Button {
 	private final float textureX, textureY;
 	private final OnTooltip tooltip;
 
-	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Identifier texture, OnPress onPress) {
-		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress);
+	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Identifier texture) {
+		this(x, y, width, height, textureX, textureY, Component.literal(""), texture);
 	}
 
-	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Identifier texture, OnPress onPress, OnTooltip onTooltip) {
-		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onPress, onTooltip);
+	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Identifier texture, OnTooltip onTooltip) {
+		this(x, y, width, height, textureX, textureY, Component.literal(""), texture, onTooltip);
 	}
 
-	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Component text, Identifier texture, OnPress onPress) {
-		this(x, y, width, height, textureX, textureY, text, texture, onPress, null);
+	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Component text, Identifier texture) {
+		this(x, y, width, height, textureX, textureY, text, texture, null);
 	}
 
-	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Component text, Identifier texture, OnPress onPress, OnTooltip onTooltip) {
-		super(x, y, width, height, text, onPress, DEFAULT_NARRATION);
+	public IconButton(int x, int y, int width, int height, float textureX, float textureY, Component text, Identifier texture, OnTooltip onTooltip) {
+		super(x, y, width, height, text, _ -> {}, DEFAULT_NARRATION);
 		this.textureX = textureX;
 		this.textureY = textureY;
 		this.texture = texture;
