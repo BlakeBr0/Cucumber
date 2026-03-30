@@ -2,6 +2,7 @@ package com.blakebr0.cucumber.tileentity;
 
 import com.blakebr0.cucumber.inventory.CItemStacksHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,6 +26,13 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     public void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         this.getInventory().serialize(output);
+    }
+
+    @Override
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (this.level != null) {
+            Containers.dropContents(this.level, pos, this.getInventory().getStacks());
+        }
     }
 
     public boolean isUsableByPlayer(Player player) {
