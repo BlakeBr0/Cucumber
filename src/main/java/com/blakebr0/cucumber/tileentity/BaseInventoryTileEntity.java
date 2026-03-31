@@ -2,8 +2,10 @@ package com.blakebr0.cucumber.tileentity;
 
 import com.blakebr0.cucumber.inventory.CItemStacksHandler;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -38,5 +40,12 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     public boolean isUsableByPlayer(Player player) {
         var pos = this.getBlockPos();
         return player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
+    }
+
+    public RecipeManager getRecipeManager() {
+        if (this.level == null || this.level.isClientSide())
+            return null;
+
+        return ((ServerLevel) this.level).recipeAccess();
     }
 }
