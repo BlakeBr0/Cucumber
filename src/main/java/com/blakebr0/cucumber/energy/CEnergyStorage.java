@@ -29,15 +29,15 @@ public class CEnergyStorage extends SimpleEnergyHandler {
         }
     }
 
-    public void setMaxEnergyStorage(int capacity) {
+    public void setMaxCapacity(int capacity) {
         this.capacity = capacity;
     }
 
-    public void setMaxEnergyStorage(double capacity) {
+    public void setMaxCapacity(double capacity) {
         this.capacity = (int) capacity;
     }
 
-    public void resetMaxEnergyStorage() {
+    public void resetMaxCapacity() {
         this.capacity = this.initialCapacity;
     }
 }
