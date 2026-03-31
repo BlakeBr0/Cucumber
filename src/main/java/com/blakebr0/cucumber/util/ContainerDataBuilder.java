@@ -18,6 +18,10 @@ public class ContainerDataBuilder {
         return new ContainerDataBuilder();
     }
 
+    public ContainerDataBuilder sync(IntSupplier getter) {
+        return this.sync(getter, _ -> {});
+    }
+
     public ContainerDataBuilder sync(IntSupplier getter, IntConsumer setter) {
         this.data.add(new DataSlotGetterSetter(getter, setter));
         return this;
