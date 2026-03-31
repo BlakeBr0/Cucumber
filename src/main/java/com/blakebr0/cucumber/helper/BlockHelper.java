@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.common.CommonHooks;
+import net.neoforged.neoforge.transfer.ResourceHandlerUtil;
 import org.jetbrains.annotations.Nullable;
 
 public final class BlockHelper {
@@ -108,23 +109,10 @@ public final class BlockHelper {
         return destroyed;
     }
 
-    /**
-     * based on {@link net.minecraft.world.inventory.AbstractContainerMenu#getRedstoneSignalFromContainer(net.minecraft.world.Container)}
-     */
     public static int getRedstoneSignalFromInventory(@Nullable BlockEntity entity) {
         if (entity instanceof BaseInventoryTileEntity tile) {
             var inventory = tile.getInventory();
-            float f = 0.0F;
-
-            for (int i = 0; i < inventory.size(); ++i) {
-                var stack = inventory.getResource(i).toStack();
-                if (!stack.isEmpty()) {
-                    f += (float) stack.getCount() / (float) inventory.getStackLimit(i, stack);
-                }
-            }
-
-            f /= (float) inventory.size();
-            return Mth.lerpDiscrete(f, 0, 15);
+            return ResourceHandlerUtil.getRedstoneSignalFromResourceHandler(inventory);
         }
 
         return 0;
