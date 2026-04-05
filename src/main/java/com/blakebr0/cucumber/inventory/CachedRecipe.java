@@ -5,6 +5,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.Level;
 
 public class CachedRecipe<I extends RecipeInput, T extends Recipe<I>> {
     private final RecipeType<T> type;
@@ -32,6 +33,13 @@ public class CachedRecipe<I extends RecipeInput, T extends Recipe<I>> {
         return this.recipe != null;
     }
 
+    public boolean check(I inventory, Level level) {
+        if (level instanceof ServerLevel serverLevel)
+            return this.check(inventory, serverLevel);
+
+        return false;
+    }
+
     public boolean exists() {
         return this.recipe != null;
     }
@@ -43,6 +51,13 @@ public class CachedRecipe<I extends RecipeInput, T extends Recipe<I>> {
     public T checkAndGet(I inventory, ServerLevel level) {
         if (this.check(inventory, level))
             return this.recipe;
+
+        return null;
+    }
+
+    public T checkAndGet(I inventory, Level level) {
+        if (level instanceof ServerLevel serverLevel)
+            return this.checkAndGet(inventory, serverLevel);
 
         return null;
     }
