@@ -16,11 +16,11 @@ import java.util.function.Function;
 
 public class BaseBlockItem extends BlockItem {
     public BaseBlockItem(Identifier id, Block block) {
-        super(block, new Properties().setId(ResourceKey.create(Registries.ITEM, id)));
+        super(block, new Properties().setId(ResourceKey.create(Registries.ITEM, id)).useBlockDescriptionPrefix());
     }
 
     public BaseBlockItem(Identifier id, Block block, Function<Properties, Properties> properties) {
-        super(block, properties.apply(new Properties().setId(ResourceKey.create(Registries.ITEM, id))));
+        super(block, properties.apply(new Properties().setId(ResourceKey.create(Registries.ITEM, id)).useBlockDescriptionPrefix()));
     }
 
     @Override
