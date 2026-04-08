@@ -14,7 +14,7 @@ import java.util.function.Function;
 
 public class BaseCrossbowItem extends CrossbowItem implements ICustomBow {
     public BaseCrossbowItem(Identifier id, Function<Properties, Properties> properties) {
-        super(properties.apply(new Properties().setId(ResourceKey.create(Registries.ITEM, id))));
+        super(properties.apply(new Properties().stacksTo(1).setId(ResourceKey.create(Registries.ITEM, id))));
     }
 
     @Override // copied from CrossbowItem#releaseUsing

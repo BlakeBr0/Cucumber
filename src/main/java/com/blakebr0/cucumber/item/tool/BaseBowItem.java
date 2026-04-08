@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public class BaseBowItem extends BowItem implements ICustomBow {
     public BaseBowItem(Identifier id, Function<Properties, Properties> properties) {
-        super(properties.apply(new Properties().setId(ResourceKey.create(Registries.ITEM, id))));
+        super(properties.apply(new Properties().stacksTo(1).setId(ResourceKey.create(Registries.ITEM, id))));
     }
 
     @Override // copied from BowItem#releaseUsing
