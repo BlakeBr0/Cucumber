@@ -15,7 +15,7 @@ public record CustomBowPullProperty() implements RangeSelectItemModelProperty {
     public float get(ItemStack stack, @Nullable ClientLevel level, @Nullable ItemOwner owner, int seed) {
         if (owner != null) {
             var entity = owner.asLivingEntity();
-            if (entity != null && entity.getUseItem() != stack) {
+            if (entity != null && entity.getUseItem() == stack) {
                 return (float) (stack.getUseDuration(entity) - entity.getUseItemRemainingTicks()) * ((ICustomBow) stack.getItem()).getDrawSpeedMulti(stack) / 20.0F;
             }
         }
