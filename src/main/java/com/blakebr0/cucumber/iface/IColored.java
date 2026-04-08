@@ -47,10 +47,10 @@ public interface IColored {
 	}
 
 	record ItemBlockColors(int index) implements ItemTintSource {
-		public static final MapCodec<ItemColors> MAP_CODEC = RecordCodecBuilder.mapCodec(builder ->
+		public static final MapCodec<ItemBlockColors> MAP_CODEC = RecordCodecBuilder.mapCodec(builder ->
 				builder.group(
-						Codec.INT.fieldOf("index").forGetter(ItemColors::index)
-				).apply(builder, ItemColors::new)
+						Codec.INT.fieldOf("index").forGetter(ItemBlockColors::index)
+				).apply(builder, ItemBlockColors::new)
 		);
 
 		@Override

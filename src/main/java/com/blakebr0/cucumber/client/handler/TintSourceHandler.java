@@ -7,7 +7,7 @@ import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
 public final class TintSourceHandler {
     @SubscribeEvent
-    public void onRegisterBlockTintSource(RegisterColorHandlersEvent.ItemTintSources event) {
+    public void onRegisterItemTintSources(RegisterColorHandlersEvent.ItemTintSources event) {
         event.register(Cucumber.resource("item_colors"), IColored.ItemColors.MAP_CODEC);
         event.register(Cucumber.resource("item_block_colors"), IColored.ItemBlockColors.MAP_CODEC);
     }
