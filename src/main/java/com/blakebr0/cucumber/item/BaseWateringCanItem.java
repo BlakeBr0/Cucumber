@@ -206,7 +206,7 @@ public class BaseWateringCanItem extends BaseItem {
 
         if (!level.isClientSide()) {
             if (Math.random() <= this.chance) {
-                BlockPos.betweenClosedStream(pos.offset(-range, -range, -range), pos.offset(range, range, range)).forEach(aoePos -> {
+                BlockPos.betweenClosedStream(pos.offset(-range, -3, -range), pos.offset(range, 3, range)).forEach(aoePos -> {
                     var state = level.getBlockState(aoePos);
                     var plantBlock = state.getBlock();
 
