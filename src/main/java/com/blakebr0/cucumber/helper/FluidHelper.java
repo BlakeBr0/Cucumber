@@ -18,22 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 public final class FluidHelper {
-	public static FluidStack getFluidFromStack(ItemStack stack) {
-		var handler = ItemAccess.forStack(stack).getCapability(Capabilities.Fluid.ITEM);
-		if (handler == null) {
-			return FluidStack.EMPTY;
-		}
-
-		var amount = handler.getAmountAsInt(0);
-
-		return handler.getResource(0).toStack(amount);
-	}
-
-	public static int getFluidAmount(ItemStack stack) {
-		var fluid = getFluidFromStack(stack);
-		return fluid == null ? 0 : fluid.getAmount();
-	}
-
 	public static ItemStack getFilledBucket(FluidStack fluid, Item bucket, int capacity) {
 		if (BuiltInRegistries.FLUID.containsValue(fluid.getFluid())) {
 			var filledBucket = new ItemStack(bucket);
