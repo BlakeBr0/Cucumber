@@ -16,21 +16,15 @@ import java.util.List;
 
 @Mixin(RecipeManager.class)
 public class RecipeManagerMixin {
-    /**
-     * This is a slightly less disgusting hack for dynamically registering recipes. Doing it this way means I don't have
-     * to replace the internal recipe maps.
-     * <p>
-     * Surely I'll come up with a better solution one day Clueless.
-     */
     @Inject(
-            at = @At(value = "RETURN", ordinal = 0),
+            at = @At(value = "INVOKE", shift = At.Shift.AFTER, target = "Ljava/util/SortedMap;forEach(Ljava/util/function/BiConsumer;)V"),
             method = "prepare(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/util/profiling/ProfilerFiller;)Lnet/minecraft/world/item/crafting/RecipeMap;"
     )
     public void cucumber$prepare(
             ResourceManager manager,
             ProfilerFiller profiler,
             CallbackInfoReturnable<RecipeMap> cir,
-            @Local List<RecipeHolder<?>> recipeHolders
+            @Local(name = "recipeHolders") List<RecipeHolder<?>> recipeHolders
     ) {
         RecipeHelper.fireRecipeManagerLoadingEvent((RecipeManager) (Object) this, recipeHolders);
     }
