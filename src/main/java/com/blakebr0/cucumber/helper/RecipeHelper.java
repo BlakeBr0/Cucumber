@@ -4,6 +4,7 @@ import com.blakebr0.cucumber.Cucumber;
 import com.blakebr0.cucumber.event.RecipeManagerLoadedEvent;
 import com.blakebr0.cucumber.event.RecipeManagerLoadingEvent;
 import com.google.common.base.Stopwatch;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.neoforge.common.NeoForge;
@@ -15,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 
 public final class RecipeHelper {
     @ApiStatus.Internal
-    public static void fireRecipeManagerLoadingEvent(RecipeManager manager, List<RecipeHolder<?>> output) {
+    public static void fireRecipeManagerLoadingEvent(RecipeManager manager, HolderLookup.Provider registries, List<RecipeHolder<?>> output) {
         var stopwatch = Stopwatch.createStarted();
         var recipes = new ArrayList<RecipeHolder<?>>();
 
         try {
-            NeoForge.EVENT_BUS.post(new RecipeManagerLoadingEvent(manager, recipes));
+            NeoForge.EVENT_BUS.post(new RecipeManagerLoadingEvent(manager, registries, recipes));
         } catch (Exception e) {
             Cucumber.LOGGER.error("An error occurred while firing RecipeManagerLoadingEvent", e);
         }
