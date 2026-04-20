@@ -21,13 +21,13 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity {
     @Override
     public void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
-        this.getInventory().deserialize(input);
+        this.getInventory().deserialize(input.childOrEmpty("inventory"));
     }
 
     @Override
     public void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
-        this.getInventory().serialize(output);
+        output.putChild("inventory", this.getInventory());
     }
 
     @Override
