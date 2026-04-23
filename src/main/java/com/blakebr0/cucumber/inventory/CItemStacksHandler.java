@@ -5,6 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -18,18 +19,21 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class CItemStacksHandler extends ItemStacksResourceHandler {
     // copy of ItemStack#CODEC that removes the stupid int range limit on count
-    private static final Codec<ItemStack> ITEMSTACK_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(builder ->
+    private static final Codec<ItemStack> ITEM_STACK_CODEC = RecordCodecBuilder.create(builder ->
             builder.group(
                     Item.CODEC_WITH_BOUND_COMPONENTS.fieldOf("id").forGetter(ItemStack::typeHolder),
                     Codec.INT.optionalFieldOf("count", 1).forGetter(ItemStack::getCount),
                     DataComponentPatch.CODEC.optionalFieldOf("components", DataComponentPatch.EMPTY).forGetter(ItemStack::getComponentsPatch)
-            ).apply(builder, ItemStack::new))
+            ).apply(builder, ItemStack::new)
     );
+    private static final Codec<ItemStack> OPTIONAL_ITEM_STACK_CODEC = ExtraCodecs.optionalEmptyMap(ITEM_STACK_CODEC)
+            .xmap(itemStack -> itemStack.orElse(ItemStack.EMPTY), itemStack -> itemStack.isEmpty() ? Optional.empty() : Optional.of(itemStack));
 
     private final OnContentsChangedFunction onContentsChanged;
     private final Map<Integer, Integer> slotSizeMap;
@@ -43,7 +47,7 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
         super(size);
         this.onContentsChanged = onContentsChanged;
         this.slotSizeMap = new HashMap<>();
-        this.codec = ITEMSTACK_CODEC.listOf().xmap(this::mutableCopyOf, Function.identity());
+        this.codec = OPTIONAL_ITEM_STACK_CODEC.listOf().xmap(this::mutableCopyOf, Function.identity());
     }
 
     @Override
@@ -202,8 +206,8 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
     public CraftingInput toShapelessCraftingInput(int startIndex, int endIndex) {
         return new ShapelessCraftingInput(this.stacks.subList(startIndex, endIndex));
     }
-    // coped from StacksResourceHandler#mutableCopyOf
 
+    // coped from StacksResourceHandler#mutableCopyOf
     private NonNullList<ItemStack> mutableCopyOf(Collection<ItemStack> list) {
         return NonNullList.of(emptyStack, list.toArray(ItemStack[]::new));
     }
