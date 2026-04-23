@@ -18,12 +18,12 @@ public class CSlot extends ResourceHandlerSlot {
 
     @Override
     public boolean mayPickup(Player player) {
-        var resource = this.inventory.getResource(index);
+        var resource = this.inventory.getResource(this.index);
         if (resource.isEmpty())
             return false;
 
         try (var tx = Transaction.openRoot()) {
-            return this.inventory.extract(index, resource, 1, tx) == 1;
+            return this.inventory.extract(this.index, resource, 1, tx, true) == 1;
         }
     }
 
