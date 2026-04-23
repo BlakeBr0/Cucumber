@@ -2,6 +2,7 @@ package com.blakebr0.cucumber.client.screen;
 
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
@@ -11,6 +12,8 @@ import java.text.NumberFormat;
 
 public abstract class BaseContainerScreen<T extends AbstractContainerMenu> extends AbstractContainerScreen<T> {
     protected Identifier bgTexture;
+    protected int bgWidth;
+    protected int bgHeight;
     protected int bgImgWidth;
     protected int bgImgHeight;
 
@@ -19,18 +22,22 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
     }
 
     public BaseContainerScreen(T container, Inventory inventory, Component title, Identifier bgTexture, int bgWidth, int bgHeight, int bgImgWidth, int bgImgHeight) {
-        super(container, inventory, title);
+        super(container, inventory, title, bgWidth, bgHeight);
         this.bgTexture = bgTexture;
+        this.bgWidth = bgWidth;
+        this.bgHeight = bgHeight;
         this.bgImgWidth = bgImgWidth;
         this.bgImgHeight = bgImgHeight;
     }
 
     @Override
     public void extractBackground(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float a) {
+        super.extractBackground(gfx, mouseX, mouseY, a);
+
         int x = this.getGuiLeft();
         int y = this.getGuiTop();
 
-        gfx.blit(this.bgTexture, x, y, 0, 0, this.bgImgWidth, this.bgImgHeight, 256, 256);
+        gfx.blit(RenderPipelines.GUI_TEXTURED, this.bgTexture, x, y, 0, 0, this.bgWidth, this.bgHeight, this.bgImgWidth, this.bgImgHeight);
     }
 
     protected static String text(String key, Object... args) {
