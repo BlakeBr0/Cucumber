@@ -30,7 +30,7 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
                     Recipe.CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
                     CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(o -> o.bookInfo),
                     ShapedRecipePattern.MAP_CODEC.forGetter(recipe -> recipe.pattern),
-                    OutputResolver.Tag.CODEC.fieldOf("result").forGetter(recipe -> (OutputResolver.Tag) recipe.outputResolver)
+                    OutputResolver.Tag.MAP_CODEC.fieldOf("result").forGetter(recipe -> (OutputResolver.Tag) recipe.outputResolver)
             ).apply(builder, ShapedTagRecipe::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, ShapedTagRecipe> STREAM_CODEC = StreamCodec.of(
@@ -40,7 +40,7 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
 
     private final OutputResolver outputResolver;
     private final ShapedRecipePattern pattern;
-    private @Nullable ItemStack result;
+    private @Nullable ItemStackTemplate result;
 
     public ShapedTagRecipe(CommonInfo commonInfo, CraftingBookInfo craftingBookInfo, ShapedRecipePattern pattern, OutputResolver outputResolver) {
         super(commonInfo, craftingBookInfo);
@@ -54,21 +54,12 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
             this.result = this.outputResolver.resolve();
         }
 
-        return this.result;
+        return this.result.create();
     }
 
     @Override
     public boolean matches(CraftingInput input, Level level) {
         return this.pattern.matches(input);
-    }
-
-    @Override
-    public boolean isSpecial() {
-        if (this.result == null) {
-            this.result = this.outputResolver.resolve();
-        }
-
-        return this.result.isEmpty();
     }
 
     @Override
@@ -78,7 +69,7 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
 
     @Override
     public List<RecipeDisplay> display() {
-        var result = ItemStackTemplate.fromNonEmptyStack(this.outputResolver.resolve());
+        var result = this.outputResolver.resolve();
 
         return List.of(
                 new ShapedCraftingRecipeDisplay(
@@ -109,6 +100,6 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
         CommonInfo.STREAM_CODEC.encode(buffer, recipe.commonInfo);
         CraftingBookInfo.STREAM_CODEC.encode(buffer, recipe.bookInfo);
         ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
-        ItemStack.OPTIONAL_STREAM_CODEC.encode(buffer, recipe.outputResolver.resolve());
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.outputResolver.resolve());
     }
 }

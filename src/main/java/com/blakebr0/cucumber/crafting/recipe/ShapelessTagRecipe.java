@@ -29,7 +29,7 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
             builder.group(
                     Recipe.CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
                     CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(o -> o.bookInfo),
-                    OutputResolver.Tag.CODEC.fieldOf("result").forGetter(recipe -> (OutputResolver.Tag) recipe.outputResolver),
+                    OutputResolver.Tag.MAP_CODEC.fieldOf("result").forGetter(recipe -> (OutputResolver.Tag) recipe.outputResolver),
                     Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(o -> o.ingredients)
             ).apply(builder, ShapelessTagRecipe::new)
     );
@@ -43,7 +43,7 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
     private final OutputResolver outputResolver;
     private final List<Ingredient> ingredients;
     private final boolean isSimple;
-    private @Nullable ItemStack result;
+    private @Nullable ItemStackTemplate result;
 
     public ShapelessTagRecipe(CommonInfo commonInfo, CraftingBookInfo craftingBookInfo, OutputResolver outputResolver, List<Ingredient> ingredients) {
         super(commonInfo, craftingBookInfo);
@@ -60,7 +60,7 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
             this.result = this.outputResolver.resolve();
         }
 
-        return this.result.copy();
+        return this.result.create();
     }
 
     @Override
@@ -78,15 +78,6 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
                     ? this.ingredients.getFirst().test(input.getItem(0))
                     : input.stackedContents().canCraft(this, null);
         }
-    }
-
-    @Override
-    public boolean isSpecial() {
-        if (this.result == null) {
-            this.result = this.outputResolver.resolve();
-        }
-
-        return this.result.isEmpty();
     }
 
     @Override
@@ -108,7 +99,7 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
 
     @Override
     public List<RecipeDisplay> display() {
-        var result = ItemStackTemplate.fromNonEmptyStack(this.outputResolver.resolve());
+        var result = this.outputResolver.resolve();
 
         return List.of(
                 new ShapelessCraftingRecipeDisplay(
@@ -132,6 +123,6 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
         CommonInfo.STREAM_CODEC.encode(buffer, recipe.commonInfo);
         CraftingBookInfo.STREAM_CODEC.encode(buffer, recipe.bookInfo);
         Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.ingredients);
-        ItemStack.STREAM_CODEC.encode(buffer, recipe.outputResolver.resolve());
+        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.outputResolver.resolve());
     }
 }

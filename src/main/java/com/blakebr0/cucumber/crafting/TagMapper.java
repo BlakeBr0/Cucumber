@@ -13,7 +13,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.loading.FMLPaths;
@@ -144,9 +144,12 @@ public class TagMapper {
         }
     }
 
-    public static ItemStack getItemStackForTag(String tagId, int size) {
+    public static ItemStackTemplate getItemStackForTag(String tagId, int size) {
         var item = getItemForTag(tagId);
-        return item != null && item != Items.AIR ? new ItemStack(item, size) : ItemStack.EMPTY;
+        if (item == null || item == Items.AIR) {
+            throw new IllegalArgumentException("Tag %s has no entries".formatted(tagId));
+        }
+        return new ItemStackTemplate(item, size);
     }
 
     private static Item addTagToFile(String tagId, JsonObject json, File file) {
