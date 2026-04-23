@@ -56,8 +56,13 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
     }
 
     public int insert(int index, ItemResource resource, int amount, TransactionContext transaction, boolean bypass) {
-        if (!bypass && this.outputSlots != null && ArrayUtils.contains(this.outputSlots, index))
-            return 0;
+        if (!bypass) {
+            if (this.canInsert != null && !this.canInsert.apply(index, resource))
+                return 0;
+
+            if (this.outputSlots != null && ArrayUtils.contains(this.outputSlots, index))
+                return 0;
+        }
 
         return super.insert(index, resource, amount, transaction);
     }
@@ -76,12 +81,7 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
                 return 0;
         }
 
-        return super.extract(index, resource,  amount, transaction);
-    }
-
-    @Override
-    public boolean isValid(int index, ItemResource resource) {
-        return this.canInsert == null || this.canInsert.apply(index, resource);
+        return super.extract(index, resource, amount, transaction);
     }
 
     @Override
@@ -213,7 +213,7 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
     }
 
     public static CItemStacksHandler create(int size) {
-        return create(size, builder -> {});
+        return create(size, _ -> {});
     }
 
     public static CItemStacksHandler create(int size, Consumer<CItemStacksHandler> builder) {
