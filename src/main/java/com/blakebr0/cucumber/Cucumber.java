@@ -1,5 +1,6 @@
 package com.blakebr0.cucumber;
 
+import com.blakebr0.cucumber.client.ModRenderTypes;
 import com.blakebr0.cucumber.client.handler.BowFOVHandler;
 import com.blakebr0.cucumber.client.handler.DataComponentTooltipHandler;
 import com.blakebr0.cucumber.client.handler.ItemModelPropertyHandler;
@@ -44,6 +45,7 @@ public final class Cucumber {
 		if (FMLEnvironment.getDist() == Dist.CLIENT) {
 			bus.register(new ItemModelPropertyHandler());
 			bus.register(new TintSourceHandler());
+			bus.register(new ModRenderTypes());
 		}
 
 		FeatureFlagInitializer.init();
