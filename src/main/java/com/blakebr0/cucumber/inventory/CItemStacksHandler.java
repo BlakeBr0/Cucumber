@@ -92,6 +92,11 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
     }
 
     @Override
+    protected int getCapacity(int index, ItemResource resource) {
+        return this.getSlotLimit(index);
+    }
+
+    @Override
     public void serialize(ValueOutput output) {
         output.store(VALUE_IO_KEY, this.codec, stacks);
     }
