@@ -40,6 +40,18 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
         gfx.blit(RenderPipelines.GUI_TEXTURED, this.bgTexture, x, y, 0, 0, this.bgWidth, this.bgHeight, this.bgImgWidth, this.bgImgHeight);
     }
 
+    protected static boolean isHoveringSlot(int x, int y, int mouseX, int mouseY) {
+        return mouseX > x - 1 && mouseX < x + 16 && mouseY > y - 1 && mouseY < y + 16;
+    }
+
+    protected static void extractSlotHighlightBack(GuiGraphicsExtractor gfx, int x, int y) {
+        gfx.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_HIGHLIGHT_BACK_SPRITE, x, y, 24, 24);
+    }
+
+    protected static void extractSlotHighlightFront(GuiGraphicsExtractor gfx, int x, int y) {
+        gfx.blitSprite(RenderPipelines.GUI_TEXTURED, SLOT_HIGHLIGHT_FRONT_SPRITE, x, y, 24, 24);
+    }
+
     protected static String text(String key, Object... args) {
         return Component.translatable(key, args).getString();
     }
