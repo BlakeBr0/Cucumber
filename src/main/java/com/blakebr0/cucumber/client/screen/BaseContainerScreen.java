@@ -5,8 +5,10 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 
 import java.text.NumberFormat;
 
@@ -38,6 +40,11 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
         int y = this.getGuiTop();
 
         gfx.blit(RenderPipelines.GUI_TEXTURED, this.bgTexture, x, y, 0, 0, this.bgWidth, this.bgHeight, this.bgImgWidth, this.bgImgHeight);
+    }
+
+    protected void extractGhostItem(GuiGraphicsExtractor gfx, int x, int y, ItemStack stack) {
+        gfx.fakeItem(stack, x, y);
+        gfx.blit(RenderPipelines.GUI_TEXTURED, this.bgTexture, x, y, x - this.leftPos, y - this.topPos, 16, 16, this.bgImgWidth, this.bgImgHeight, ARGB.white(0.67F));
     }
 
     protected static boolean isHoveringSlot(int x, int y, int mouseX, int mouseY) {
