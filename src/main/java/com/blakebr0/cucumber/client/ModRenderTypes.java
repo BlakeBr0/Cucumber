@@ -24,13 +24,6 @@ public final class ModRenderTypes {
             .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
             .withDepthStencilState(DepthStencilState.DEFAULT)
             .build();
-    private static final RenderPipeline GHOST_ITEM_PIPELINE = RenderPipeline.builder(RenderPipelines.BLOCK_SNIPPET)
-            .withLocation(Cucumber.resource("pipelines/ghost_item"))
-            .withShaderDefine("ALPHA_CUTOUT", 0.01F)
-            .withVertexShader(Cucumber.resource("ghost_item"))
-            .withColorTargetState(new ColorTargetState(BlendFunction.TRANSLUCENT))
-            .withDepthStencilState(DepthStencilState.DEFAULT)
-            .build();
     private static final Function<Identifier, RenderType> GHOST_BLOCK = Util.memoize(
             texture -> {
                 RenderSetup state = RenderSetup.builder(GHOST_BLOCK_PIPELINE)
@@ -43,30 +36,13 @@ public final class ModRenderTypes {
                 return RenderType.create("cucumber:ghost_block", state);
             }
     );
-    private static final Function<Identifier, RenderType> GHOST_ITEM = Util.memoize(
-            texture -> {
-                RenderSetup state = RenderSetup.builder(GHOST_ITEM_PIPELINE)
-                        .withTexture("Sampler0", texture)
-                        .useLightmap()
-                        .useOverlay()
-                        .affectsCrumbling()
-                        .setOutline(RenderSetup.OutlineProperty.AFFECTS_OUTLINE)
-                        .createRenderSetup();
-                return RenderType.create("cucumber:ghost_item", state);
-            }
-    );
 
     public static RenderType ghostBlock() {
         return GHOST_BLOCK.apply(TextureAtlas.LOCATION_BLOCKS);
     }
 
-    public static RenderType ghostItem() {
-        return GHOST_ITEM.apply(TextureAtlas.LOCATION_ITEMS);
-    }
-
     @SubscribeEvent
     public void onRegisterRenderPipelines(RegisterRenderPipelinesEvent event) {
         event.registerPipeline(GHOST_BLOCK_PIPELINE);
-        event.registerPipeline(GHOST_ITEM_PIPELINE);
     }
 }
