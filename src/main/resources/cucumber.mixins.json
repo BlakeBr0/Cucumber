@@ -8,7 +8,9 @@
     "RecipeManagerMixin",
     "ReloadableServerResourcesMixin"
   ],
-  "client": [],
+  "client": [
+    "ModelBakeryMixin"
+  ],
   "minVersion": "0.8",
   "injectors": {
     "defaultRequire": 1
