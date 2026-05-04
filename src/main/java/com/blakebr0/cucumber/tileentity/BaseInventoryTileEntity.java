@@ -38,11 +38,6 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity implements 
         }
     }
 
-    public boolean isUsableByPlayer(Player player) {
-        var pos = this.getBlockPos();
-        return player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
-    }
-
     public RecipeManager getRecipeManager() {
         if (this.level == null || this.level.isClientSide())
             return null;
@@ -53,5 +48,13 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity implements 
     @Override
     public void clearContent() {
         this.getInventory().getStacks().clear();
+        this.clearAdditional();
+    }
+
+    protected void clearAdditional() { }
+
+    public boolean isUsableByPlayer(Player player) {
+        var pos = this.getBlockPos();
+        return player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
     }
 }
