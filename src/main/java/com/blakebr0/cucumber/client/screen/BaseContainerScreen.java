@@ -36,8 +36,8 @@ public abstract class BaseContainerScreen<T extends AbstractContainerMenu> exten
     public void extractBackground(GuiGraphicsExtractor gfx, int mouseX, int mouseY, float a) {
         super.extractBackground(gfx, mouseX, mouseY, a);
 
-        int x = this.getGuiLeft();
-        int y = this.getGuiTop();
+        int x = this.getLeftPos();
+        int y = this.getTopPos();
 
         gfx.blit(RenderPipelines.GUI_TEXTURED, this.bgTexture, x, y, 0, 0, this.bgWidth, this.bgHeight, this.bgImgWidth, this.bgImgHeight);
     }

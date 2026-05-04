@@ -32,6 +32,7 @@ import net.neoforged.neoforge.common.CommonHooks;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.common.damagesource.DamageContainer;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
@@ -147,7 +148,7 @@ public class BaseScytheItem extends BaseItem {
         if (NeoForge.EVENT_BUS.post(new ScytheHarvestCropEvent(level, pos, state, stack, player)).isCanceled())
             return;
 
-        if (NeoForge.EVENT_BUS.post(new BlockEvent.BreakEvent(level, pos, state, player)).isCanceled())
+        if (NeoForge.EVENT_BUS.post(new BreakBlockEvent(level, pos, state, player)).isCanceled())
             return;
 
         handleDrops(state, level, pos, item);
