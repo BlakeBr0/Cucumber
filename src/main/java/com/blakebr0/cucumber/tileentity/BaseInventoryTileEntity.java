@@ -27,13 +27,16 @@ public abstract class BaseInventoryTileEntity extends BaseTileEntity implements 
         tag.merge(this.getInventory().serializeNBT(lookup));
     }
 
-    public boolean isUsableByPlayer(Player player) {
-        var pos = this.getBlockPos();
-        return player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
-    }
-
     @Override
     public void clearContent() {
         this.getInventory().getStacks().clear();
+        this.clearAdditional();
+    }
+
+    protected void clearAdditional() { }
+
+    public boolean isUsableByPlayer(Player player) {
+        var pos = this.getBlockPos();
+        return player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64;
     }
 }
