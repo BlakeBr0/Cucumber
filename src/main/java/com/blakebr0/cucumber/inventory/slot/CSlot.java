@@ -27,12 +27,6 @@ public class CSlot extends ResourceHandlerSlot {
         }
     }
 
-    // TODO this needs to be checked since it's final in the base implementation and cant be changed
-//    @Override
-//    public ItemStack remove(int amount) {
-//        return this.inventory.extract(this.index, amount, false, true);
-//    }
-
     @Override
     public int getMaxStackSize(ItemStack stack) {
         var slotLimit = this.inventory.getSlotLimit(this.index);
