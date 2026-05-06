@@ -28,13 +28,15 @@ public class RecipeInventory implements Container {
 
     @Override
     public ItemStack getItem(int slot) {
-        return this.inventory.getResource(slot + this.start).toStack();
+        var amount = this.inventory.getAmountAsInt(slot + this.start);
+        return this.inventory.getResource(slot + this.start).toStack(amount);
     }
 
     @Override
     public ItemStack removeItem(int slot, int count) {
         var stack = this.inventory.getResource(slot + this.start);
-        return stack.isEmpty() ? ItemStack.EMPTY : stack.toStack().split(count);
+        var amount = this.inventory.getAmountAsInt(slot + this.start);
+        return stack.isEmpty() ? ItemStack.EMPTY : stack.toStack(amount).split(count);
     }
 
     @Override
