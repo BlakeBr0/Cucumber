@@ -1,10 +1,10 @@
 package com.blakebr0.cucumber.util;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.entity.player.Player;
 
 public final class ClientPlayerUtil {
-    public static LocalPlayer getClientPlayer() {
+    public static Player getClientPlayer() {
         return Minecraft.getInstance().player;
     }
 }
