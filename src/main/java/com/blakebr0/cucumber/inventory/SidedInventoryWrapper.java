@@ -39,8 +39,8 @@ public class SidedInventoryWrapper extends ItemStacksResourceHandler {
     }
 
     @Override
-    public boolean isValid(int index, ItemResource resource) {
-        return this.canInsert != null && this.canInsert.apply(index, resource, this.direction) && this.inventory.isValid(index, resource);
+    public ItemResource getResource(int index) {
+        return this.inventory.getResource(index);
     }
 
     public int getSlotLimit(int slot) {
