@@ -56,13 +56,8 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
     }
 
     public int insert(int index, ItemResource resource, int amount, TransactionContext transaction, boolean bypass) {
-        if (!bypass) {
-            if (this.canInsert != null && !this.canInsert.apply(index, resource))
-                return 0;
-
-            if (this.outputSlots != null && ArrayUtils.contains(this.outputSlots, index))
-                return 0;
-        }
+        if (!bypass && !this.checkCanInsert(index, resource))
+            return 0;
 
         return super.insert(index, resource, amount, transaction);
     }
@@ -73,13 +68,8 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
     }
 
     public int extract(int index, ItemResource resource, int amount, TransactionContext transaction, boolean bypass) {
-        if (!bypass) {
-            if (this.canExtract != null && !this.canExtract.apply(index))
-                return 0;
-
-            if (this.outputSlots != null && !ArrayUtils.contains(this.outputSlots, index))
-                return 0;
-        }
+        if (!bypass && !this.checkCanExtract(index))
+            return 0;
 
         return super.extract(index, resource, amount, transaction);
     }
@@ -143,8 +133,22 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
         this.canInsert = canInsert;
     }
 
+    public boolean checkCanInsert(int index, ItemResource resource) {
+        if (this.canInsert != null && !this.canInsert.apply(index, resource))
+            return false;
+
+        return this.outputSlots == null || !ArrayUtils.contains(this.outputSlots, index);
+    }
+
     public void setCanExtract(CanExtractFunction canExtract) {
         this.canExtract = canExtract;
+    }
+
+    public boolean checkCanExtract(int index) {
+        if (this.canExtract != null && !this.canExtract.apply(index))
+            return false;
+
+        return this.outputSlots == null || ArrayUtils.contains(this.outputSlots, index);
     }
 
     public void setOutputSlots(int... slots) {

@@ -3,6 +3,7 @@ package com.blakebr0.cucumber.inventory.slot;
 import com.blakebr0.cucumber.inventory.CItemStacksHandler;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.transfer.item.ItemResource;
 import net.neoforged.neoforge.transfer.item.ResourceHandlerSlot;
 import net.neoforged.neoforge.transfer.transaction.Transaction;
 
@@ -14,6 +15,14 @@ public class CSlot extends ResourceHandlerSlot {
         super(inventory, inventory::set, index, x, y);
         this.inventory = inventory;
         this.index = index;
+    }
+
+    @Override
+    public boolean mayPlace(ItemStack stack) {
+        if (stack.isEmpty())
+            return false;
+
+        return this.inventory.checkCanInsert(this.index, ItemResource.of(stack));
     }
 
     @Override
