@@ -147,7 +147,8 @@ public class TagMapper {
     public static ItemStackTemplate getItemStackForTag(String tagId, int size) {
         var item = getItemForTag(tagId);
         if (item == null || item == Items.AIR) {
-            throw new IllegalArgumentException("Tag %s has no entries".formatted(tagId));
+            Cucumber.LOGGER.warn("Tag {} has no entries", tagId);
+            return new ItemStackTemplate(Items.BARRIER, size);
         }
         return new ItemStackTemplate(item, size);
     }
