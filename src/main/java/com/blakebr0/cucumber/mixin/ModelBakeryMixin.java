@@ -38,7 +38,13 @@ public class ModelBakeryMixin {
             Cucumber.LOGGER.error("An error occurred while firing RegisterClientItemsEvent", e);
         }
 
-        clientInfos.putAll(items);
+        try {
+            clientInfos.putAll(items);
+        } catch (Exception e) {
+            items.clear();
+
+            Cucumber.LOGGER.error("An error occurred whilst registering custom client infos", e);
+        }
 
         Cucumber.LOGGER.info("Registered {} client items in {} ms", items.size(), stopwatch.stop().elapsed(TimeUnit.MILLISECONDS));
     }
