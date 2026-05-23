@@ -6,6 +6,7 @@ import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
+@Deprecated(forRemoval = true)
 public class ExtendedContainerMenu extends BaseContainerMenu {
     protected ExtendedContainerMenu(MenuType<?> menu, int id, BlockPos pos) {
         super(menu, id, pos);
@@ -86,8 +87,9 @@ public class ExtendedContainerMenu extends BaseContainerMenu {
                     // change: break right away here so that it doesn't try to fill additional slots in the inventory
                     if (stack.getCount() > maxSize) {
                         slot1.setByPlayer(stack.split(maxSize));
-
                         slot1.setChanged();
+
+                        flag = true;
                         break;
                     } else {
                         slot1.setByPlayer(stack.split(stack.getCount()));
