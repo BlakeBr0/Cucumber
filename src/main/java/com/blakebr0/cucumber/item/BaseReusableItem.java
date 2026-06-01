@@ -1,6 +1,7 @@
 package com.blakebr0.cucumber.item;
 
 import com.blakebr0.cucumber.lib.Tooltips;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemInstance;
@@ -46,18 +47,19 @@ public class BaseReusableItem extends BaseItem {
 	
 	@Override
 	public @Nullable ItemStackTemplate getCraftingRemainder(ItemInstance instance) {
+		var damage = instance.getOrDefault(DataComponents.DAMAGE, 0);
+		var unbreaking = instance.getEnchantmentLevel(UNBREAKING_ENCHANTMENT);
 		var template = new ItemStackTemplate(instance.typeHolder(), 1);
 
 		if (this.unbreakable)
 			return template;
 
-		var unbreaking = template.getEnchantmentLevel(UNBREAKING_ENCHANTMENT);
 		if (Math.random() > (1.0F / (unbreaking + 1)))
 			return template;
 
 		var stack = template.create();
 
-		var newDamage = stack.getDamageValue() + 1;
+		var newDamage = damage + 1;
 		if (newDamage > stack.getMaxDamage())
 			return null;
 
