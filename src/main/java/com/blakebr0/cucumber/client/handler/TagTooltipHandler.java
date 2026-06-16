@@ -25,6 +25,10 @@ public final class TagTooltipHandler {
 
         if (Minecraft.getInstance().options.advancedItemTooltips) {
             var stack = event.getItemStack();
+            if (stack.isEmpty()) { // Look, I don't know how, but going over the item's stack limit makes this air?
+                return;
+            }
+
             var block = Block.byItem(stack.getItem());
 
             var blockTags = block == Blocks.AIR ? List.of() : block.defaultBlockState().tags()
