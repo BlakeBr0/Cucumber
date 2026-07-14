@@ -50,15 +50,14 @@ configurations {
 }
 
 repositories {
-    maven {
-        url = 'https://maven.blamejared.com/'
-        content {
-            includeGroup "com.almostreliable.mods"
-        }
-    }
+    maven { url 'https://maven.blamejared.com/' }
 }
 
 dependencies {
+    runtimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+
+    compileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
+    compileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
     compileOnly "com.almostreliable.mods:almostunified-neoforge:${almostunified_version}:api"
 }
 

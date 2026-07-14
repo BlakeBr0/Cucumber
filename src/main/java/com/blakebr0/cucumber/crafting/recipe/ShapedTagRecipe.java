@@ -87,6 +87,14 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
         return PlacementInfo.createFromOptionals(this.pattern.ingredients());
     }
 
+    public int getWidth() {
+        return this.pattern.width();
+    }
+
+    public int getHeight() {
+        return this.pattern.height();
+    }
+
     private static ShapedTagRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
         var commonInfo = CommonInfo.STREAM_CODEC.decode(buffer);
         var craftingBookInfo = CraftingBookInfo.STREAM_CODEC.decode(buffer);
