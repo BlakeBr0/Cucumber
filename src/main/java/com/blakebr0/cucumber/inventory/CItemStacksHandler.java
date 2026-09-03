@@ -83,7 +83,7 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
 
     @Override
     protected int getCapacity(int index, ItemResource resource) {
-        return this.getSlotLimit(index);
+        return Math.min(this.getSlotLimit(index), resource.getMaxStackSize());
     }
 
     @Override
