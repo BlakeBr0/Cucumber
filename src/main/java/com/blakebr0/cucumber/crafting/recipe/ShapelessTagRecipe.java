@@ -29,7 +29,7 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
             builder.group(
                     Recipe.CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
                     CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(o -> o.bookInfo),
-                    OutputResolver.Tag.MAP_CODEC.fieldOf("result").forGetter(recipe -> (OutputResolver.Tag) recipe.outputResolver),
+                    OutputResolver.Tag.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
                     Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(o -> o.ingredients)
             ).apply(builder, ShapelessTagRecipe::new)
     );
@@ -40,27 +40,22 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
 
     private final Recipe.CommonInfo commonInfo;
     private final CraftingRecipe.CraftingBookInfo bookInfo;
-    private final OutputResolver outputResolver;
     private final List<Ingredient> ingredients;
+    private final OutputResolver.Tag result;
     private final boolean isSimple;
-    private @Nullable ItemStackTemplate result;
 
-    public ShapelessTagRecipe(CommonInfo commonInfo, CraftingBookInfo craftingBookInfo, OutputResolver outputResolver, List<Ingredient> ingredients) {
+    public ShapelessTagRecipe(CommonInfo commonInfo, CraftingBookInfo craftingBookInfo, OutputResolver.Tag result, List<Ingredient> ingredients) {
         super(commonInfo, craftingBookInfo);
         this.commonInfo = commonInfo;
         this.bookInfo = craftingBookInfo;
-        this.outputResolver = outputResolver;
+        this.result = result;
         this.ingredients = ingredients;
         this.isSimple = ingredients.stream().allMatch(Ingredient::isSimple);
     }
 
     @Override
     public ItemStack assemble(CraftingInput input) {
-        if (this.result == null) {
-            this.result = this.outputResolver.resolve();
-        }
-
-        return this.result.create();
+        return this.result.resolve().create();
     }
 
     @Override
@@ -94,17 +89,15 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
      * {@return the result of this shapeless recipe or null if it is not static and needs ot be obtained by assembling it}
      */
     public @Nullable ItemStackTemplate result() {
-        return null;
+        return this.result.resolve();
     }
 
     @Override
     public List<RecipeDisplay> display() {
-        var result = this.outputResolver.resolve();
-
         return List.of(
                 new ShapelessCraftingRecipeDisplay(
                         this.ingredients.stream().map(Ingredient::display).toList(),
-                        new SlotDisplay.ItemStackSlotDisplay(result),
+                        new SlotDisplay.ItemStackSlotDisplay(this.result.resolve()),
                         new SlotDisplay.ItemSlotDisplay(Items.CRAFTING_TABLE)
                 )
         );
@@ -113,8 +106,8 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
     private static ShapelessTagRecipe fromNetwork(RegistryFriendlyByteBuf buffer) {
         var commonInfo = CommonInfo.STREAM_CODEC.decode(buffer);
         var craftingBookInfo = CraftingBookInfo.STREAM_CODEC.decode(buffer);
+        var result = OutputResolver.Tag.STREAM_CODEC.decode(buffer);
         var ingredients = Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).decode(buffer);
-        var result = OutputResolver.create(buffer);
 
         return new ShapelessTagRecipe(commonInfo, craftingBookInfo, result, ingredients);
     }
@@ -122,7 +115,7 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
     private static void toNetwork(RegistryFriendlyByteBuf buffer, ShapelessTagRecipe recipe) {
         CommonInfo.STREAM_CODEC.encode(buffer, recipe.commonInfo);
         CraftingBookInfo.STREAM_CODEC.encode(buffer, recipe.bookInfo);
+        OutputResolver.Tag.STREAM_CODEC.encode(buffer, recipe.result);
         Ingredient.CONTENTS_STREAM_CODEC.apply(ByteBufCodecs.list()).encode(buffer, recipe.ingredients);
-        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.outputResolver.resolve());
     }
 }

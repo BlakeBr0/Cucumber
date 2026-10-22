@@ -27,7 +27,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.StreamSupport;
 
 public class TagMapper {
     private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
@@ -58,7 +57,10 @@ public class TagMapper {
 
                     json.entrySet().stream().filter(e -> {
                         var value = e.getValue().getAsString();
-                        return !"__comment".equalsIgnoreCase(e.getKey()) && !value.isEmpty() && !"null".equalsIgnoreCase(value);
+                        return !"__comment".equalsIgnoreCase(e.getKey())
+                                && !value.isEmpty()
+                                && !"null".equalsIgnoreCase(value)
+                                && !value.equalsIgnoreCase("minecraft:air");
                     }).forEach(entry -> {
                         var tagId = entry.getKey();
                         var itemId = entry.getValue().getAsString();
@@ -68,11 +70,9 @@ public class TagMapper {
                         // if 'auto refresh tag entries' is enabled, we check any entries that contain an item ID to see
                         // if they are still present. if not, we just refresh the entry
                         if (ModConfigs.AUTO_REFRESH_TAG_ENTRIES.get()) {
-                            if (!itemId.isEmpty() && !"null".equalsIgnoreCase(itemId)) {
-                                var item = BuiltInRegistries.ITEM.get(Identifier.parse(itemId));
-                                if (item.isEmpty() || !item.get().isBound()) {
-                                    addTagToFile(tagId, json, file, false);
-                                }
+                            var item = BuiltInRegistries.ITEM.get(Identifier.parse(itemId));
+                            if (item.isEmpty() || !item.get().isBound()) {
+                                addTagToFile(tagId, json, file, false);
                             }
                         }
                     });
@@ -128,7 +128,7 @@ public class TagMapper {
                 if (json != null) {
                     if (json.has(tagId)) {
                         var itemId = json.get(tagId).getAsString();
-                        if (itemId.isEmpty() || "null".equalsIgnoreCase(itemId))
+                        if (itemId.isEmpty() || "null".equalsIgnoreCase(itemId) || "minecraft:air".equalsIgnoreCase(itemId))
                             return addTagToFile(tagId, json, file);
 
                         TAG_TO_ITEM_MAP.put(tagId, itemId);
@@ -161,18 +161,18 @@ public class TagMapper {
         var mods = ModConfigs.MOD_TAG_PRIORITIES.get();
         var key = ItemTags.create(Identifier.parse(tagId));
 
-        var item = StreamSupport.stream(BuiltInRegistries.ITEM.getTagOrEmpty(key).spliterator(), false).filter(Holder::isBound).min((item1, item2) -> {
-            var id1 = BuiltInRegistries.ITEM.getKey(item1.value());
+        var item = BuiltInRegistries.ITEM.get(key).stream().filter(t -> t.size() > 0).min((item1, item2) -> {
+            var id1 = BuiltInRegistries.ITEM.getKey(item1.get(0).value());
             var index1 = mods.indexOf(id1.getNamespace());
 
-            var id2 = BuiltInRegistries.ITEM.getKey(item2.value());
+            var id2 = BuiltInRegistries.ITEM.getKey(item2.get(0).value());
             var index2 = mods.indexOf(id2.getNamespace());
 
             return index1 > index2 ? 1 : index1 == -1 ? 0 : -1;
-        }).map(Holder::value).orElse(Items.AIR);
+        }).map(v -> v.get(0).value()).orElse(Items.AIR);
 
         var itemId = "null";
-        if (BuiltInRegistries.ITEM.containsValue(item)) {
+        if (item != Items.AIR && BuiltInRegistries.ITEM.containsValue(item)) {
             itemId = BuiltInRegistries.ITEM.getKey(item).toString();
         }
 

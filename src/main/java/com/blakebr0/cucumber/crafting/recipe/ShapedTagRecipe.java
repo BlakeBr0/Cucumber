@@ -6,7 +6,6 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
@@ -20,7 +19,6 @@ import net.minecraft.world.item.crafting.display.RecipeDisplay;
 import net.minecraft.world.item.crafting.display.ShapedCraftingRecipeDisplay;
 import net.minecraft.world.item.crafting.display.SlotDisplay;
 import net.minecraft.world.level.Level;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -30,7 +28,7 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
                     Recipe.CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
                     CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(o -> o.bookInfo),
                     ShapedRecipePattern.MAP_CODEC.forGetter(recipe -> recipe.pattern),
-                    OutputResolver.Tag.MAP_CODEC.fieldOf("result").forGetter(recipe -> (OutputResolver.Tag) recipe.outputResolver)
+                    OutputResolver.Tag.MAP_CODEC.fieldOf("result").forGetter(recipe -> recipe.result)
             ).apply(builder, ShapedTagRecipe::new)
     );
     public static final StreamCodec<RegistryFriendlyByteBuf, ShapedTagRecipe> STREAM_CODEC = StreamCodec.of(
@@ -38,23 +36,18 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
     );
     public static final RecipeSerializer<ShapedTagRecipe> SERIALIZER = new RecipeSerializer<>(MAP_CODEC, STREAM_CODEC);
 
-    private final OutputResolver outputResolver;
     private final ShapedRecipePattern pattern;
-    private @Nullable ItemStackTemplate result;
+    private final OutputResolver.Tag result;
 
-    public ShapedTagRecipe(CommonInfo commonInfo, CraftingBookInfo craftingBookInfo, ShapedRecipePattern pattern, OutputResolver outputResolver) {
+    public ShapedTagRecipe(CommonInfo commonInfo, CraftingBookInfo craftingBookInfo, ShapedRecipePattern pattern, OutputResolver.Tag result) {
         super(commonInfo, craftingBookInfo);
-        this.outputResolver = outputResolver;
         this.pattern = pattern;
+        this.result = result;
     }
 
     @Override
     public ItemStack assemble(CraftingInput input) {
-        if (this.result == null) {
-            this.result = this.outputResolver.resolve();
-        }
-
-        return this.result.create();
+        return this.result.resolve().create();
     }
 
     @Override
@@ -69,14 +62,12 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
 
     @Override
     public List<RecipeDisplay> display() {
-        var result = this.outputResolver.resolve();
-
         return List.of(
                 new ShapedCraftingRecipeDisplay(
                         this.pattern.width(),
                         this.pattern.height(),
                         this.pattern.ingredients().stream().map(e -> e.map(Ingredient::display).orElse(SlotDisplay.Empty.INSTANCE)).toList(),
-                        new SlotDisplay.ItemStackSlotDisplay(result),
+                        new SlotDisplay.ItemStackSlotDisplay(this.result.resolve()),
                         new SlotDisplay.ItemSlotDisplay(Items.CRAFTING_TABLE)
                 )
         );
@@ -99,7 +90,7 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
         var commonInfo = CommonInfo.STREAM_CODEC.decode(buffer);
         var craftingBookInfo = CraftingBookInfo.STREAM_CODEC.decode(buffer);
         var pattern = ShapedRecipePattern.STREAM_CODEC.decode(buffer);
-        var result = OutputResolver.create(buffer);
+        var result = OutputResolver.Tag.STREAM_CODEC.decode(buffer);
 
         return new ShapedTagRecipe(commonInfo, craftingBookInfo, pattern, result);
     }
@@ -108,6 +99,6 @@ public class ShapedTagRecipe extends NormalCraftingRecipe {
         CommonInfo.STREAM_CODEC.encode(buffer, recipe.commonInfo);
         CraftingBookInfo.STREAM_CODEC.encode(buffer, recipe.bookInfo);
         ShapedRecipePattern.STREAM_CODEC.encode(buffer, recipe.pattern);
-        ItemStackTemplate.STREAM_CODEC.encode(buffer, recipe.outputResolver.resolve());
+        OutputResolver.Tag.STREAM_CODEC.encode(buffer, recipe.result);
     }
 }
