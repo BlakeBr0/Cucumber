@@ -29,7 +29,7 @@ public class ShapelessTagRecipe extends NormalCraftingRecipe {
             builder.group(
                     Recipe.CommonInfo.MAP_CODEC.forGetter(o -> o.commonInfo),
                     CraftingRecipe.CraftingBookInfo.MAP_CODEC.forGetter(o -> o.bookInfo),
-                    OutputResolver.Tag.CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
+                    OutputResolver.Tag.MAP_CODEC.fieldOf("result").forGetter(recipe -> recipe.result),
                     Ingredient.CODEC.listOf().fieldOf("ingredients").forGetter(o -> o.ingredients)
             ).apply(builder, ShapelessTagRecipe::new)
     );
