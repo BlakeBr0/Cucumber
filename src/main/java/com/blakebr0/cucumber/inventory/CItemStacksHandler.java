@@ -83,7 +83,19 @@ public class CItemStacksHandler extends ItemStacksResourceHandler {
 
     @Override
     protected int getCapacity(int index, ItemResource resource) {
-        return Math.min(this.getSlotLimit(index), resource.getMaxStackSize());
+        var slotLimit = this.getSlotLimit(index);
+        var maxStackSize = resource.getMaxStackSize();
+        if (slotLimit > 64) {
+            // same as CSlot#getMaxStackSize: slot limits above 64 are for items that stack to 64, and get scaled
+            // down to the same ratio for items with a smaller max stack size
+            if (maxStackSize < 64) {
+                return (int) (slotLimit * (float) maxStackSize / 64);
+            }
+
+            return slotLimit;
+        }
+
+        return Math.min(slotLimit, maxStackSize);
     }
 
     @Override
